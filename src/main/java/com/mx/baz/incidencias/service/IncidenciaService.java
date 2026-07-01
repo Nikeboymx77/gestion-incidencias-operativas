@@ -6,6 +6,7 @@ import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.HistorialIncidencia;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
+import com.mx.baz.incidencias.notification.NotificationService;
 import com.mx.baz.incidencias.repository.EmpleadoRepository;
 import com.mx.baz.incidencias.repository.HistorialIncidenciaRepository;
 import com.mx.baz.incidencias.repository.IncidenciaRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class IncidenciaService {
     private final IncidenciaRepository incidenciaRepository;
     private final EmpleadoRepository empleadoRepository;
     private final HistorialIncidenciaRepository historialIncidenciaRepository;
+    private final NotificationService notificationService;
 
     public Incidencia crearIncidencia(IncidenciaRequest request) {
 
@@ -57,7 +60,12 @@ public class IncidenciaService {
                 .fechaAsignacion(LocalDateTime.now())
                 .build();
 
-        return incidenciaRepository.save(incidencia);
+        //return incidenciaRepository.save(incidencia);
+        Incidencia incidenciaGuardada = incidenciaRepository.save(incidencia);
+
+        notificationService.notificarNuevaIncidencia(incidenciaGuardada);
+
+        return incidenciaGuardada;
     }
     
     public Incidencia resolverIncidencia(
@@ -82,7 +90,22 @@ public class IncidenciaService {
                 .build();
 
         historialIncidenciaRepository.save(historial);
+        
+        notificationService.notificarIncidenciaResuelta(
+                incidencia,
+                request.getUsuario(),
+                request.getComentario()
+        );
 
         return incidencia;
+    }
+    
+    public List<Incidencia> obtenerPendientes() {
+        return incidenciaRepository.findByEstado(EstadoIncidencia.PENDIENTE);
+    }
+
+    public Incidencia obtenerPorFolio(String folio) {
+        return incidenciaRepository.findByFolio(folio)
+                .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
     }
 }

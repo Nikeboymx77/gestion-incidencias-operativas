@@ -5,6 +5,9 @@ import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,5 +30,15 @@ public class IncidenciaController {
             @RequestBody ResolverIncidenciaRequest request) {
 
         return incidenciaService.resolverIncidencia(folio, request);
+    }
+    
+    @GetMapping("/pendientes")
+    public List<Incidencia> obtenerPendientes() {
+        return incidenciaService.obtenerPendientes();
+    }
+
+    @GetMapping("/{folio}")
+    public Incidencia obtenerPorFolio(@PathVariable String folio) {
+        return incidenciaService.obtenerPorFolio(folio);
     }
 }
