@@ -28,3 +28,18 @@ def resolver_incidencia(folio, usuario, comentario):
 
     response.raise_for_status()
     return response.json()
+
+def tomar_incidencia(folio, usuario, comentario):
+    payload = {
+        "usuario": usuario,
+        "comentario": comentario
+    }
+
+    response = requests.put(
+        f"{API_BASE_URL}/incidencias/{folio}/tomar",
+        json=payload,
+        timeout=10
+    )
+
+    response.raise_for_status()
+    return response.json()

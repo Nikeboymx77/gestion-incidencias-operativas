@@ -1,7 +1,7 @@
 from telegram.ext import Application, CommandHandler
 
 from config import TELEGRAM_BOT_TOKEN
-from commands import help_command, pendientes_command, estado_command, resuelto_command, chatid_command
+from commands import help_command, pendientes_command, estado_command, resuelto_command, chatid_command, tomar_command
 
 
 def main():
@@ -16,6 +16,7 @@ def main():
     app.add_handler(CommandHandler("estado", estado_command))
     app.add_handler(CommandHandler("resuelto", resuelto_command))
     app.add_handler(CommandHandler("chatid", chatid_command))
+    app.add_handler(CommandHandler("tomar", tomar_command))
 
     print("🤖 Bot de incidencias iniciado...")
     app.run_polling()

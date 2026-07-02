@@ -45,6 +45,12 @@ public class Incidencia {
     private Empleado empleadoAsignado;
 
     private LocalDateTime fechaAsignacion;
+    
+    @Column(name = "usuario_que_la_tomo")
+    private String usuarioQueLaTomo;
+
+    @Column(name = "fecha_inicio")
+    private LocalDateTime fechaInicio;
 
     private LocalDateTime fechaResolucion;
 

@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from api import obtener_pendientes, obtener_incidencia, resolver_incidencia
+from api import obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -107,3 +107,24 @@ async def chatid_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🆔 Chat ID: {chat_id}\n"
         f"💬 Chat: {chat_title}"
     )
+
+async def tomar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        if len(context.args) < 2:
+            await update.message.reply_text(
+                "Uso: /tomar INC-1001 comentario"
+            )
+            return
+
+        folio = context.args[0]
+        comentario = " ".join(context.args[1:])
+        usuario = update.effective_user.username or update.effective_user.first_name
+
+        tomar_incidencia(folio, usuario, comentario)
+
+        await update.message.reply_text(
+            f"✅ Listo, {folio} fue marcada como EN_PROCESO."
+        )
+
+    except Exception as e:
+        await update.message.reply_text(f"❌ Error tomando incidencia: {e}")

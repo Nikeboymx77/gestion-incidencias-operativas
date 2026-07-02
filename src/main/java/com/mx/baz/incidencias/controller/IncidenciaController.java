@@ -1,5 +1,6 @@
 package com.mx.baz.incidencias.controller;
 
+import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
@@ -40,5 +41,13 @@ public class IncidenciaController {
     @GetMapping("/{folio}")
     public Incidencia obtenerPorFolio(@PathVariable String folio) {
         return incidenciaService.obtenerPorFolio(folio);
+    }
+    
+    @PutMapping("/{folio}/tomar")
+    public Incidencia tomarIncidencia(
+            @PathVariable String folio,
+            @RequestBody ActualizarEstadoIncidenciaRequest request) {
+
+        return incidenciaService.tomarIncidencia(folio, request);
     }
 }

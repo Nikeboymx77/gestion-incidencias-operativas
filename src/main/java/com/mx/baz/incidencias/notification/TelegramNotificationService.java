@@ -68,4 +68,26 @@ public class TelegramNotificationService implements NotificationService {
 
         telegramClient.sendMessage(mensaje);
     }
+    
+    @Override
+    public void notificarIncidenciaEnProceso(
+            Incidencia incidencia,
+            String usuario,
+            String comentario) {
+
+        String mensaje = """
+                🔎 <b>INCIDENCIA EN PROCESO</b>
+
+                📌 <b>Folio:</b> %s
+                👤 <b>Tomada por:</b> %s
+                📝 <b>Comentario:</b>
+                %s
+                """.formatted(
+                incidencia.getFolio(),
+                usuario,
+                comentario
+        );
+
+        telegramClient.sendMessage(mensaje);
+    }
 }

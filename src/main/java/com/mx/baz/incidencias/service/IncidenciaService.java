@@ -1,5 +1,6 @@
 package com.mx.baz.incidencias.service;
 
+import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Empleado;
@@ -72,10 +73,27 @@ public class IncidenciaService {
             String folio,
             ResolverIncidenciaRequest request) {
 
-        Incidencia incidencia = incidenciaRepository
-                .findByFolio(folio)
-                .orElseThrow(() ->
-                        new RuntimeException("Incidencia no encontrada"));
+        Incidencia incidencia = incidenciaRepository.findByFolio(folio)
+                .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
+
+        if (incidencia.getEstado() == EstadoIncidencia.PENDIENTE) {
+            throw new RuntimeException(
+                    "La incidencia " + folio + " aún no ha sido tomada"
+            );
+        }
+
+        if (incidencia.getEstado() == EstadoIncidencia.RESUELTA) {
+            throw new RuntimeException(
+                    "La incidencia " + folio + " ya fue resuelta"
+            );
+        }
+
+        if (incidencia.getEstado() != EstadoIncidencia.EN_PROCESO) {
+            throw new RuntimeException(
+                    "La incidencia " + folio + " no puede resolverse porque está en estado "
+                            + incidencia.getEstado()
+            );
+        }
 
         incidencia.setEstado(EstadoIncidencia.RESUELTA);
         incidencia.setFechaResolucion(LocalDateTime.now());
@@ -90,7 +108,7 @@ public class IncidenciaService {
                 .build();
 
         historialIncidenciaRepository.save(historial);
-        
+
         notificationService.notificarIncidenciaResuelta(
                 incidencia,
                 request.getUsuario(),
@@ -107,5 +125,56 @@ public class IncidenciaService {
     public Incidencia obtenerPorFolio(String folio) {
         return incidenciaRepository.findByFolio(folio)
                 .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
+    }
+    
+    public Incidencia tomarIncidencia(
+            String folio,
+            ActualizarEstadoIncidenciaRequest request) {
+
+        Incidencia incidencia = incidenciaRepository.findByFolio(folio)
+                .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
+
+        if (incidencia.getEstado() == EstadoIncidencia.EN_PROCESO) {
+            throw new RuntimeException(
+                    "La incidencia " + folio + " ya fue tomada por "
+                            + incidencia.getUsuarioQueLaTomo()
+            );
+        }
+
+        if (incidencia.getEstado() == EstadoIncidencia.RESUELTA) {
+            throw new RuntimeException(
+                    "La incidencia " + folio + " ya fue resuelta"
+            );
+        }
+
+        if (incidencia.getEstado() != EstadoIncidencia.PENDIENTE) {
+            throw new RuntimeException(
+                    "La incidencia " + folio + " no puede ser tomada porque está en estado "
+                            + incidencia.getEstado()
+            );
+        }
+
+        incidencia.setEstado(EstadoIncidencia.EN_PROCESO);
+        incidencia.setUsuarioQueLaTomo(request.getUsuario());
+        incidencia.setFechaInicio(LocalDateTime.now());
+
+        incidenciaRepository.save(incidencia);
+
+        HistorialIncidencia historial = HistorialIncidencia.builder()
+                .incidencia(incidencia)
+                .accion("EN_PROCESO")
+                .usuario(request.getUsuario())
+                .comentario(request.getComentario())
+                .build();
+
+        historialIncidenciaRepository.save(historial);
+
+        notificationService.notificarIncidenciaEnProceso(
+                incidencia,
+                request.getUsuario(),
+                request.getComentario()
+        );
+
+        return incidencia;
     }
 }

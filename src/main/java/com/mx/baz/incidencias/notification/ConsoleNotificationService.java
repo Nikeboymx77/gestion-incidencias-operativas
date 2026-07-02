@@ -35,4 +35,16 @@ public class ConsoleNotificationService implements NotificationService {
                 usuario,
                 comentario);
     }
+    
+    @Override
+    public void notificarIncidenciaEnProceso(
+            Incidencia incidencia,
+            String usuario,
+            String comentario) {
+
+        log.info("Incidencia en proceso: {} - Usuario: {} - Comentario: {}",
+                incidencia.getFolio(),
+                usuario,
+                comentario);
+    }
 }
