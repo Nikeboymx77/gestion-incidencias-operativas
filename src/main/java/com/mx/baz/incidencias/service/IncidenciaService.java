@@ -8,16 +8,20 @@ import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.HistorialIncidencia;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
+import com.mx.baz.incidencias.events.IncidenciaCreadaEvent;
 import com.mx.baz.incidencias.exception.BusinessException;
 import com.mx.baz.incidencias.exception.ErrorCodes;
 import com.mx.baz.incidencias.mapper.IncidenciaMapper;
-import com.mx.baz.incidencias.notification.NotificationService;
 import com.mx.baz.incidencias.repository.EmpleadoRepository;
 import com.mx.baz.incidencias.repository.HistorialIncidenciaRepository;
 import com.mx.baz.incidencias.repository.IncidenciaRepository;
 import com.mx.baz.incidencias.schedule.AssignmentService;
+import com.mx.baz.incidencias.events.IncidenciaEnProcesoEvent;
+import com.mx.baz.incidencias.events.IncidenciaResueltaEvent;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,9 +36,9 @@ public class IncidenciaService {
     private final IncidenciaRepository incidenciaRepository;
     private final EmpleadoRepository empleadoRepository;
     private final HistorialIncidenciaRepository historialIncidenciaRepository;
-    private final NotificationService notificationService;
     private final AssignmentService assignmentService;
     private final IncidenciaMapper incidenciaMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public IncidenciaResponse crearIncidencia(IncidenciaRequest request) {
@@ -58,7 +62,7 @@ public class IncidenciaService {
 
         assignmentService.actualizarUltimaAsignacion(empleadoAsignado);
 
-        notificationService.notificarNuevaIncidencia(incidenciaGuardada);
+        eventPublisher.publishEvent(new IncidenciaCreadaEvent(incidenciaGuardada));
 
         return incidenciaMapper.toResponse(incidenciaGuardada);
     }
@@ -103,10 +107,12 @@ public class IncidenciaService {
 
         historialIncidenciaRepository.save(historial);
 
-        notificationService.notificarIncidenciaResuelta(
-                incidencia,
-                request.getUsuario(),
-                request.getComentario()
+        eventPublisher.publishEvent(
+                new IncidenciaResueltaEvent(
+                        incidencia,
+                        request.getUsuario(),
+                        request.getComentario()
+                )
         );
 
         return incidenciaMapper.toResponse(incidencia);
@@ -170,10 +176,11 @@ public class IncidenciaService {
 
         historialIncidenciaRepository.save(historial);
 
-        notificationService.notificarIncidenciaEnProceso(
-                incidencia,
-                request.getUsuario(),
-                request.getComentario()
+        eventPublisher.publishEvent(new IncidenciaEnProcesoEvent(
+        		        incidencia,
+                        request.getUsuario(),
+                        request.getComentario()
+                )
         );
 
         return incidenciaMapper.toResponse(incidencia);
