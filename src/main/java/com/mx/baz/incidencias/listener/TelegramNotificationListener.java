@@ -7,6 +7,7 @@ import com.mx.baz.incidencias.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Component;
 public class TelegramNotificationListener {
 
     private final NotificationService notificationService;
+    
 
+    @Async
     @EventListener
     public void onIncidenciaCreada(IncidenciaCreadaEvent event) {
 
@@ -27,6 +30,7 @@ public class TelegramNotificationListener {
 
     }
     
+    @Async
     @EventListener
     public void onIncidenciaEnProceso(IncidenciaEnProcesoEvent event) {
     	
@@ -40,6 +44,7 @@ public class TelegramNotificationListener {
 
     }
     
+    @Async
     @EventListener
     public void onIncidenciaResuelta(IncidenciaResueltaEvent event) {
     	
