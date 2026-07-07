@@ -2,6 +2,7 @@ package com.mx.baz.incidencias.controller;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
+import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
@@ -19,14 +20,14 @@ public class IncidenciaController {
     private final IncidenciaService incidenciaService;
 
     @PostMapping
-    public Incidencia crearIncidencia(
+    public IncidenciaResponse crearIncidencia(
             @RequestBody IncidenciaRequest request) {
 
         return incidenciaService.crearIncidencia(request);
     }
     
     @PutMapping("/{folio}/resolver")
-    public Incidencia resolverIncidencia(
+    public IncidenciaResponse resolverIncidencia(
             @PathVariable String folio,
             @RequestBody ResolverIncidenciaRequest request) {
 
@@ -34,17 +35,17 @@ public class IncidenciaController {
     }
     
     @GetMapping("/pendientes")
-    public List<Incidencia> obtenerPendientes() {
+    public List<IncidenciaResponse> obtenerPendientes() {
         return incidenciaService.obtenerPendientes();
     }
 
     @GetMapping("/{folio}")
-    public Incidencia obtenerPorFolio(@PathVariable String folio) {
+    public IncidenciaResponse obtenerPorFolio(@PathVariable String folio) {
         return incidenciaService.obtenerPorFolio(folio);
     }
     
     @PutMapping("/{folio}/tomar")
-    public Incidencia tomarIncidencia(
+    public IncidenciaResponse tomarIncidencia(
             @PathVariable String folio,
             @RequestBody ActualizarEstadoIncidenciaRequest request) {
 

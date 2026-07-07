@@ -1,6 +1,7 @@
 package com.mx.baz.incidencias.controller;
 
 import com.mx.baz.incidencias.dto.EmpleadoRequest;
+import com.mx.baz.incidencias.dto.EmpleadoResponse;
 import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.service.EmpleadoService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class EmpleadoController {
     private final EmpleadoService empleadoService;
 
     @PostMapping
-    public Empleado crearEmpleado(@RequestBody EmpleadoRequest request) {
+    public EmpleadoResponse crearEmpleado(@RequestBody EmpleadoRequest request) {
         return empleadoService.crearEmpleado(request);
     }
 

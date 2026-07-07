@@ -1,10 +1,15 @@
 package com.mx.baz.incidencias.service;
 
 import com.mx.baz.incidencias.dto.EmpleadoRequest;
+import com.mx.baz.incidencias.dto.EmpleadoResponse;
 import com.mx.baz.incidencias.entity.Empleado;
+import com.mx.baz.incidencias.entity.EmpleadoDiaLaboral;
+import com.mx.baz.incidencias.mapper.EmpleadoMapper;
+import com.mx.baz.incidencias.repository.EmpleadoDiaLaboralRepository;
 import com.mx.baz.incidencias.repository.EmpleadoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,19 +18,28 @@ import java.util.List;
 public class EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
+    private final EmpleadoDiaLaboralRepository empleadoDiaLaboralRepository;
+    private final EmpleadoMapper empleadoMapper;
 
-    public Empleado crearEmpleado(EmpleadoRequest request) {
-        Empleado empleado = Empleado.builder()
-                .nombre(request.getNombre())
-                .usernameTelegram(request.getUsernameTelegram())
-                .email(request.getEmail())
-                .activo(true)
-                .trabajaSemana(request.getTrabajaSemana())
-                .trabajaFinSemana(request.getTrabajaFinSemana())
-                .ordenAsignacion(request.getOrdenAsignacion())
-                .build();
+    @Transactional
+    public EmpleadoResponse crearEmpleado(EmpleadoRequest request) {
 
-        return empleadoRepository.save(empleado);
+    	Empleado empleado = empleadoMapper.toEntity(request);
+
+        Empleado empleadoGuardado = empleadoRepository.save(empleado);
+
+        if (request.getDiasLaborales() != null) {
+            request.getDiasLaborales().forEach(dia -> {
+                EmpleadoDiaLaboral diaLaboral = EmpleadoDiaLaboral.builder()
+                        .empleado(empleadoGuardado)
+                        .diaSemana(dia)
+                        .build();
+
+                empleadoDiaLaboralRepository.save(diaLaboral);
+            });
+        }
+
+        return empleadoMapper.toResponse(empleadoGuardado, request);
     }
 
     public List<Empleado> obtenerEmpleados() {

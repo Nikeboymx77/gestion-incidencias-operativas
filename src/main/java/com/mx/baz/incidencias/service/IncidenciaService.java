@@ -2,17 +2,24 @@ package com.mx.baz.incidencias.service;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
+import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.HistorialIncidencia;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
+import com.mx.baz.incidencias.exception.BusinessException;
+import com.mx.baz.incidencias.exception.ErrorCodes;
+import com.mx.baz.incidencias.mapper.IncidenciaMapper;
 import com.mx.baz.incidencias.notification.NotificationService;
 import com.mx.baz.incidencias.repository.EmpleadoRepository;
 import com.mx.baz.incidencias.repository.HistorialIncidenciaRepository;
 import com.mx.baz.incidencias.repository.IncidenciaRepository;
+import com.mx.baz.incidencias.schedule.AssignmentService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -26,27 +33,13 @@ public class IncidenciaService {
     private final EmpleadoRepository empleadoRepository;
     private final HistorialIncidenciaRepository historialIncidenciaRepository;
     private final NotificationService notificationService;
+    private final AssignmentService assignmentService;
+    private final IncidenciaMapper incidenciaMapper;
 
-    public Incidencia crearIncidencia(IncidenciaRequest request) {
+    @Transactional
+    public IncidenciaResponse crearIncidencia(IncidenciaRequest request) {
 
-        DayOfWeek diaActual = LocalDateTime.now().getDayOfWeek();
-
-        Empleado empleadoAsignado;
-
-        if (diaActual == DayOfWeek.SATURDAY || diaActual == DayOfWeek.SUNDAY) {
-
-            empleadoAsignado = empleadoRepository
-                    .findFirstByTrabajaFinSemanaTrueAndActivoTrueOrderByOrdenAsignacionAsc()
-                    .orElseThrow(() ->
-                            new RuntimeException("No hay empleados activos para fin de semana"));
-
-        } else {
-
-            empleadoAsignado = empleadoRepository
-                    .findFirstByTrabajaSemanaTrueAndActivoTrueOrderByOrdenAsignacionAsc()
-                    .orElseThrow(() ->
-                            new RuntimeException("No hay empleados activos para semana"));
-        }
+        Empleado empleadoAsignado = assignmentService.obtenerEmpleadoDisponible();
 
         Incidencia incidencia = Incidencia.builder()
                 .folio(request.getFolio())
@@ -61,35 +54,36 @@ public class IncidenciaService {
                 .fechaAsignacion(LocalDateTime.now())
                 .build();
 
-        //return incidenciaRepository.save(incidencia);
         Incidencia incidenciaGuardada = incidenciaRepository.save(incidencia);
+
+        assignmentService.actualizarUltimaAsignacion(empleadoAsignado);
 
         notificationService.notificarNuevaIncidencia(incidenciaGuardada);
 
-        return incidenciaGuardada;
+        return incidenciaMapper.toResponse(incidenciaGuardada);
     }
     
-    public Incidencia resolverIncidencia(
+    public IncidenciaResponse resolverIncidencia(
             String folio,
             ResolverIncidenciaRequest request) {
 
         Incidencia incidencia = incidenciaRepository.findByFolio(folio)
-                .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
+                .orElseThrow(() -> new BusinessException(ErrorCodes.INCIDENCIA_NO_ENCONTRADA,"Incidencia no encontrada"));
 
         if (incidencia.getEstado() == EstadoIncidencia.PENDIENTE) {
-            throw new RuntimeException(
+            throw new BusinessException(ErrorCodes.INCIDENCIA_NO_TOMADA,
                     "La incidencia " + folio + " aún no ha sido tomada"
             );
         }
 
         if (incidencia.getEstado() == EstadoIncidencia.RESUELTA) {
-            throw new RuntimeException(
+            throw new BusinessException(ErrorCodes.INCIDENCIA_RESUELTA,
                     "La incidencia " + folio + " ya fue resuelta"
             );
         }
 
         if (incidencia.getEstado() != EstadoIncidencia.EN_PROCESO) {
-            throw new RuntimeException(
+            throw new BusinessException(ErrorCodes.INCIDENCIA_YA_TOMADA,
                     "La incidencia " + folio + " no puede resolverse porque está en estado "
                             + incidencia.getEstado()
             );
@@ -115,40 +109,47 @@ public class IncidenciaService {
                 request.getComentario()
         );
 
-        return incidencia;
+        return incidenciaMapper.toResponse(incidencia);
     }
     
-    public List<Incidencia> obtenerPendientes() {
-        return incidenciaRepository.findByEstado(EstadoIncidencia.PENDIENTE);
+    public List<IncidenciaResponse> obtenerPendientes() {
+    	return incidenciaRepository.findByEstado(EstadoIncidencia.PENDIENTE)
+                .stream()
+                .map(incidenciaMapper::toResponse)
+                .toList();
     }
 
-    public Incidencia obtenerPorFolio(String folio) {
+    public IncidenciaResponse obtenerPorFolio(String folio) {
         return incidenciaRepository.findByFolio(folio)
-                .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
+                .map(incidenciaMapper::toResponse)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.INCIDENCIA_NO_ENCONTRADA,
+                        "Incidencia no encontrada"
+                ));
     }
     
-    public Incidencia tomarIncidencia(
+    public IncidenciaResponse tomarIncidencia(
             String folio,
             ActualizarEstadoIncidenciaRequest request) {
 
         Incidencia incidencia = incidenciaRepository.findByFolio(folio)
-                .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
+                .orElseThrow(() -> new BusinessException(ErrorCodes.INCIDENCIA_NO_ENCONTRADA,"Incidencia no encontrada"));
 
         if (incidencia.getEstado() == EstadoIncidencia.EN_PROCESO) {
-            throw new RuntimeException(
+            throw new BusinessException(ErrorCodes.INCIDENCIA_YA_TOMADA,
                     "La incidencia " + folio + " ya fue tomada por "
                             + incidencia.getUsuarioQueLaTomo()
             );
         }
 
         if (incidencia.getEstado() == EstadoIncidencia.RESUELTA) {
-            throw new RuntimeException(
+            throw new BusinessException(ErrorCodes.INCIDENCIA_RESUELTA,
                     "La incidencia " + folio + " ya fue resuelta"
             );
         }
 
         if (incidencia.getEstado() != EstadoIncidencia.PENDIENTE) {
-            throw new RuntimeException(
+            throw new BusinessException(ErrorCodes.INCIDENCIA_YA_TOMADA,
                     "La incidencia " + folio + " no puede ser tomada porque está en estado "
                             + incidencia.getEstado()
             );
@@ -175,6 +176,6 @@ public class IncidenciaService {
                 request.getComentario()
         );
 
-        return incidencia;
+        return incidenciaMapper.toResponse(incidencia);
     }
 }

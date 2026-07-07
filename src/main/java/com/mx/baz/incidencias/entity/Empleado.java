@@ -2,6 +2,9 @@ package com.mx.baz.incidencias.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "empleados")
@@ -25,12 +28,24 @@ public class Empleado {
 
     private Boolean activo;
 
-    @Column(name = "trabaja_semana")
-    private Boolean trabajaSemana;
+    @Column(name = "ultima_asignacion")
+    private LocalDateTime ultimaAsignacion;
+    
+    @OneToMany(
+            mappedBy = "empleado",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<EmpleadoDiaLaboral> diasLaborales = new ArrayList<>();
 
-    @Column(name = "trabaja_fin_semana")
-    private Boolean trabajaFinSemana;
-
-    @Column(name = "orden_asignacion")
-    private Integer ordenAsignacion;
+    @OneToMany(
+            mappedBy = "empleado",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @Builder.Default
+    private List<EmpleadoAusencia> ausencias = new ArrayList<>();
 }

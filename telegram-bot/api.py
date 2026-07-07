@@ -1,6 +1,14 @@
 import requests
 from config import API_BASE_URL
 
+def manejar_error_response(response):
+    try:
+        error = response.json()
+        mensaje = error.get("mensaje", "Error desconocido")
+    except Exception:
+        mensaje = response.text or "Error desconocido"
+
+    raise Exception(mensaje)
 
 def obtener_pendientes():
     response = requests.get(f"{API_BASE_URL}/incidencias/pendientes", timeout=10)
@@ -26,7 +34,9 @@ def resolver_incidencia(folio, usuario, comentario):
         timeout=10
     )
 
-    response.raise_for_status()
+    if not response.ok:
+        manejar_error_response(response)
+
     return response.json()
 
 def tomar_incidencia(folio, usuario, comentario):
@@ -41,5 +51,7 @@ def tomar_incidencia(folio, usuario, comentario):
         timeout=10
     )
 
-    response.raise_for_status()
+    if not response.ok:
+        manejar_error_response(response)
+
     return response.json()

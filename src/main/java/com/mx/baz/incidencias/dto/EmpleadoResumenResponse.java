@@ -1,18 +1,16 @@
 package com.mx.baz.incidencias.dto;
 
-import java.time.DayOfWeek;
-import java.util.List;
-
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class EmpleadoRequest {
+@Builder
+public class EmpleadoResumenResponse {
 
+    private Long id;
     private String nombre;
     private String usernameTelegram;
     private String email;
-    private Boolean activo;
-    private List<DayOfWeek> diasLaborales;
 }
