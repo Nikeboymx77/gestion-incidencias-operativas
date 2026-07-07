@@ -1,0 +1,18 @@
+[
+  {
+    "idCorreo": "MAIL-0001",
+    "asunto": "Error al liberar crédito",
+    "remitente": "sucursal123@empresa.com",
+    "descripcion": "No se pudo liberar el crédito del cliente.",
+    "fechaCorreo": "2026-07-07T10:15:00",
+    "carpetaOrigen": "Incidencias"
+  },
+  {
+    "idCorreo": "MAIL-0002",
+    "asunto": "Error en validación de INE",
+    "remitente": "sucursal456@empresa.com",
+    "descripcion": "Falla al validar documento INE.",
+    "fechaCorreo": "2026-07-07T10:30:00",
+    "carpetaOrigen": "Produccion"
+  }
+]
