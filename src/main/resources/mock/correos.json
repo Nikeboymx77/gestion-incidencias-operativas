@@ -1,6 +1,6 @@
 [
   {
-    "idCorreo": "MAIL-0001",
+    "idCorreo": "MAIL-0003",
     "asunto": "Error al liberar crédito",
     "remitente": "sucursal123@empresa.com",
     "descripcion": "No se pudo liberar el crédito del cliente.",
@@ -8,7 +8,7 @@
     "carpetaOrigen": "Incidencias"
   },
   {
-    "idCorreo": "MAIL-0002",
+    "idCorreo": "MAIL-0004",
     "asunto": "Error en validación de INE",
     "remitente": "sucursal456@empresa.com",
     "descripcion": "Falla al validar documento INE.",
