@@ -1,0 +1,28 @@
+
+
+
+   ███████╗ ██████╗ ██╗ ██████╗
+   ██╔════╝██╔════╝ ██║██╔═══██╗
+   ███████╗██║  ███╗██║██║   ██║
+   ╚════██║██║   ██║██║██║   ██║
+   ███████║╚██████╔╝██║╚██████╔╝
+   ╚══════╝ ╚═════╝ ╚═╝ ╚═════╝
+
+===========================================================
+      Sistema de Gestión de Incidencias Operativas
+===========================================================
+
+   📬 Mail Provider : ${mail.provider}
+   🌐 Perfil        : ${spring.profiles.active}
+   🚀 Versión       : ${application.version}
+
+-----------------------------------------------------------
+ Procesamiento Automático de Correos
+ Asignación Inteligente de Incidencias
+ Telegram Notifications
+ PST / Outlook / Microsoft Graph
+-----------------------------------------------------------
+
+ Powered by Spring Boot ${spring-boot.version}
+
+===========================================================
