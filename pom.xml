@@ -62,6 +62,16 @@
 	        <artifactId>spring-boot-starter-test</artifactId>
 	        <scope>test</scope>
 	    </dependency>
+	    <dependency>
+		    <groupId>net.sf.jacob-project</groupId>
+		    <artifactId>jacob</artifactId>
+		    <version>1.14.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.pff</groupId>
+		    <artifactId>java-libpst</artifactId>
+		    <version>0.9.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

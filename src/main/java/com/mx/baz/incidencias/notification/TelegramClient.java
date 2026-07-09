@@ -38,4 +38,15 @@ public class TelegramClient {
             log.error("Error enviando mensaje a Telegram: {}", e.getMessage());
         }
     }
+    
+    private String escapeHtml(String text) {
+        if (text == null) {
+            return "";
+        }
+
+        return text
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
 }

@@ -13,6 +13,9 @@ import com.mx.baz.incidencias.service.IncidenciaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import com.mx.baz.incidencias.integration.mail.generator.FolioGenerator;
+import com.mx.baz.incidencias.integration.mail.extractor.MailInformationExtractor;
+import com.mx.baz.incidencias.integration.mail.model.CorreoMetadata;
 
 @Slf4j
 @Component
@@ -23,6 +26,8 @@ public class MailProcessor {
     private final MailNormalizer mailNormalizer;
     private final CorreoProcesadoRepository correoProcesadoRepository;
     private final IncidenciaService incidenciaService;
+    private final FolioGenerator folioGenerator;
+    private final MailInformationExtractor mailInformationExtractor;
 
     public void procesar(CorreoDTO correo) {
 
@@ -36,6 +41,15 @@ public class MailProcessor {
         }
 
         CorreoDTO correoNormalizado = mailNormalizer.normalizar(correo);
+        
+        CorreoMetadata metadata = mailInformationExtractor.extraer(correoNormalizado);
+
+        log.info("Metadata extraída - folio: {}, sucursal: {}, cliente: {}, CU: {}, motivo: {}",
+                metadata.getFolio(),
+                metadata.getSucursal(),
+                metadata.getNombreCliente(),
+                metadata.getClienteUnico(),
+                metadata.getMotivo());
 
         if (correoProcesadoRepository.existsByIdCorreo(correoNormalizado.getIdCorreo())) {
             log.info("Correo ya procesado, se omite: {}", correoNormalizado.getIdCorreo());
@@ -43,7 +57,7 @@ public class MailProcessor {
         }
 
         IncidenciaRequest request = IncidenciaRequest.builder()
-                .folio(correoNormalizado.getIdCorreo())
+        		.folio(folioGenerator.generarDesdeCorreo(correoNormalizado.getAsunto()))
                 .asunto(correoNormalizado.getAsunto())
                 .remitente(correoNormalizado.getRemitente())
                 .fechaCorreo(correoNormalizado.getFechaCorreo())

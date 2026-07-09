@@ -10,10 +10,16 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.util.List;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(
+        name = "mail.provider",
+        havingValue = "mock",
+        matchIfMissing = true
+)
 public class MockMailClient implements MailClient {
 
     private final ObjectMapper objectMapper;

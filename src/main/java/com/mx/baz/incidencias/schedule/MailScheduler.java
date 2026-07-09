@@ -13,8 +13,8 @@ public class MailScheduler {
 
     private final MailService mailService;
 
-//    @Scheduled(fixedDelay = 60000)
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelay = 60000)
+//    @Scheduled(fixedDelay = 15000)
     public void revisarCorreos() {
 
         log.info("========================================");

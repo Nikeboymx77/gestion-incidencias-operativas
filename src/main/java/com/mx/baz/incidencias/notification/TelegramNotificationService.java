@@ -41,7 +41,7 @@ public class TelegramNotificationService implements NotificationService {
                 empleado,
                 incidencia.getCarpetaOrigen(),
                 incidencia.getEstado(),
-                incidencia.getDescripcion()
+                resumen(incidencia.getDescripcion())
         );
 
         telegramClient.sendMessage(mensaje);
@@ -89,5 +89,23 @@ public class TelegramNotificationService implements NotificationService {
         );
 
         telegramClient.sendMessage(mensaje);
+    }
+    
+    private String resumen(String texto) {
+        if (texto == null || texto.isBlank()) {
+            return "Sin descripción";
+        }
+
+        String limpio = texto
+                .replaceAll("\\s+", " ")
+                .trim();
+
+        int max = 700;
+
+        if (limpio.length() <= max) {
+            return limpio;
+        }
+
+        return limpio.substring(0, max) + "...";
     }
 }
