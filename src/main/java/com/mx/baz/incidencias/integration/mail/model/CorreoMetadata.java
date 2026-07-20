@@ -14,4 +14,5 @@ public class CorreoMetadata {
     private String clienteUnico;
     private String nombreCliente;
     private String motivo;
+    private String equipo;
 }

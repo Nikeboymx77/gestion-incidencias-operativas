@@ -56,6 +56,11 @@ public class IncidenciaService {
                 .estado(EstadoIncidencia.PENDIENTE)
                 .empleadoAsignado(empleadoAsignado)
                 .fechaAsignacion(LocalDateTime.now())
+                .sucursal(request.getSucursal())
+                .clienteUnico(request.getClienteUnico())
+                .nombreCliente(request.getNombreCliente())
+                .equipo(request.getEquipo())
+                .motivo(request.getMotivo())
                 .build();
 
         Incidencia incidenciaGuardada = incidenciaRepository.save(incidencia);

@@ -25,6 +25,11 @@ public class IncidenciaMapper {
                 .usuarioQueLaTomo(incidencia.getUsuarioQueLaTomo())
                 .fechaInicio(incidencia.getFechaInicio())
                 .fechaResolucion(incidencia.getFechaResolucion())
+                .sucursal(incidencia.getSucursal())
+                .clienteUnico(incidencia.getClienteUnico())
+                .nombreCliente(incidencia.getNombreCliente())
+                .equipo(incidencia.getEquipo())
+                .motivo(incidencia.getMotivo())
                 .build();
     }
 

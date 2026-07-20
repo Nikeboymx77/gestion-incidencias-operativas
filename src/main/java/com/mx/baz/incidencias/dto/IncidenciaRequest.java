@@ -20,4 +20,9 @@ public class IncidenciaRequest {
     private String carpetaOrigen;
     private PrioridadIncidencia prioridad;
     private String descripcion;
+    private String sucursal;
+    private String clienteUnico;
+    private String nombreCliente;
+    private String equipo;
+    private String motivo;
 }

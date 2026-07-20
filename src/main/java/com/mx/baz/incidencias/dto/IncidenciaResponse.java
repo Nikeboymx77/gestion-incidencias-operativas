@@ -27,4 +27,9 @@ public class IncidenciaResponse {
     private String usuarioQueLaTomo;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaResolucion;
+    private String sucursal;
+    private String clienteUnico;
+    private String nombreCliente;
+    private String equipo;
+    private String motivo;
 }

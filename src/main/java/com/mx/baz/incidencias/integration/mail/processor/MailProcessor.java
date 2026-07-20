@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import com.mx.baz.incidencias.integration.mail.generator.FolioGenerator;
 import com.mx.baz.incidencias.integration.mail.extractor.MailInformationExtractor;
 import com.mx.baz.incidencias.integration.mail.model.CorreoMetadata;
+import com.mx.baz.incidencias.integration.mail.model.MetadataValidationResult;
+import com.mx.baz.incidencias.integration.mail.validator.MetadataValidator;
 
 @Slf4j
 @Component
@@ -28,6 +30,7 @@ public class MailProcessor {
     private final IncidenciaService incidenciaService;
     private final FolioGenerator folioGenerator;
     private final MailInformationExtractor mailInformationExtractor;
+    private final MetadataValidator metadataValidator;
 
     public void procesar(CorreoDTO correo) {
 
@@ -42,7 +45,19 @@ public class MailProcessor {
 
         CorreoDTO correoNormalizado = mailNormalizer.normalizar(correo);
         
-        CorreoMetadata metadata = mailInformationExtractor.extraer(correoNormalizado);
+        CorreoMetadata metadata =
+                mailInformationExtractor.extraer(correoNormalizado);
+
+        MetadataValidationResult validation =
+                metadataValidator.validar(metadata);
+
+        if (!validation.isCompleta()) {
+            log.warn(
+                    "Metadata incompleta para correo {}. Campos faltantes: {}",
+                    correoNormalizado.getIdCorreo(),
+                    validation.getCamposFaltantes()
+            );
+        }
 
         log.info("Metadata extraída - folio: {}, sucursal: {}, cliente: {}, CU: {}, motivo: {}",
                 metadata.getFolio(),
@@ -57,13 +72,18 @@ public class MailProcessor {
         }
 
         IncidenciaRequest request = IncidenciaRequest.builder()
-        		.folio(folioGenerator.generarDesdeCorreo(correoNormalizado.getAsunto()))
+                .folio(folioGenerator.generarDesdeCorreo(correoNormalizado.getAsunto()))
                 .asunto(correoNormalizado.getAsunto())
                 .remitente(correoNormalizado.getRemitente())
                 .fechaCorreo(correoNormalizado.getFechaCorreo())
                 .carpetaOrigen(correoNormalizado.getCarpetaOrigen())
                 .prioridad(PrioridadIncidencia.MEDIA)
                 .descripcion(correoNormalizado.getDescripcion())
+                .sucursal(metadata.getSucursal())
+                .clienteUnico(metadata.getClienteUnico())
+                .nombreCliente(metadata.getNombreCliente())
+                .equipo(metadata.getEquipo())
+                .motivo(metadata.getMotivo())
                 .build();
 
         IncidenciaResponse incidenciaCreada = incidenciaService.crearIncidencia(request);

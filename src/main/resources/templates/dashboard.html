@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SGIO | Dashboard</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div>
+        <h1>SGIO</h1>
+        <p>Sistema de Gestión de Incidencias Operativas</p>
+    </div>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        Sistema activo
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <div>
+            <p class="eyebrow">Panel operativo</p>
+            <h2>Resumen de incidencias</h2>
+            <p>
+                Consulta el estado actual y las incidencias procesadas
+                recientemente por SGIO.
+            </p>
+        </div>
+
+        <a class="refresh-button" th:href="@{/dashboard}">
+            Actualizar
+        </a>
+    </section>
+
+    <section class="cards">
+
+        <article class="metric-card">
+            <p>Total</p>
+            <strong th:text="${total}">0</strong>
+            <span>Incidencias registradas</span>
+        </article>
+
+        <article class="metric-card pending">
+            <p>Pendientes</p>
+            <strong th:text="${pendientes}">0</strong>
+            <span>Esperando atención</span>
+        </article>
+
+        <article class="metric-card progress">
+            <p>En proceso</p>
+            <strong th:text="${enProceso}">0</strong>
+            <span>Actualmente atendidas</span>
+        </article>
+
+        <article class="metric-card resolved">
+            <p>Resueltas</p>
+            <strong th:text="${resueltas}">0</strong>
+            <span>Atención terminada</span>
+        </article>
+
+    </section>
+
+    <section class="table-card">
+
+        <div class="table-header">
+            <div>
+                <p class="eyebrow">Actividad reciente</p>
+                <h3>Últimas incidencias</h3>
+            </div>
+
+            <span th:text="${#lists.size(incidencias)} + ' registros encontrados'">
+			    0 registros encontrados
+			</span>
+        </div>
+        
+        <section class="filters-card">
+
+	    <form method="get"
+	          th:action="@{/dashboard}"
+	          class="filters-form">
+	
+	        <div class="filter-field search-field">
+	
+	            <label for="texto">
+	                Buscar incidencia
+	            </label>
+	
+	            <input
+	                    id="texto"
+	                    name="texto"
+	                    type="text"
+	                    th:value="${texto}"
+	                    placeholder="Folio, cliente, CU o sucursal">
+	
+	        </div>
+	
+	        <div class="filter-field">
+	
+	            <label for="estado">
+	                Estado
+	            </label>
+	
+	            <select id="estado" name="estado">
+	
+	                <option value="">
+	                    Todos los estados
+	                </option>
+	
+	                <option
+	                        th:each="estado : ${estados}"
+	                        th:value="${estado}"
+	                        th:text="${estado}"
+	                        th:selected="${estado == estadoSeleccionado}">
+	                    PENDIENTE
+	                </option>
+	
+	            </select>
+	
+	        </div>
+	
+	        <div class="filter-actions">
+	
+	            <button type="submit"
+	                    class="search-button">
+	                Buscar
+	            </button>
+	
+	            <a th:href="@{/dashboard}"
+	               class="clear-button">
+	                Limpiar
+	            </a>
+	
+	        </div>
+	
+	    </form>
+	
+	</section>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th>Cliente</th>
+                    <th>Sucursal</th>
+                    <th>Estado</th>
+                    <th>Prioridad</th>
+                    <th>Asignado</th>
+                    <th>Fecha</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:if="${#lists.isEmpty(incidencias)}">
+                    <td colspan="7" class="empty-state">
+                        No hay incidencias registradas.
+                    </td>
+                </tr>
+
+                <tr th:each="incidencia : ${incidencias}">
+
+                    <td>
+					    <a class="folio-link"
+					       th:href="@{/dashboard/incidencias/{folio}(
+					            folio=${incidencia.folio}
+					       )}"
+					       th:text="${incidencia.folio}">
+					        INC000001
+					    </a>
+					</td>
+
+                    <td th:text="${incidencia.nombreCliente != null
+                            ? incidencia.nombreCliente
+                            : 'No identificado'}">
+                        Cliente
+                    </td>
+
+                    <td th:text="${incidencia.sucursal != null
+                            ? incidencia.sucursal
+                            : 'No identificada'}">
+                        Sucursal
+                    </td>
+
+                    <td>
+                        <span class="badge"
+                              th:classappend="${#strings.toLowerCase(
+                                  incidencia.estado.toString()
+                              )}"
+                              th:text="${incidencia.estado}">
+                            PENDIENTE
+                        </span>
+                    </td>
+
+                    <td th:text="${incidencia.prioridad}">
+                        MEDIA
+                    </td>
+
+                    <td th:text="${incidencia.empleadoAsignado != null
+                            ? incidencia.empleadoAsignado.nombre
+                            : 'Sin asignar'}">
+                        Empleado
+                    </td>
+
+                    <td th:text="${incidencia.fechaAsignacion  != null
+                            ? #temporals.format(
+                                incidencia.fechaAsignacion,
+                                'dd/MM/yyyy HH:mm'
+                              )
+                            : '-'}">
+                        15/07/2026
+                    </td>
+
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    SGIO · Sistema de Gestión de Incidencias Operativas
+</footer>
+
+</body>
+</html>

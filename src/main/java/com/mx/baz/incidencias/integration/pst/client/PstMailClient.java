@@ -66,6 +66,9 @@ public class PstMailClient implements MailClient {
                 }
 
                 correos.add(correo);
+                
+                //Solo es Temporal
+                log.info("BODY:\n{}", obtenerDescripcion(mensaje));
 
                 if (correos.size() >= pstProperties.getMaxMails()) {
                     break;

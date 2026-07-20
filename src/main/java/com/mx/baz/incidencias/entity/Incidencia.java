@@ -55,6 +55,21 @@ public class Incidencia {
     private LocalDateTime fechaResolucion;
 
     private LocalDateTime createdAt;
+    
+    @Column(name = "sucursal")
+    private String sucursal;
+
+    @Column(name = "cliente_unico")
+    private String clienteUnico;
+
+    @Column(name = "nombre_cliente")
+    private String nombreCliente;
+
+    @Column(name = "equipo")
+    private String equipo;
+
+    @Column(name = "motivo", length = 1000)
+    private String motivo;
 
     @PrePersist
     public void prePersist() {

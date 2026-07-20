@@ -27,21 +27,24 @@ public class TelegramNotificationService implements NotificationService {
 
                 📌 <b>Folio:</b> %s
                 📝 <b>Asunto:</b> %s
-                ⚠️ <b>Prioridad:</b> %s
-                👤 <b>Asignado:</b> %s
-                📂 <b>Carpeta:</b> %s
-                📍 <b>Estado:</b> %s
+                🏢 <b>Sucursal:</b> %s
+                👤 <b>Cliente:</b> %s
+                🆔 <b>Cliente único:</b> %s
+                💻 <b>Equipo:</b> %s
+                ⚠️ <b>Motivo:</b> %s
 
-                🧾 <b>Descripción:</b>
-                %s
+                👨‍💻 <b>Asignado:</b> %s
+                📍 <b>Estado:</b> %s
                 """.formatted(
-                incidencia.getFolio(),
-                incidencia.getAsunto(),
-                incidencia.getPrioridad(),
-                empleado,
-                incidencia.getCarpetaOrigen(),
-                incidencia.getEstado(),
-                resumen(incidencia.getDescripcion())
+                html(valor(incidencia.getFolio())),
+                html(valor(incidencia.getAsunto())),
+                html(valor(incidencia.getSucursal())),
+                html(valor(incidencia.getNombreCliente())),
+                html(valor(incidencia.getClienteUnico())),
+                html(valor(incidencia.getEquipo())),
+                html(resumen(valor(incidencia.getMotivo()), 500)),
+                html(valor(incidencia.getEmpleadoAsignado().getNombre())),
+                html(valor(incidencia.getEstado()))
         );
 
         telegramClient.sendMessage(mensaje);
@@ -107,5 +110,27 @@ public class TelegramNotificationService implements NotificationService {
         }
 
         return limpio.substring(0, max) + "...";
+    }
+    private String valor(Object valor) {
+        return valor == null || valor.toString().isBlank()
+                ? "No identificado"
+                : valor.toString();
+    }
+
+    private String resumen(String texto, int maximo) {
+        String limpio = texto.replaceAll("\\s+", " ").trim();
+
+        if (limpio.length() <= maximo) {
+            return limpio;
+        }
+
+        return limpio.substring(0, maximo) + "...";
+    }
+
+    private String html(String texto) {
+        return texto
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
     }
 }
