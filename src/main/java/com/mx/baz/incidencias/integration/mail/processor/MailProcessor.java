@@ -18,6 +18,7 @@ import com.mx.baz.incidencias.integration.mail.extractor.MailInformationExtracto
 import com.mx.baz.incidencias.integration.mail.model.CorreoMetadata;
 import com.mx.baz.incidencias.integration.mail.model.MetadataValidationResult;
 import com.mx.baz.incidencias.integration.mail.validator.MetadataValidator;
+import com.mx.baz.incidencias.service.SeguimientoIncidenciaService;
 
 @Slf4j
 @Component
@@ -31,20 +32,37 @@ public class MailProcessor {
     private final FolioGenerator folioGenerator;
     private final MailInformationExtractor mailInformationExtractor;
     private final MetadataValidator metadataValidator;
+    private final SeguimientoIncidenciaService seguimientoIncidenciaService;
 
     public void procesar(CorreoDTO correo) {
 
         MailValidationResult validationResult = mailValidator.validar(correo);
 
         if (!validationResult.isValido()) {
-            log.warn("Correo rechazado. idCorreo: {}, motivo: {}",
+            log.warn(
+                    "Correo rechazado. idCorreo: {}, motivo: {}",
                     correo != null ? correo.getIdCorreo() : "SIN_ID",
-                    validationResult.getMotivo());
+                    validationResult.getMotivo()
+            );
             return;
         }
 
         CorreoDTO correoNormalizado = mailNormalizer.normalizar(correo);
-        
+
+        /*
+         * Primero verificamos si este correo específico ya fue procesado.
+         * Esto evita volver a procesar exactamente el mismo mensaje.
+         */
+        if (correoProcesadoRepository.existsByIdCorreo(
+                correoNormalizado.getIdCorreo())) {
+
+            log.info(
+                    "Correo ya procesado, se omite: {}",
+                    correoNormalizado.getIdCorreo()
+            );
+            return;
+        }
+
         CorreoMetadata metadata =
                 mailInformationExtractor.extraer(correoNormalizado);
 
@@ -59,20 +77,62 @@ public class MailProcessor {
             );
         }
 
-        log.info("Metadata extraída - folio: {}, sucursal: {}, cliente: {}, CU: {}, motivo: {}",
+        log.info(
+                "Metadata extraída - folio: {}, sucursal: {}, cliente: {}, CU: {}, motivo: {}",
                 metadata.getFolio(),
                 metadata.getSucursal(),
                 metadata.getNombreCliente(),
                 metadata.getClienteUnico(),
-                metadata.getMotivo());
+                metadata.getMotivo()
+        );
 
-        if (correoProcesadoRepository.existsByIdCorreo(correoNormalizado.getIdCorreo())) {
-            log.info("Correo ya procesado, se omite: {}", correoNormalizado.getIdCorreo());
+        /*
+         * Generamos o extraemos el folio una sola vez.
+         * Este mismo folio se utiliza para buscar y, si es necesario,
+         * crear la incidencia.
+         */
+        String folio = folioGenerator.generarDesdeCorreo(
+                correoNormalizado.getAsunto()
+        );
+
+        /*
+         * Si el folio ya existe, el correo se registra como seguimiento.
+         */
+        boolean registradoComoSeguimiento =
+                seguimientoIncidenciaService.registrarSiExiste(
+                        folio,
+                        correoNormalizado
+                );
+
+        if (registradoComoSeguimiento) {
+
+            /*
+             * También marcamos el correo como procesado.
+             * De lo contrario, el scheduler intentaría guardarlo
+             * como seguimiento nuevamente.
+             */
+            correoProcesadoRepository.save(
+                    CorreoProcesado.builder()
+                            .idCorreo(correoNormalizado.getIdCorreo())
+                            .folioIncidencia(folio)
+                            .build()
+            );
+
+            log.info(
+                    "Correo procesado como seguimiento. idCorreo: {}, folio: {}",
+                    correoNormalizado.getIdCorreo(),
+                    folio
+            );
+
             return;
         }
 
+        /*
+         * Si el folio no existe, seguimos con el flujo normal
+         * de creación de una incidencia.
+         */
         IncidenciaRequest request = IncidenciaRequest.builder()
-                .folio(folioGenerator.generarDesdeCorreo(correoNormalizado.getAsunto()))
+                .folio(folio)
                 .asunto(correoNormalizado.getAsunto())
                 .remitente(correoNormalizado.getRemitente())
                 .fechaCorreo(correoNormalizado.getFechaCorreo())
@@ -86,7 +146,8 @@ public class MailProcessor {
                 .motivo(metadata.getMotivo())
                 .build();
 
-        IncidenciaResponse incidenciaCreada = incidenciaService.crearIncidencia(request);
+        IncidenciaResponse incidenciaCreada =
+                incidenciaService.crearIncidencia(request);
 
         correoProcesadoRepository.save(
                 CorreoProcesado.builder()
@@ -95,8 +156,10 @@ public class MailProcessor {
                         .build()
         );
 
-        log.info("Correo procesado correctamente. idCorreo: {}, folio: {}",
+        log.info(
+                "Correo procesado correctamente. idCorreo: {}, folio: {}",
                 correoNormalizado.getIdCorreo(),
-                incidenciaCreada.getFolio());
+                incidenciaCreada.getFolio()
+        );
     }
 }

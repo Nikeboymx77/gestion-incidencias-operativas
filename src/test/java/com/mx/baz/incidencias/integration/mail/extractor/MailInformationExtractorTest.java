@@ -82,4 +82,49 @@ class MailInformationExtractorTest {
                 metadata.getMotivo()
         );
     }
+    
+    @Test
+    void debeExtraerNombreYSucursalGestoraDeCorreoReenviado() {
+
+        CorreoDTO correo = CorreoDTO.builder()
+                .asunto("""
+                        Re: MBC // INC000024108083 //
+                        4815 MEGA LOS MOCHIS INDEPENDENCIA
+                        """)
+                .descripcion("""
+                        Nombre: JUAN CARLOS GALAVIZ BRISEÑO
+                        Sucursal gestora: 2197
+
+                        Les agradezco su apoyo, buen día.
+
+                        De: Angel Donaldo Manzano Bravo
+                        Enviado: lunes, 13 de julio de 2026 16:57:23
+                        Para: Mariano Blanco Cruz;
+                        Cliente Expediente Electronico de Credito
+                        Cc: Soporte Tecnico - Aplicativo 2° Nivel
+                        Asunto: Re: MBC // INC000024108083
+
+                        Buena tarde.
+                        Se apoya con el desligue de la solicitud,
+                        me apoyan a validarlo por favor.
+                        """)
+                .build();
+
+        CorreoMetadata metadata = extractor.extraer(correo);
+
+        assertEquals(
+                "JUAN CARLOS GALAVIZ BRISEÑO",
+                metadata.getNombreCliente()
+        );
+
+        assertEquals(
+                "2197",
+                metadata.getSucursal()
+        );
+
+        assertEquals(
+                "INC000024108083",
+                metadata.getFolio()
+        );
+    }
 }

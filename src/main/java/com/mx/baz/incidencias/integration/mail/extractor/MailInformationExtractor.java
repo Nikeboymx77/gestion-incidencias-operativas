@@ -28,21 +28,39 @@ public class MailInformationExtractor {
                             + "(?=\\s+Cliente\\s+[ÚU]nico\\s*:"
                             + "|\\s+Fecha\\s+de\\s+Nacimiento\\s*:"
                             + "|\\s+Estado\\s+de\\s+L[ií]nea"
-                            + "|\\s+Sucursal\\s*:"
+                            + "|\\s+Sucursal(?:\\s+gestora)?\\s*:"
                             + "|\\s+Equipo\\s*:"
                             + "|\\s+MOTIVO\\s*:"
+                            + "|\\s+De\\s*:"
+                            + "|\\s+Enviado\\s*:"
+                            + "|\\s+Para\\s*:"
+                            + "|\\s+Cc\\s*:"
+                            + "|\\s+CC\\s*:"
+                            + "|\\s+Asunto\\s*:"
                             + "|$)",
                     REGEX_FLAGS
             );
 
     private static final Pattern SUCURSAL_ETIQUETA_PATTERN =
             Pattern.compile(
-                    "Sucursal\\s*:\\s*(.+?)"
+                    "Sucursal(?:\\s+gestora)?\\s*:\\s*(.+?)"
                             + "(?=\\s+Equipo\\s*:"
                             + "|\\s+Cliente\\s+[ÚU]nico\\s*:"
                             + "|\\s+Nombre\\s*:"
                             + "|\\s+Fecha\\s+de\\s+Nacimiento"
                             + "|\\s+MOTIVO\\s*:"
+                            + "|\\s+Les\\s+agradezco\\b"
+                            + "|\\s+Agradezco\\b"
+                            + "|\\s+Buen\\s+d[ií]a\\b"
+                            + "|\\s+Buena\\s+tarde\\b"
+                            + "|\\s+Quedo\\s+(?:atento|pendiente)\\b"
+                            + "|\\s+Saludos\\b"
+                            + "|\\s+De\\s*:"
+                            + "|\\s+Enviado\\s*:"
+                            + "|\\s+Para\\s*:"
+                            + "|\\s+Cc\\s*:"
+                            + "|\\s+CC\\s*:"
+                            + "|\\s+Asunto\\s*:"
                             + "|$)",
                     REGEX_FLAGS
             );

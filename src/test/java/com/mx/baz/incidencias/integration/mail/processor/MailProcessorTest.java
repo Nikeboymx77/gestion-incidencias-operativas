@@ -12,9 +12,9 @@ import com.mx.baz.incidencias.integration.mail.repository.CorreoProcesadoReposit
 import com.mx.baz.incidencias.integration.mail.validator.MailValidator;
 import com.mx.baz.incidencias.integration.mail.validator.MetadataValidator;
 import com.mx.baz.incidencias.service.IncidenciaService;
+import com.mx.baz.incidencias.service.SeguimientoIncidenciaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,9 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -54,6 +53,9 @@ class MailProcessorTest {
     @Mock
     private IncidenciaService incidenciaService;
 
+    @Mock
+    private SeguimientoIncidenciaService seguimientoIncidenciaService;
+
     @InjectMocks
     private MailProcessor mailProcessor;
 
@@ -76,6 +78,8 @@ class MailProcessorTest {
         verify(metadataValidator, never()).validar(any());
         verify(folioGenerator, never()).generarDesdeCorreo(any());
         verify(correoProcesadoRepository, never()).existsByIdCorreo(any());
+        verify(seguimientoIncidenciaService, never())
+                .registrarSiExiste(anyString(), any(CorreoDTO.class));
         verify(incidenciaService, never()).crearIncidencia(any());
         verify(correoProcesadoRepository, never()).save(any());
     }
@@ -85,38 +89,22 @@ class MailProcessorTest {
 
         CorreoDTO correo = crearCorreoValido();
 
-        CorreoMetadata metadata = CorreoMetadata.builder()
-                .folio("INC000001")
-                .sucursal("9711 Mega Portal Durango")
-                .clienteUnico("0107-09283-2985")
-                .nombreCliente("MARIA ANTONIA RESENDIZ HERRERA")
-                .equipo("WS_VTAS06")
-                .motivo("INACTIVIDAD")
-                .build();
-
         when(mailValidator.validar(correo))
                 .thenReturn(MailValidationResult.valido());
 
         when(mailNormalizer.normalizar(correo))
                 .thenReturn(correo);
 
-        when(mailInformationExtractor.extraer(correo))
-                .thenReturn(metadata);
-
-        when(metadataValidator.validar(metadata))
-                .thenReturn(
-                        MetadataValidationResult.builder()
-                                .completa(true)
-                                .camposFaltantes(List.of())
-                                .build()
-                );
-
         when(correoProcesadoRepository.existsByIdCorreo("MAIL-1"))
                 .thenReturn(true);
 
         mailProcessor.procesar(correo);
 
+        verify(mailInformationExtractor, never()).extraer(any());
+        verify(metadataValidator, never()).validar(any());
         verify(folioGenerator, never()).generarDesdeCorreo(any());
+        verify(seguimientoIncidenciaService, never())
+                .registrarSiExiste(anyString(), any(CorreoDTO.class));
         verify(incidenciaService, never()).crearIncidencia(any());
         verify(correoProcesadoRepository, never()).save(any());
     }
@@ -141,6 +129,9 @@ class MailProcessorTest {
         when(mailNormalizer.normalizar(correo))
                 .thenReturn(correo);
 
+        when(correoProcesadoRepository.existsByIdCorreo("MAIL-1"))
+                .thenReturn(false);
+
         when(mailInformationExtractor.extraer(correo))
                 .thenReturn(metadata);
 
@@ -152,11 +143,13 @@ class MailProcessorTest {
                                 .build()
                 );
 
-        when(correoProcesadoRepository.existsByIdCorreo("MAIL-1"))
-                .thenReturn(false);
-
         when(folioGenerator.generarDesdeCorreo(correo.getAsunto()))
                 .thenReturn("INC000001");
+
+        when(seguimientoIncidenciaService.registrarSiExiste(
+                anyString(),
+                any(CorreoDTO.class)
+        )).thenReturn(false);
 
         when(incidenciaService.crearIncidencia(any()))
                 .thenReturn(
@@ -167,8 +160,17 @@ class MailProcessorTest {
 
         mailProcessor.procesar(correo);
 
-        verify(incidenciaService, times(1)).crearIncidencia(any());
-        verify(correoProcesadoRepository, times(1)).save(any());
+        verify(seguimientoIncidenciaService, times(1))
+                .registrarSiExiste(
+                        "INC000001",
+                        correo
+                );
+
+        verify(incidenciaService, times(1))
+                .crearIncidencia(any());
+
+        verify(correoProcesadoRepository, times(1))
+                .save(any());
     }
 
     @Test
@@ -205,17 +207,22 @@ class MailProcessorTest {
         when(mailNormalizer.normalizar(correo))
                 .thenReturn(correo);
 
+        when(correoProcesadoRepository.existsByIdCorreo("MAIL-1"))
+                .thenReturn(false);
+
         when(mailInformationExtractor.extraer(correo))
                 .thenReturn(metadata);
 
         when(metadataValidator.validar(metadata))
                 .thenReturn(validationResult);
 
-        when(correoProcesadoRepository.existsByIdCorreo("MAIL-1"))
-                .thenReturn(false);
-
         when(folioGenerator.generarDesdeCorreo(correo.getAsunto()))
                 .thenReturn("INC000001");
+
+        when(seguimientoIncidenciaService.registrarSiExiste(
+                anyString(),
+                any(CorreoDTO.class)
+        )).thenReturn(false);
 
         when(incidenciaService.crearIncidencia(any()))
                 .thenReturn(
@@ -226,8 +233,17 @@ class MailProcessorTest {
 
         mailProcessor.procesar(correo);
 
-        verify(incidenciaService, times(1)).crearIncidencia(any());
-        verify(correoProcesadoRepository, times(1)).save(any());
+        verify(seguimientoIncidenciaService, times(1))
+                .registrarSiExiste(
+                        "INC000001",
+                        correo
+                );
+
+        verify(incidenciaService, times(1))
+                .crearIncidencia(any());
+
+        verify(correoProcesadoRepository, times(1))
+                .save(any());
     }
 
     private CorreoDTO crearCorreoValido() {
