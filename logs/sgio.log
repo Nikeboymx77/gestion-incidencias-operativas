@@ -215,3 +215,364 @@ Buen día compañeros de @Operacion e Incidencias – Originacion unica ACA . Le
 2026-07-24T15:57:18.266-06:00  INFO 40084 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-07-24T15:57:18.271-06:00  INFO 40084 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-07-24T15:57:18.287-06:00  INFO 40084 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T17:55:54.065-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 25956 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T17:55:54.087-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-24T17:55:56.264-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T17:55:56.770-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 468 ms. Found 7 JPA repository interfaces.
+2026-07-24T17:55:58.247-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T17:55:58.489-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T17:55:58.616-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T17:55:59.662-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T17:55:59.748-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T17:56:00.174-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@502c087e
+2026-07-24T17:56:00.177-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T17:56:00.399-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T17:56:02.856-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T17:56:03.103-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T17:56:04.295-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T17:56:07.921-06:00  WARN 25956 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T17:56:09.331-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 16.01 seconds (process running for 18.773)
+2026-07-24T17:56:09.350-06:00  INFO 25956 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T17:56:09.353-06:00  INFO 25956 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T17:56:09.354-06:00  INFO 25956 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T17:56:09.601-06:00  INFO 25956 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T17:56:09.604-06:00  INFO 25956 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T17:56:09.605-06:00  INFO 25956 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T17:56:13.570-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-24T17:56:13.670-06:00  WARN 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-24T17:56:13.672-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-24T17:56:13.679-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T17:56:13.710-06:00  WARN 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-24T17:56:13.752-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-24T17:56:13.755-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T17:56:14.165-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-24T17:56:14.175-06:00  INFO 25956 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-24T17:56:14.511-06:00  INFO 25956 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T17:56:14.519-06:00  INFO 25956 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T17:56:14.555-06:00  INFO 25956 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T17:57:30.941-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 23152 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T17:57:30.960-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-24T17:57:33.055-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T17:57:33.482-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 411 ms. Found 7 JPA repository interfaces.
+2026-07-24T17:57:34.735-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T17:57:34.892-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T17:57:34.998-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T17:57:35.983-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T17:57:36.041-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T17:57:36.529-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7f012923
+2026-07-24T17:57:36.532-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T17:57:36.793-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T17:57:38.511-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T17:57:38.654-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T17:57:39.897-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T17:57:43.415-06:00  WARN 23152 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T17:57:44.403-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 14.106 seconds (process running for 16.537)
+2026-07-24T17:57:44.410-06:00  INFO 23152 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T17:57:44.411-06:00  INFO 23152 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T17:57:44.412-06:00  INFO 23152 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T17:57:44.583-06:00  INFO 23152 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T17:57:44.586-06:00  INFO 23152 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T17:57:44.588-06:00  INFO 23152 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T17:57:48.160-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-24T17:57:48.212-06:00  WARN 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-24T17:57:48.214-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-24T17:57:48.218-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T17:57:48.230-06:00  WARN 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-24T17:57:48.256-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-24T17:57:48.259-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T17:57:48.565-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-24T17:57:48.575-06:00  INFO 23152 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-24T17:57:48.799-06:00  INFO 23152 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T17:57:48.804-06:00  INFO 23152 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T17:57:48.826-06:00  INFO 23152 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T17:59:26.901-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : Starting GestionIncidenciasOperativasApplication using Java 21.0.7 with PID 2672 (E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas\target\classes started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T17:59:26.912-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : The following 1 profile is active: "local"
+2026-07-24T17:59:28.035-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T17:59:28.251-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 196 ms. Found 7 JPA repository interfaces.
+2026-07-24T17:59:28.973-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-07-24T17:59:29.030-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-24T17:59:29.032-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2026-07-24T17:59:29.221-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-24T17:59:29.224-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2166 ms
+2026-07-24T17:59:29.529-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T17:59:29.600-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T17:59:29.654-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T17:59:30.048-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T17:59:30.088-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T17:59:30.337-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ebfb045
+2026-07-24T17:59:30.339-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T17:59:30.447-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T17:59:32.091-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T17:59:32.337-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T17:59:32.957-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T17:59:35.030-06:00  WARN 2672 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T17:59:35.617-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2026-07-24T17:59:35.630-06:00  INFO 2672 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : Started GestionIncidenciasOperativasApplication in 10.287 seconds (process running for 12.284)
+2026-07-24T17:59:35.638-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T17:59:35.638-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T17:59:35.640-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T17:59:35.699-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T17:59:35.700-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T17:59:35.700-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:00:35.704-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:00:35.705-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:00:35.706-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:00:35.765-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:00:35.767-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:00:35.768-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:01:35.773-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:01:35.776-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:01:35.777-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:01:35.883-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:01:35.885-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:01:35.887-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:02:35.897-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:02:35.898-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:02:35.900-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:02:35.960-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:02:35.962-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:02:35.962-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:03:35.968-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:03:35.968-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:03:35.969-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:03:36.021-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:03:36.023-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:03:36.024-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:04:36.036-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:04:36.036-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:04:36.036-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:04:36.063-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:04:36.259-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : BODY:
+Buen día compañeros de @Operacion e Incidencias – Originacion unica ACA . Les solicito de su amable apoyo para validar la siguiente incidencia ¿Cómo se da la incidencia? Se tenia dos solicitudes activas y autorizadas en sucursal diferentes. Lo cual ya se corrigió, sin embargo al reintentar persiste error. Validaciones: DATOS : Cliente Único: 0101-03078-3631-9 Nombre: JUAN CARLOS GALAVIZ BRISEÑO Sucursal gestora: 2197 Les agradezco su apoyo, buen día. De: Angel Donaldo Manzano Bravo Enviado: lunes, 13 de julio de 2026 16:57:23 Para: Mariano Blanco Cruz; Cliente Expediente Electronico de Credito Cc: Soporte Tecnico - Aplicativo 2° Nivel Asunto: Re: MBC // INC000024108083 // 4815 MEGA LOS MOCHIS INDEPENDENCIA // API para registrar el bajado a tienda del prospecto Buena tarde. Se apoya con el desligue de la solicitud, me apoyan a validarlo por favor. Quedo atento, Saludos! De: Mariano Blanco Cruz Enviado: lunes, 13 de julio de 2026 03:32:28 p. m. Para: Cliente Expediente Electronico de Credito CC: Soporte Tecnico - Aplicativo 2° Nivel Asunto: MBC // INC000024108083 // 4815 MEGA LOS MOCHIS INDEPENDENCIA // API para registrar el bajado a tienda del prospecto Buen día compañeros. Les solicito de su amable apoyo para validar la siguiente incidencia ¿Cómo se da la incidencia? Al momento de levantar solicitud de reactivación, arroja el siguiente error: Error 1; Lo sentimos Inconveniente con el API para registrar el bajado a tienda del prospecto.. Error 2: Detalles: Hubo un problema al ejecutar los SPs de tienda, favor de reintentar Validaciones: -Se valida regional de cliente con bloqueo Bloqueo por 180 días LCR liberada sin uso y MOTIVO: INACTIVIDAD. Sin embargo se observa que cuenta con dos solicitudes activas y autorizadas en sucursal diferentes. fiPais fiCanal fiSucursal fiFolio fiPaisGestor fiCanalGestor fiSucursalGestora fiStatus fdFechaAlta fdFechaAct fiNgcioId fiNoTienda fiCteId fiDigitoVer 1 1 3078 36319 1 1 2197 3 15/09/2009 04:13:00 p. m. 21/09/2009 12:22:00 p. m. 1 3078 179446 5 No. Registros: 1 fiPais fiCanal fiSucursal fiFolio fdactualiza fiCredAnterior fiCredActual fiCenAnterior fiCenActual fcPrograma fcWS fcUsuario fiMotivo fcValor 1 1 3078 36319 11/10/2012 02:20:08 p. m. 1 1 3 3 CRESolCreAutoriza WS_SFIN03 T816094 0 BLOQUEO POR CAMBIO DE TIENDA ORIGEN 1 1 3078 36319 11/10/2012 02:22:23 p. m. 1 0 3 1 ExpCredito WS_SFIN03 T816094 0 STATUS LCR: LIBERADO 1 1 3078 36319 05/09/2017 12:16:52 a. m. 0 1 1 3 jTDS NT2197 CtrlmJob 0 MOTIVO: ATRASO PEDIDO: 665799 1 1 3078 36319 27/11/2017 07:47:16 p. m. 1 1 3 3 Extractor .NET R04 103 BAEXTAPV01 BANCO 0 MOTIVO: PEDIDOS EN NEGOCIACION NO SE LIBERA LA LCR HASTA LIQUIDACION DE PEDIDOS PEDIDO: 665799 1 1 3078 36319 17/07/2018 12:31:37 a. m. 1 1 3 3 Extractor .NET R04 149 BAEXTAPV01 BANCO 0 MOTIVO: PEDIDOS EN PCJ 1 1 3078 36319 17/12/2018 12:16:53 a. m. 1 1 3 3 jTDS NT2197 CtrlmJob 0 MOTIVO: LEGAL PEDIDO: 665799 1 1 3078 36319 10/06/2026 02:14:48 a. m. 1 0 3 1 Extractor .NET R04 200 QROBANFLUJAPEX1 BANCO 0 DESBLOQUEO REQ LEANBA-118589 1 1 3078 36319 10/06/2026 05:21:00 a. m. 0 0 0 1 jTDS NT2197 CtrlmJob 0 MOTIVO: INACTIVIDAD 1 1 3078 36319 12/06/2026 07:04:43 p. m. 1 1 3 3 Extractor .NET R04 200 QROBANFLUJAPEX1 BANCO 0 Bloqueo por 180 días LCR liberada sin uso No. Registros: 9 fiPais fiCanal fiSucursal fiFolio fnCapacidadPago fnCapacidadPagoDisp fnMontoLCR fiPlazoMax fnEnganche1Compra fiDiaPagoUnico fiStatusAutorizacion fdFechaUltAct fdFechaUltAut fiStatus fiTranNo fiListaNegra fiLocalizacion fiRMD fiLegal fiDificilCobro fiAceptaPP fiPCJ 1 1 3078 36319 450.00 450.00 35100.00 78 0.00 1 0 13/07/2026 12:05:00 p. m. 23/10/2014 04:36:00 a. m. 1 10955978 0 0 0 0 0 0 0 No. Registros: 1 fiPais fiCanal fiSucursal fiFolio fiNgcioId fiNoTienda fiCteId fiDigitoVer 1 1 3078 36319 1 3078 179446 5 No. Registros: 1 FiPais FiCanal FiSucursal FiFolio FiIdBloqueo FiIdStatus FdProceso FiStatCRED FiStatCEN FiNoPedido FcEmpleado FcPuesto FiTranNo FcTranWS FcTranUsr FcAplicacion 1 1 3078 36319 12 0 11/10/2012 02:22:23 p. m. 0 1 0 SYS GCC 7146222 WS_SFIN03 T816094 ExpCredito 1 1 3078 36319 12 1 10/10/2012 02:58:27 p. m. 1 3 0 999999 TAZ 100 BANEXTAPV6 BANCO Dispersor Flujos 1 1 3078 36319 18 1 12/06/2026 07:05:00 p. m. 1 3 0 SYSLCR SYSLCR 0 QROBANFLUJ BANCO Extractor .NET R04 200 No. Registros: 3 fiPais fiCanal fiSucursal fiFolio fiPaisGestor fiCanalGestor fiSucursalGestora fiStatus fdFechaAlta fdFechaAct fiNgcioId fiNoTienda fiCteId fiDigitoVer 1 1 3078 36319 1 1 4815 3 15/09/2009 04:13:00 p. m. 21/09/2009 12:22:00 p. m. 1 3078 179446 5 No. Registros: 1 fiPais fiCanal fiSucursal fiFolio fdactualiza fiCredAnterior fiCredActual fiCenAnterior fiCenActual fcPrograma fcWS fcUsuario fiMotivo fcValor 1 1 3078 36319 21/09/2009 12:21:44 p. m. 9 9 0 2 CRESolCreAutoriza WS_SFIN01 T628442 0 STATUS LCR: AUTORIZADO SIN LIBERAR 1 1 3078 36319 21/09/2009 12:25:39 p. m. 9 3 2 0 ExpCredito WS_SFIN01 T628442 0 0 1 1 3078 36319 21/09/2009 12:30:29 p. m. 3 0 0 1 ExpCredito WS_SFIN02 T621448 0 STATUS LCR: LIBERADO 1 1 3078 36319 05/10/2010 12:15:14 a. m. 0 1 1 3 SQLCMD NT3078 DBJOB 0 MOTIVO: ATRASO PEDIDO: 812186 MOTIVO: ATRASO PEDIDO: 812094 MOTIVO: ATRASO PEDIDO: 811891 MOTIVO: ATRASO PEDIDO: 803984 1 1 3078 36319 05/10/2010 02:52:49 p. m. 1 0 3 1 Abono WS_CAJA04 T687448 0 STATUS LCR: LIBERADO 1 1 3078 36319 10/10/2012 02:58:27 p. m. 0 1 1 3 Dispersor Flujos BANEXTAPV6 BANCO 0 BLOQUEO POR CAMBIO DE TIENDA ORIGEN No. Registros: 6 fiPais fiCanal fiSucursal fiFolio fnCapacidadPago fnCapacidadPagoDisp fnMontoLCR fiPlazoMax fnEnganche1Compra fiDiaPagoUnico fiStatusAutorizacion fdFechaUltAct fdFechaUltAut fiStatus fiTranNo fiListaNegra fiLocalizacion fiRMD fiLegal fiDificilCobro fiAceptaPP fiPCJ 1 1 3078 36319 337.00 337.00 26286.00 78 0.00 0 0 11/10/2012 07:59:00 a. m. 1 1912027 0 0 0 0 0 0 0 No. Registros: 1 fiPais fiCanal fiSucursal fiFolio fiNgcioId fiNoTienda fiCteId fiDigitoVer 1 1 3078 36319 1 3078 179446 5 No. Registros: 1 FiPais FiCanal FiSucursal FiFolio FiIdBloqueo FiIdStatus FdProceso FiStatCRED FiStatCEN FiNoPedido FcEmpleado FcPuesto FiTranNo FcTranWS FcTranUsr FcAplicacion 1 1 3078 36319 12 1 10/10/2012 02:58:27 p. m. 1 3 0 999999 TAZ 8181004 BANEXTAPV6 BANCO Dispersor Flujos 1 1 3078 36319 12 1 11/10/2012 07:59:11 a. m. 1 3 0 SYS GCC 8182704 SISTEMASM BANCO .Net SqlClient Data Provider No. Registros: 2 DATOS : Cliente Único: 0101-03078-3631-9 Nombre: JUAN CARLOS GALAVIZ BRISEÑO Se solicita de su apoyo para el desligue de una de las solicitudes con la finalidad de trasmitir estatus correcto y así pueda continuar con proceso de reactivación Les agradezco, buen día.
+2026-07-24T18:04:36.261-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 1
+2026-07-24T18:04:36.261-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 1
+2026-07-24T18:04:36.272-06:00  WARN 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>. Campos faltantes: [equipo]
+2026-07-24T18:04:36.273-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000024108083, sucursal: 2197, cliente: JUAN CARLOS GALAVIZ BRISEÑO, CU: 0101-03078-3631-9, motivo: INACTIVIDAD. Sin embargo se observa que cuenta con dos solicitudes activas y autorizadas en sucursal diferentes. fiPais fiCanal fiSucursal fiFolio fiPaisGestor fiCanalGestor fiSucursalGestora fiStatus fdFechaAlta fdFechaAct fiNgcioId fiNoTienda fiCteId fiDigitoVer 1 1 3078 36319 1 1 2197 3 15/09/2009 04:13:00 p. m. 21/09/2009 12:22:00 p. m. 1 3078 179446 5
+2026-07-24T18:04:36.482-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Cesar Chavez
+2026-07-24T18:04:36.548-06:00  INFO 2672 --- [gestion-incidencias-operativas] [task-1] c.m.b.i.l.TelegramNotificationListener   : Evento recibido: IncidenciaCreadaEvent
+2026-07-24T18:04:36.556-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>, folio: INC000024108083
+2026-07-24T18:04:39.013-06:00  INFO 2672 --- [gestion-incidencias-operativas] [task-1] c.m.b.i.notification.TelegramClient      : Mensaje enviado a Telegram correctamente
+2026-07-24T18:05:36.595-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:05:36.595-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:05:36.596-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:05:36.648-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:05:36.674-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>
+2026-07-24T18:05:36.674-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:05:36.675-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:06:36.685-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:06:36.686-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:06:36.687-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:06:36.718-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:06:36.744-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>
+2026-07-24T18:06:36.744-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:06:36.745-06:00  INFO 2672 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:07:06.391-06:00  INFO 2672 --- [gestion-incidencias-operativas] [RMI TCP Connection(11)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2026-07-24T18:07:06.396-06:00  INFO 2672 --- [gestion-incidencias-operativas] [RMI TCP Connection(11)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-24T18:07:06.407-06:00  INFO 2672 --- [gestion-incidencias-operativas] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-07-24T18:07:06.415-06:00  INFO 2672 --- [gestion-incidencias-operativas] [RMI TCP Connection(11)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T18:07:06.418-06:00  INFO 2672 --- [gestion-incidencias-operativas] [RMI TCP Connection(11)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T18:07:06.430-06:00  INFO 2672 --- [gestion-incidencias-operativas] [RMI TCP Connection(11)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T18:17:11.842-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 26576 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T18:17:11.855-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-24T18:17:13.350-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T18:17:13.538-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 173 ms. Found 7 JPA repository interfaces.
+2026-07-24T18:17:14.519-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T18:17:14.660-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T18:17:14.753-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T18:17:15.673-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T18:17:15.721-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T18:17:16.014-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@10bdfbcc
+2026-07-24T18:17:16.017-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T18:17:16.125-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T18:17:17.855-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T18:17:17.990-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T18:17:18.861-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T18:17:21.351-06:00  WARN 26576 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T18:17:21.950-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 10.748 seconds (process running for 12.744)
+2026-07-24T18:17:21.958-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:17:21.958-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:17:21.958-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:17:22.069-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:17:22.247-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>
+2026-07-24T18:17:22.248-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:17:22.248-06:00  INFO 26576 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:17:24.692-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-24T18:17:24.739-06:00  WARN 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-24T18:17:24.740-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-24T18:17:24.743-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T18:17:24.761-06:00  WARN 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-24T18:17:24.779-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-24T18:17:24.781-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T18:17:25.009-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-24T18:17:25.017-06:00  INFO 26576 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-24T18:17:25.230-06:00  INFO 26576 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T18:17:25.235-06:00  INFO 26576 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T18:17:25.255-06:00  INFO 26576 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T18:46:31.258-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 7532 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T18:46:31.284-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-24T18:46:34.042-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T18:46:34.476-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 413 ms. Found 7 JPA repository interfaces.
+2026-07-24T18:46:35.984-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T18:46:36.230-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T18:46:36.368-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T18:46:37.639-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T18:46:37.762-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T18:46:38.441-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@131ba005
+2026-07-24T18:46:38.447-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T18:46:38.718-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T18:46:42.096-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T18:46:42.370-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T18:46:43.582-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T18:46:48.306-06:00  WARN 7532 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T18:46:49.677-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 19.415 seconds (process running for 22.342)
+2026-07-24T18:46:49.691-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:46:49.691-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T18:46:49.692-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T18:46:49.870-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T18:46:50.123-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>
+2026-07-24T18:46:50.124-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T18:46:50.124-06:00  INFO 7532 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T18:46:53.315-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-24T18:46:53.398-06:00  WARN 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-24T18:46:53.399-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-24T18:46:53.406-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T18:46:53.426-06:00  WARN 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-24T18:46:53.448-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-24T18:46:53.451-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T18:46:53.769-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-24T18:46:53.777-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-24T18:46:54.286-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: RESPUESTA
+2026-07-24T18:46:54.309-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: REASIGNACION
+2026-07-24T18:46:54.318-06:00  INFO 7532 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: PERSISTE_ERROR
+2026-07-24T18:46:54.475-06:00  INFO 7532 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T18:46:54.481-06:00  INFO 7532 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T18:46:54.506-06:00  INFO 7532 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T19:09:05.627-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 40100 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T19:09:05.666-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-24T19:09:10.324-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T19:09:11.102-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 712 ms. Found 7 JPA repository interfaces.
+2026-07-24T19:09:13.795-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T19:09:14.190-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T19:09:14.393-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T19:09:16.556-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T19:09:16.767-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T19:09:17.681-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3b0ed98a
+2026-07-24T19:09:17.693-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T19:09:18.022-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T19:09:21.774-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T19:09:22.066-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T19:09:23.696-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T19:09:28.775-06:00  WARN 40100 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T19:09:30.392-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 26.03 seconds (process running for 30.247)
+2026-07-24T19:09:30.415-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T19:09:30.417-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T19:09:30.419-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T19:09:30.644-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T19:09:30.882-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>
+2026-07-24T19:09:30.883-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T19:09:30.884-06:00  INFO 40100 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T19:09:35.751-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-24T19:09:35.883-06:00  WARN 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-24T19:09:35.885-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-24T19:09:35.892-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T19:09:35.936-06:00  WARN 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-24T19:09:35.985-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-24T19:09:35.988-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T19:09:36.510-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-24T19:09:36.524-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-24T19:09:36.919-06:00  WARN 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.service.IncidenciaEstadoService  : Incidencia reabierta automáticamente. Folio: INC000024108083, motivo: persistencia del error
+2026-07-24T19:09:37.357-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: RESPUESTA, requiereAtencion: false, estadoModificado: false
+2026-07-24T19:09:37.393-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: REASIGNACION, requiereAtencion: true, estadoModificado: false
+2026-07-24T19:09:37.409-06:00  INFO 40100 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: PERSISTE_ERROR, requiereAtencion: true, estadoModificado: false
+2026-07-24T19:09:37.660-06:00  INFO 40100 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T19:09:37.669-06:00  INFO 40100 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T19:09:37.700-06:00  INFO 40100 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-24T19:16:29.185-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 32800 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-24T19:16:29.200-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-24T19:16:31.419-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-24T19:16:31.665-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 228 ms. Found 7 JPA repository interfaces.
+2026-07-24T19:16:33.006-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-24T19:16:33.272-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-24T19:16:33.413-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-24T19:16:34.430-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-24T19:16:34.531-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-24T19:16:34.951-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@134abd78
+2026-07-24T19:16:34.955-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-24T19:16:35.112-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-24T19:16:37.328-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-24T19:16:37.521-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T19:16:38.855-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-24T19:16:42.148-06:00  WARN 32800 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-24T19:16:43.396-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 14.994 seconds (process running for 17.354)
+2026-07-24T19:16:43.416-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T19:16:43.418-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-24T19:16:43.419-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-24T19:16:43.638-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-24T19:16:43.910-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <bad20ad123ff4acda72318561f31d1cc@centrodesoluciones-gs.com.mx>
+2026-07-24T19:16:43.911-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-24T19:16:43.911-06:00  INFO 32800 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-24T19:16:47.591-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-24T19:16:47.688-06:00  WARN 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-24T19:16:47.690-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-24T19:16:47.698-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T19:16:47.721-06:00  WARN 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-24T19:16:47.751-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-24T19:16:47.754-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-24T19:16:48.080-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-24T19:16:48.091-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-24T19:16:48.396-06:00  WARN 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.service.IncidenciaEstadoService  : Incidencia reabierta automáticamente. Folio: INC000024108083, motivo: persistencia del error
+2026-07-24T19:16:48.794-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: RESPUESTA, requiereAtencion: false, estadoModificado: false
+2026-07-24T19:16:48.843-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: REASIGNACION, requiereAtencion: true, estadoModificado: false
+2026-07-24T19:16:48.857-06:00  INFO 32800 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: PERSISTE_ERROR, requiereAtencion: true, estadoModificado: false
+2026-07-24T19:16:49.122-06:00  INFO 32800 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-24T19:16:49.133-06:00  INFO 32800 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-24T19:16:49.176-06:00  INFO 32800 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

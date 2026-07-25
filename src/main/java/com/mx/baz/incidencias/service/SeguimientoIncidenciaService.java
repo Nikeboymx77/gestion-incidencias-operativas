@@ -20,6 +20,8 @@ public class SeguimientoIncidenciaService {
 
     private final IncidenciaRepository incidenciaRepository;
     private final SeguimientoIncidenciaRepository seguimientoRepository;
+    private final ClasificadorCorreoService clasificadorCorreoService;
+    private final IncidenciaEstadoService incidenciaEstadoService;
 
     /**
      * Busca una incidencia por folio.
@@ -45,6 +47,12 @@ public class SeguimientoIncidenciaService {
         }
 
         Incidencia incidencia = incidenciaExistente.get();
+        
+        TipoSeguimiento tipoSeguimiento =
+                clasificadorCorreoService.clasificar(correo);
+        
+        boolean requiereAtencion =
+                requiereAtencion(tipoSeguimiento);
 
         SeguimientoIncidencia seguimiento =
                 SeguimientoIncidencia.builder()
@@ -53,19 +61,45 @@ public class SeguimientoIncidenciaService {
                         .remitente(correo.getRemitente())
                         .contenido(correo.getDescripcion())
                         .fechaCorreo(correo.getFechaCorreo())
-                        .tipo(TipoSeguimiento.RESPUESTA)
-                        .requiereAtencion(false)
+                        .tipo(tipoSeguimiento)
+                        .requiereAtencion(requiereAtencion)
                         .build();
 
         seguimientoRepository.save(seguimiento);
 
+        boolean estadoModificado =
+                incidenciaEstadoService.evaluarCambioEstado(
+                        incidencia,
+                        tipoSeguimiento
+                );
+
         log.info(
-                "Correo registrado como seguimiento. Folio: {}, idCorreo: {}, estadoActual: {}",
+                "Correo registrado como seguimiento. " +
+                "Folio: {}, idCorreo: {}, estadoActual: {}, " +
+                "tipoSeguimiento: {}, requiereAtencion: {}, " +
+                "estadoModificado: {}",
                 folio,
                 correo.getIdCorreo(),
-                incidencia.getEstado()
+                incidencia.getEstado(),
+                tipoSeguimiento,
+                requiereAtencion,
+                estadoModificado
         );
 
         return true;
+    }
+    
+    private boolean requiereAtencion(
+            TipoSeguimiento tipoSeguimiento) {
+
+        return switch (tipoSeguimiento) {
+            case PERSISTE_ERROR,
+                 REASIGNACION,
+                 ESCALAMIENTO -> true;
+
+            case RESPUESTA,
+                 CONFIRMACION_SOLUCION,
+                 INFORMATIVO -> false;
+        };
     }
 }
