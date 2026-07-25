@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import com.mx.baz.incidencias.events.IncidenciaReabiertaEvent;
 
 @Slf4j
 @Component
@@ -56,6 +57,21 @@ public class TelegramNotificationListener {
                 event.getComentario()
         );
 
+    }
+    
+    @EventListener
+    public void manejarIncidenciaReabierta(
+            IncidenciaReabiertaEvent event) {
+
+        log.info(
+                "Evento recibido: IncidenciaReabiertaEvent. Folio: {}",
+                event.getIncidencia().getFolio()
+        );
+
+        notificationService.notificarIncidenciaReabierta(
+                event.getIncidencia(),
+                event.getMotivo()
+        );
     }
 
 }

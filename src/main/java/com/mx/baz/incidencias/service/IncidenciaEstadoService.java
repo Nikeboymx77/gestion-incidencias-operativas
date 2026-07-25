@@ -7,18 +7,25 @@ import com.mx.baz.incidencias.repository.IncidenciaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import com.mx.baz.incidencias.events.IncidenciaReabiertaEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class IncidenciaEstadoService {
 
-    private final IncidenciaRepository incidenciaRepository;
+    private static final String USUARIO_SISTEMA = "SISTEMA";
 
-    /**
-     * Evalúa si el tipo de seguimiento recibido debe provocar
-     * un cambio automático en el estado de la incidencia.
-     */
+    private static final String COMENTARIO_REAPERTURA =
+            "Incidencia reabierta automáticamente "
+                    + "por persistencia del error detectada en correo";
+
+    private final IncidenciaRepository incidenciaRepository;
+    private final HistorialIncidenciaService historialIncidenciaService;
+    
+    private final ApplicationEventPublisher eventPublisher;
+
     public boolean evaluarCambioEstado(
             Incidencia incidencia,
             TipoSeguimiento tipoSeguimiento) {
@@ -49,15 +56,36 @@ public class IncidenciaEstadoService {
             return false;
         }
 
+        EstadoIncidencia estadoAnterior =
+                incidencia.getEstado();
+
         incidencia.setEstado(
                 EstadoIncidencia.REABIERTA
         );
 
         incidenciaRepository.save(incidencia);
 
+        historialIncidenciaService.registrarCambioEstado(
+                incidencia,
+                estadoAnterior,
+                EstadoIncidencia.REABIERTA,
+                USUARIO_SISTEMA,
+                COMENTARIO_REAPERTURA
+        );
+        
+        eventPublisher.publishEvent(
+                new IncidenciaReabiertaEvent(
+                        incidencia,
+                        COMENTARIO_REAPERTURA
+                )
+        );
+
         log.warn(
-                "Incidencia reabierta automáticamente. Folio: {}, motivo: persistencia del error",
-                incidencia.getFolio()
+                "Incidencia reabierta automáticamente. " +
+                "Folio: {}, estadoAnterior: {}, estadoNuevo: {}",
+                incidencia.getFolio(),
+                estadoAnterior,
+                incidencia.getEstado()
         );
 
         return true;

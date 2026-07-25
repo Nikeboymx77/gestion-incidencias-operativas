@@ -133,4 +133,57 @@ public class TelegramNotificationService implements NotificationService {
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
     }
+    
+    public void notificarIncidenciaReabierta(
+            Incidencia incidencia,
+            String motivoReapertura) {
+
+        String mensaje = """
+                🔄 INCIDENCIA REABIERTA
+
+                Folio:
+                %s
+
+                Sucursal:
+                %s
+
+                Cliente:
+                %s
+
+                Cliente único:
+                %s
+
+                Equipo:
+                %s
+
+                Motivo:
+                %s
+
+                Estado:
+                %s
+
+                ⚠️ Se requiere atención.
+                """.formatted(
+                valorSeguro(incidencia.getFolio()),
+                valorSeguro(incidencia.getSucursal()),
+                valorSeguro(incidencia.getNombreCliente()),
+                valorSeguro(incidencia.getClienteUnico()),
+                valorSeguro(incidencia.getEquipo()),
+                valorSeguro(motivoReapertura),
+                valorSeguro(
+                        incidencia.getEstado() != null
+                                ? incidencia.getEstado().name()
+                                : null
+                )
+        );
+
+        telegramClient.sendMessage(mensaje);
+        
+    }
+    private String valorSeguro(String valor) {
+
+        return valor == null || valor.isBlank()
+                ? "No disponible"
+                : valor;
+    }
 }

@@ -3,21 +3,24 @@ from telegram.ext import ContextTypes
 from api import obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia
 
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    mensaje = """
-🤖 Bot de Gestión de Incidencias
+async def help_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
 
-Comandos disponibles:
+    mensaje = (
+        "🤖 Bot de Gestión de Incidencias\n\n"
+        "Comandos disponibles:\n\n"
+        "/pendientes\n"
+        "Consulta incidencias pendientes.\n\n"
+        "/estado INC-1001\n"
+        "Consulta el estado de una incidencia.\n\n"
+        "/tomar INC-1001\n"
+        "Toma una incidencia pendiente y la marca como EN_PROCESO.\n\n"
+        "/resuelto INC-1001 comentario\n"
+        "Marca una incidencia como resuelta."
+    )
 
-/pendientes
-Consulta incidencias pendientes.
-
-/estado INC-1001
-Consulta el estado de una incidencia.
-
-/resuelto INC-1001 comentario
-Marca una incidencia como resuelta.
-"""
     await update.message.reply_text(mensaje)
 
 

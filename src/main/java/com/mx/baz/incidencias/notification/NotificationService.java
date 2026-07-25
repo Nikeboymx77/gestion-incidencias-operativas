@@ -9,4 +9,7 @@ public interface NotificationService {
     void notificarIncidenciaResuelta(Incidencia incidencia, String usuario, String comentario);
     
     void notificarIncidenciaEnProceso(Incidencia incidencia, String usuario, String comentario);
+    
+    void notificarIncidenciaReabierta(Incidencia incidencia,String motivoReapertura);
+    
 }

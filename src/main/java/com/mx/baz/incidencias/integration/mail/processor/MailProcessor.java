@@ -66,16 +66,7 @@ public class MailProcessor {
         CorreoMetadata metadata =
                 mailInformationExtractor.extraer(correoNormalizado);
 
-        MetadataValidationResult validation =
-                metadataValidator.validar(metadata);
-
-        if (!validation.isCompleta()) {
-            log.warn(
-                    "Metadata incompleta para correo {}. Campos faltantes: {}",
-                    correoNormalizado.getIdCorreo(),
-                    validation.getCamposFaltantes()
-            );
-        }
+       
 
         log.info(
                 "Metadata extraída - folio: {}, sucursal: {}, cliente: {}, CU: {}, motivo: {}",
@@ -125,6 +116,17 @@ public class MailProcessor {
             );
 
             return;
+        }
+        
+        MetadataValidationResult validation =
+                metadataValidator.validar(metadata);
+
+        if (!validation.isCompleta()) {
+            log.warn(
+                    "Metadata incompleta para correo {}. Campos faltantes: {}",
+                    correoNormalizado.getIdCorreo(),
+                    validation.getCamposFaltantes()
+            );
         }
 
         /*

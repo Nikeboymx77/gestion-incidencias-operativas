@@ -47,4 +47,11 @@ public class ConsoleNotificationService implements NotificationService {
                 usuario,
                 comentario);
     }
+
+	@Override
+	public void notificarIncidenciaReabierta(Incidencia incidencia, String motivoReapertura) {
+		log.info("Incidencia ReAbierta: {} - MotivoReapertura: {}",
+                incidencia.getFolio(), motivoReapertura);
+		
+	}
 }

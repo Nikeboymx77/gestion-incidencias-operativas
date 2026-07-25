@@ -9,12 +9,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+import com.mx.baz.incidencias.events.IncidenciaReabiertaEvent;
+import org.mockito.ArgumentCaptor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class IncidenciaEstadoServiceTest {
@@ -22,15 +26,23 @@ class IncidenciaEstadoServiceTest {
     @Mock
     private IncidenciaRepository incidenciaRepository;
 
+    @Mock
+    private HistorialIncidenciaService historialIncidenciaService;
+
     private IncidenciaEstadoService incidenciaEstadoService;
+    
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
 
-        incidenciaEstadoService =
-                new IncidenciaEstadoService(
-                        incidenciaRepository
-                );
+    	incidenciaEstadoService =
+    	        new IncidenciaEstadoService(
+    	                incidenciaRepository,
+    	                historialIncidenciaService,
+    	                eventPublisher
+    	        );
     }
 
     @Test
@@ -56,6 +68,37 @@ class IncidenciaEstadoServiceTest {
 
         verify(incidenciaRepository)
                 .save(incidencia);
+
+        verify(historialIncidenciaService)
+                .registrarCambioEstado(
+                        incidencia,
+                        EstadoIncidencia.RESUELTA,
+                        EstadoIncidencia.REABIERTA,
+                        "SISTEMA",
+                        "Incidencia reabierta automáticamente "
+                                + "por persistencia del error detectada en correo"
+                );
+        ArgumentCaptor<IncidenciaReabiertaEvent> eventCaptor =
+                ArgumentCaptor.forClass(
+                        IncidenciaReabiertaEvent.class
+                );
+
+        verify(eventPublisher)
+                .publishEvent(eventCaptor.capture());
+
+        IncidenciaReabiertaEvent eventoPublicado =
+                eventCaptor.getValue();
+
+        assertEquals(
+                incidencia,
+                eventoPublicado.getIncidencia()
+        );
+
+        assertEquals(
+                "Incidencia reabierta automáticamente "
+                        + "por persistencia del error detectada en correo",
+                eventoPublicado.getMotivo()
+        );
     }
 
     @Test
@@ -81,6 +124,11 @@ class IncidenciaEstadoServiceTest {
 
         verify(incidenciaRepository, never())
                 .save(incidencia);
+
+        verifyNoInteractions(
+                historialIncidenciaService,
+                eventPublisher
+        );
     }
 
     @Test
@@ -104,8 +152,11 @@ class IncidenciaEstadoServiceTest {
                 incidencia.getEstado()
         );
 
-        verify(incidenciaRepository, never())
-                .save(incidencia);
+        verifyNoInteractions(
+                incidenciaRepository,
+                historialIncidenciaService,
+                eventPublisher
+        );
     }
 
     @Test
@@ -119,10 +170,10 @@ class IncidenciaEstadoServiceTest {
 
         assertFalse(resultado);
 
-        verify(incidenciaRepository, never())
-                .save(
-                        org.mockito.ArgumentMatchers.any()
-                );
+        verifyNoInteractions(
+                incidenciaRepository,
+                historialIncidenciaService
+        );
     }
 
     @Test
@@ -141,9 +192,9 @@ class IncidenciaEstadoServiceTest {
 
         assertFalse(resultado);
 
-        verify(incidenciaRepository, never())
-                .save(
-                        org.mockito.ArgumentMatchers.any()
-                );
+        verifyNoInteractions(
+                incidenciaRepository,
+                historialIncidenciaService
+        );
     }
 }
