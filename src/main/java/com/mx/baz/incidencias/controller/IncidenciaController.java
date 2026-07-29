@@ -1,8 +1,10 @@
 package com.mx.baz.incidencias.controller;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
+import com.mx.baz.incidencias.dto.EstadisticasResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
+import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
@@ -75,6 +77,19 @@ public class IncidenciaController {
                         .obtenerPendientesPorNombreEmpleado(
                                 nombreEmpleado
                         )
+        );
+    }
+    
+    @GetMapping("/estadisticas")
+    public ResponseEntity<EstadisticasResponse> obtenerEstadisticas() {
+        return ResponseEntity.ok(incidenciaService.obtenerEstadisticas());
+    }
+    
+    @GetMapping("/ranking")
+    public ResponseEntity<List<RankingEmpleadoResponse>> obtenerRanking() {
+
+        return ResponseEntity.ok(
+                incidenciaService.obtenerRanking()
         );
     }
 }

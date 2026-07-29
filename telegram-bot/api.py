@@ -100,3 +100,27 @@ def obtener_detalle_empleado(username):
     response.raise_for_status()
 
     return response.json()
+
+def obtener_estadisticas():
+    url = f"{API_BASE_URL}/incidencias/estadisticas"
+
+    try:
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as error:
+        print(f"Error al consultar estadísticas: {error}")
+        return None
+    
+def obtener_ranking():
+    url = f"{API_BASE_URL}/incidencias/ranking"
+
+    try:
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as error:
+        print(f"Error al consultar el ranking: {error}")
+        return None

@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia, 
                  obtener_pendientes_empleado,obtener_pendientes_por_empleado,obtener_resumen_empleados,
-                 obtener_detalle_empleado)
+                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking)
 
 
 
@@ -28,7 +28,9 @@ async def help_command(
         "/mis_pendientes\n"
         "Consulta las incidencias EN_PROCESO o REABIERTAS asignadas a tu usuario.\n\n"
         "/empleados - Muestra la carga operativa del equipo.\n\n"
-        "/empleado usuarioTelegram - Muestra el detalle de un integrante."
+        "/empleado usuarioTelegram - Muestra el detalle de un integrante.\n\n"
+        "/estadisticas - Muestra el resumen general de SGIO.\n\n"
+        "/ranking - Muestra el ranking operativo del equipo."
     )
 
     await update.message.reply_text(mensaje)
@@ -357,4 +359,76 @@ async def empleado_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             f"❌ Error:\n{error}"
         )
+
+async def estadisticas_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+):
+
+    estadisticas = obtener_estadisticas()
+
+    if not estadisticas:
+        await update.message.reply_text(
+            "❌ No fue posible consultar las estadísticas de SGIO."
+        )
+        return
+
+    mensaje = (
+        "📊 *Estadísticas SGIO*\n\n"
+        f"📌 Pendientes: {estadisticas.get('pendientes', 0)}\n"
+        f"🟡 En proceso: {estadisticas.get('enProceso', 0)}\n"
+        f"🔴 Reabiertas: {estadisticas.get('reabiertas', 0)}\n"
+        f"✅ Resueltas hoy: {estadisticas.get('resueltasHoy', 0)}\n\n"
+        f"👥 Empleados activos: {estadisticas.get('empleadosActivos', 0)}"
+    )
+
+    await update.message.reply_text(
+        mensaje,
+        parse_mode="Markdown"
+    )
+
+async def ranking_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+):
+
+    ranking = obtener_ranking()
+
+    if ranking is None:
+        await update.message.reply_text(
+            "❌ No fue posible consultar el ranking de SGIO."
+        )
+        return
+
+    if not ranking:
+        await update.message.reply_text(
+            "📭 No hay información disponible para generar el ranking."
+        )
+        return
+
+    medallas = ["🥇", "🥈", "🥉"]
+
+    mensaje = "🏆 *Ranking SGIO*\n\n"
+
+    for posicion, empleado in enumerate(ranking, start=1):
+
+        indicador = (
+            medallas[posicion - 1]
+            if posicion <= 3
+            else f"{posicion}."
+        )
+
+        mensaje += (
+            f"{indicador} *{empleado.get('nombre', 'Sin nombre')}*\n"
+            f"✅ Resueltas: {empleado.get('resueltas', 0)}\n"
+            f"📌 Pendientes: {empleado.get('pendientes', 0)}\n"
+            f"🟡 En proceso: {empleado.get('enProceso', 0)}\n"
+            f"🔴 Reabiertas: {empleado.get('reabiertas', 0)}\n"
+            f"📊 Activas: {empleado.get('totalActivas', 0)}\n\n"
+        )
+
+    await update.message.reply_text(
+        mensaje,
+        parse_mode="Markdown"
+    )
         

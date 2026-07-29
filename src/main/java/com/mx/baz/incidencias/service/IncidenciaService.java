@@ -2,8 +2,10 @@ package com.mx.baz.incidencias.service;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
 import com.mx.baz.incidencias.dto.EmpleadoResumenOperativoResponse;
+import com.mx.baz.incidencias.dto.EstadisticasResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
+import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.HistorialIncidencia;
@@ -27,7 +29,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -303,6 +307,51 @@ public class IncidenciaService {
                         empleado2.getTotalActivas(),
                         empleado1.getTotalActivas()
                 ))
+                .toList();
+    }
+    public EstadisticasResponse obtenerEstadisticas() {
+
+        long pendientes = incidenciaRepository.countByEstado(EstadoIncidencia.PENDIENTE);
+
+        long enProceso = incidenciaRepository.countByEstado(EstadoIncidencia.EN_PROCESO);
+
+        long reabiertas = incidenciaRepository.countByEstado(EstadoIncidencia.REABIERTA);
+
+        LocalDateTime inicioHoy = LocalDate.now().atStartOfDay();
+
+        LocalDateTime finHoy = LocalDate.now().atTime(LocalTime.MAX);
+
+        long resueltasHoy = incidenciaRepository.countByEstadoAndFechaResolucionBetween(
+                EstadoIncidencia.RESUELTA,
+                inicioHoy,
+                finHoy
+        );
+
+        long empleadosActivos = empleadoRepository.countByActivoTrue();
+
+        return EstadisticasResponse.builder()
+                .pendientes(pendientes)
+                .enProceso(enProceso)
+                .reabiertas(reabiertas)
+                .resueltasHoy(resueltasHoy)
+                .empleadosActivos(empleadosActivos)
+                .build();
+    }
+    
+    public List<RankingEmpleadoResponse> obtenerRanking() {
+
+        return incidenciaRepository.obtenerRankingEmpleados()
+                .stream()
+                .map(resultado -> RankingEmpleadoResponse.builder()
+                        .empleadoId(resultado.getEmpleadoId())
+                        .nombre(resultado.getNombre())
+                        .pendientes(resultado.getPendientes())
+                        .enProceso(resultado.getEnProceso())
+                        .reabiertas(resultado.getReabiertas())
+                        .resueltas(resultado.getResueltas())
+                        .totalActivas(resultado.getTotalActivas())
+                        .build()
+                )
                 .toList();
     }
 }

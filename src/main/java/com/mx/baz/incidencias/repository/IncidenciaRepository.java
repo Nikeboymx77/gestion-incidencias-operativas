@@ -2,6 +2,8 @@ package com.mx.baz.incidencias.repository;
 
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
+import com.mx.baz.incidencias.repository.projection.RankingEmpleadoProjection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.Optional;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -56,4 +60,60 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
             Long empleadoId,
             EstadoIncidencia estado
     );
+    
+    long countByEstadoAndFechaResolucionBetween(
+            EstadoIncidencia estado,
+            LocalDateTime inicio,
+            LocalDateTime fin
+    );
+    
+    @Query("""
+    	    SELECT
+    	        e.id AS empleadoId,
+    	        e.nombre AS nombre,
+
+    	        SUM(CASE
+    	            WHEN i.estado = com.mx.baz.incidencias.enums.EstadoIncidencia.PENDIENTE
+    	            THEN 1 ELSE 0
+    	        END) AS pendientes,
+
+    	        SUM(CASE
+    	            WHEN i.estado = com.mx.baz.incidencias.enums.EstadoIncidencia.EN_PROCESO
+    	            THEN 1 ELSE 0
+    	        END) AS enProceso,
+
+    	        SUM(CASE
+    	            WHEN i.estado = com.mx.baz.incidencias.enums.EstadoIncidencia.REABIERTA
+    	            THEN 1 ELSE 0
+    	        END) AS reabiertas,
+
+    	        SUM(CASE
+    	            WHEN i.estado = com.mx.baz.incidencias.enums.EstadoIncidencia.RESUELTA
+    	            THEN 1 ELSE 0
+    	        END) AS resueltas,
+
+    	        SUM(CASE
+    	            WHEN i.estado IN (
+    	                com.mx.baz.incidencias.enums.EstadoIncidencia.PENDIENTE,
+    	                com.mx.baz.incidencias.enums.EstadoIncidencia.EN_PROCESO,
+    	                com.mx.baz.incidencias.enums.EstadoIncidencia.REABIERTA
+    	            )
+    	            THEN 1 ELSE 0
+    	        END) AS totalActivas
+
+    	    FROM Incidencia i
+    	    JOIN i.empleadoAsignado e
+
+    	    WHERE e.activo = true
+
+    	    GROUP BY e.id, e.nombre
+
+    	    ORDER BY
+    	        SUM(CASE
+    	            WHEN i.estado = com.mx.baz.incidencias.enums.EstadoIncidencia.RESUELTA
+    	            THEN 1 ELSE 0
+    	        END) DESC,
+    	        e.nombre ASC
+    	    """)
+    	List<RankingEmpleadoProjection> obtenerRankingEmpleados();
 }

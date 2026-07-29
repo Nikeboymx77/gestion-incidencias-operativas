@@ -11,5 +11,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
     List<Empleado> findByActivoTrue();
     
     Optional<Empleado> findByUsernameTelegramIgnoreCase(String usernameTelegram);
+    
+    long countByActivoTrue();
 
 }
