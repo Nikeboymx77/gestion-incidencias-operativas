@@ -124,3 +124,19 @@ def obtener_ranking():
     except requests.RequestException as error:
         print(f"Error al consultar el ranking: {error}")
         return None
+    
+def obtener_incidencias_atrasadas(dias=3):
+    url = f"{API_BASE_URL}/incidencias/atrasadas"
+
+    try:
+        response = requests.get(
+            url,
+            params={"dias": dias},
+            timeout=30
+        )
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as error:
+        print(f"Error al consultar incidencias atrasadas: {error}")
+        return None

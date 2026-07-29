@@ -116,4 +116,17 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
     	        e.nombre ASC
     	    """)
     	List<RankingEmpleadoProjection> obtenerRankingEmpleados();
+    
+    @Query("""
+    	    SELECT i
+    	    FROM Incidencia i
+    	    LEFT JOIN FETCH i.empleadoAsignado e
+    	    WHERE i.estado IN (
+    	        com.mx.baz.incidencias.enums.EstadoIncidencia.PENDIENTE,
+    	        com.mx.baz.incidencias.enums.EstadoIncidencia.EN_PROCESO,
+    	        com.mx.baz.incidencias.enums.EstadoIncidencia.REABIERTA
+    	    )
+    	    ORDER BY i.fechaInicio ASC
+    	    """)
+    	List<Incidencia> obtenerIncidenciasAbiertas();
 }

@@ -1,7 +1,9 @@
 package com.mx.baz.incidencias.controller;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
+import com.mx.baz.incidencias.dto.BalanceResponse;
 import com.mx.baz.incidencias.dto.EstadisticasResponse;
+import com.mx.baz.incidencias.dto.IncidenciaAtrasadaResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
@@ -90,6 +92,22 @@ public class IncidenciaController {
 
         return ResponseEntity.ok(
                 incidenciaService.obtenerRanking()
+        );
+    }
+    
+    @GetMapping("/balance")
+    public ResponseEntity<BalanceResponse> obtenerBalance() {
+        return ResponseEntity.ok(
+                incidenciaService.obtenerBalance()
+        );
+    }
+    
+    @GetMapping("/atrasadas")
+    public ResponseEntity<List<IncidenciaAtrasadaResponse>> obtenerIncidenciasAtrasadas(
+            @RequestParam(defaultValue = "3") int dias
+    ) {
+        return ResponseEntity.ok(
+                incidenciaService.obtenerIncidenciasAtrasadas(dias)
         );
     }
 }

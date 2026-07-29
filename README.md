@@ -292,6 +292,17 @@ mvn spring-boot:run
 - ✅ Idempotencia
 - ✅ Pruebas unitarias
 
+## Caracteristicas
+✔ Outlook
+✔ Telegram
+✔ Round Robin
+✔ Ausencias
+✔ Historial
+✔ Estadísticas
+✔ Ranking
+✔ Gestión de empleados
+✔ Reapertura automática
+
 ## Próximas funcionalidades
 
 - 🔲 Microsoft Graph

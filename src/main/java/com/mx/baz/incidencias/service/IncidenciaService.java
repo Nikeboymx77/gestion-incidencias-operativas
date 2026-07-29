@@ -1,8 +1,11 @@
 package com.mx.baz.incidencias.service;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
+import com.mx.baz.incidencias.dto.BalanceEmpleadoResponse;
+import com.mx.baz.incidencias.dto.BalanceResponse;
 import com.mx.baz.incidencias.dto.EmpleadoResumenOperativoResponse;
 import com.mx.baz.incidencias.dto.EstadisticasResponse;
+import com.mx.baz.incidencias.dto.IncidenciaAtrasadaResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
@@ -11,6 +14,7 @@ import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.HistorialIncidencia;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
+import com.mx.baz.incidencias.enums.NivelCarga;
 import com.mx.baz.incidencias.events.IncidenciaCreadaEvent;
 import com.mx.baz.incidencias.exception.BusinessException;
 import com.mx.baz.incidencias.exception.ErrorCodes;
@@ -32,7 +36,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -351,6 +358,106 @@ public class IncidenciaService {
                         .resueltas(resultado.getResueltas())
                         .totalActivas(resultado.getTotalActivas())
                         .build()
+                )
+                .toList();
+    }
+    
+    public BalanceResponse obtenerBalance() {
+
+        List<BalanceEmpleadoResponse> empleados =
+                incidenciaRepository.obtenerRankingEmpleados()
+                        .stream()
+                        .map(resultado -> {
+
+                            long totalActivas = resultado.getTotalActivas();
+
+                            NivelCarga nivelCarga;
+
+                            if (totalActivas <= 1) {
+                                nivelCarga = NivelCarga.BAJA;
+                            } else if (totalActivas <= 4) {
+                                nivelCarga = NivelCarga.MEDIA;
+                            } else {
+                                nivelCarga = NivelCarga.ALTA;
+                            }
+
+                            return BalanceEmpleadoResponse.builder()
+                                    .empleadoId(resultado.getEmpleadoId())
+                                    .nombre(resultado.getNombre())
+                                    .totalActivas(totalActivas)
+                                    .nivelCarga(nivelCarga)
+                                    .build();
+                        })
+                        .sorted(
+                                Comparator.comparing(
+                                        BalanceEmpleadoResponse::getTotalActivas
+                                ).reversed()
+                        )
+                        .toList();
+
+        List<BalanceEmpleadoResponse> cargaBaja = empleados.stream()
+                .filter(e -> e.getNivelCarga() == NivelCarga.BAJA)
+                .toList();
+
+        List<BalanceEmpleadoResponse> cargaMedia = empleados.stream()
+                .filter(e -> e.getNivelCarga() == NivelCarga.MEDIA)
+                .toList();
+
+        List<BalanceEmpleadoResponse> cargaAlta = empleados.stream()
+                .filter(e -> e.getNivelCarga() == NivelCarga.ALTA)
+                .toList();
+
+        return BalanceResponse.builder()
+                .cargaBaja(cargaBaja)
+                .cargaMedia(cargaMedia)
+                .cargaAlta(cargaAlta)
+                .build();
+    }
+    
+    public List<IncidenciaAtrasadaResponse> obtenerIncidenciasAtrasadas(int diasMinimos) {
+
+        int diasFiltro = Math.max(diasMinimos, 1);
+        LocalDate hoy = LocalDate.now();
+
+        return incidenciaRepository.obtenerIncidenciasAbiertas()
+                .stream()
+                .map(incidencia -> {
+
+                    LocalDateTime fechaReferencia =
+                            incidencia.getFechaInicio() != null
+                                    ? incidencia.getFechaInicio()
+                                    : incidencia.getFechaCorreo();
+
+                    if (fechaReferencia == null) {
+                        return null;
+                    }
+
+                    long diasAbierta = ChronoUnit.DAYS.between(
+                            fechaReferencia.toLocalDate(),
+                            hoy
+                    );
+
+                    if (diasAbierta < diasFiltro) {
+                        return null;
+                    }
+
+                    String empleado = incidencia.getEmpleadoAsignado() != null
+                            ? incidencia.getEmpleadoAsignado().getNombre()
+                            : "Sin asignar";
+
+                    return IncidenciaAtrasadaResponse.builder()
+                            .folio(incidencia.getFolio())
+                            .asunto(incidencia.getAsunto())
+                            .empleado(empleado)
+                            .estado(incidencia.getEstado())
+                            .diasAbierta(diasAbierta)
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .sorted(
+                        Comparator.comparing(
+                                IncidenciaAtrasadaResponse::getDiasAbierta
+                        ).reversed()
                 )
                 .toList();
     }

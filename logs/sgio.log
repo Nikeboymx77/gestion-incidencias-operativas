@@ -327,3 +327,214 @@
 2026-07-29T12:45:22.628-06:00  INFO 37280 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-07-29T12:45:22.633-06:00  INFO 37280 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-07-29T12:45:22.651-06:00  INFO 37280 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-29T13:06:55.472-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : Starting GestionIncidenciasOperativasApplication using Java 21.0.7 with PID 12316 (E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas\target\classes started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-29T13:06:55.481-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : The following 1 profile is active: "local"
+2026-07-29T13:06:57.061-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-29T13:06:57.287-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 207 ms. Found 7 JPA repository interfaces.
+2026-07-29T13:06:58.367-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-07-29T13:06:58.443-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-29T13:06:58.445-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2026-07-29T13:06:58.744-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-29T13:06:58.746-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3194 ms
+2026-07-29T13:06:59.550-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-29T13:06:59.921-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-29T13:07:00.064-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-29T13:07:01.143-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-29T13:07:01.326-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-29T13:07:02.076-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@d85b399
+2026-07-29T13:07:02.090-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-29T13:07:02.500-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-29T13:07:05.818-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-29T13:07:06.136-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-29T13:07:07.217-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-29T13:07:15.328-06:00  WARN 12316 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-29T13:07:17.723-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-07-29T13:07:17.773-06:00  INFO 12316 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : Started GestionIncidenciasOperativasApplication in 23.987 seconds (process running for 27.004)
+2026-07-29T13:07:17.799-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:07:17.801-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-29T13:07:17.802-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:07:17.919-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-29T13:07:18.242-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8b45e4b1465c4d1394c076aff164a97f@centrodesoluciones-gs.com.mx>
+2026-07-29T13:07:18.255-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <b93d24b994414ee3bafa2d96a6347250@tecnologiaaccionable.mx>
+2026-07-29T13:07:18.278-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8125217122db497ab9d9a385f4476070@centrodesoluciones-gs.com.mx>
+2026-07-29T13:07:18.311-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <30b8e7248dc74f58903c26cd1e0ccbbf@elektra.com.mx>
+2026-07-29T13:07:18.340-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <3f62256a920b40e9ba00e63e305309da@centrodesoluciones-gs.com.mx>
+2026-07-29T13:07:18.367-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <86c7119082f049eaa0d039be44bbd2be@elektra.com.mx>
+2026-07-29T13:07:18.393-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <686ccd37f79e4afaab0338ab2918c928@centrodesoluciones-gs.com.mx>
+2026-07-29T13:07:18.423-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <7a1aac00ab114866b966bf657d0f0b49@centrodesoluciones-gs.com.mx>
+2026-07-29T13:07:18.457-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <13378dcfce654bde8d1388131a665274@centrodesoluciones-gs.com.mx>
+2026-07-29T13:07:18.481-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <2fa5682362c94ba2b4972f1b5a0070ef@centrodesoluciones-gs.com>
+2026-07-29T13:07:18.498-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <1e8318eda6c64e6ea3f3cdd120763e6a@centrodesoluciones-gs.com>
+2026-07-29T13:07:18.526-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <338a841e59e14de88a7cc6290fbf7696@centrodesoluciones-gs.com>
+2026-07-29T13:07:18.527-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-29T13:07:18.528-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-29T13:07:31.370-06:00  INFO 12316 --- [gestion-incidencias-operativas] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-29T13:07:31.373-06:00  INFO 12316 --- [gestion-incidencias-operativas] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-29T13:07:31.380-06:00  INFO 12316 --- [gestion-incidencias-operativas] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2026-07-29T13:08:18.544-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:08:18.545-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-29T13:08:18.545-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:08:18.603-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-29T13:08:18.625-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8b45e4b1465c4d1394c076aff164a97f@centrodesoluciones-gs.com.mx>
+2026-07-29T13:08:18.640-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <b93d24b994414ee3bafa2d96a6347250@tecnologiaaccionable.mx>
+2026-07-29T13:08:18.652-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8125217122db497ab9d9a385f4476070@centrodesoluciones-gs.com.mx>
+2026-07-29T13:08:18.664-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <30b8e7248dc74f58903c26cd1e0ccbbf@elektra.com.mx>
+2026-07-29T13:08:18.679-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <3f62256a920b40e9ba00e63e305309da@centrodesoluciones-gs.com.mx>
+2026-07-29T13:08:18.699-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <86c7119082f049eaa0d039be44bbd2be@elektra.com.mx>
+2026-07-29T13:08:18.713-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <686ccd37f79e4afaab0338ab2918c928@centrodesoluciones-gs.com.mx>
+2026-07-29T13:08:18.727-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <7a1aac00ab114866b966bf657d0f0b49@centrodesoluciones-gs.com.mx>
+2026-07-29T13:08:18.742-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <13378dcfce654bde8d1388131a665274@centrodesoluciones-gs.com.mx>
+2026-07-29T13:08:18.760-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <2fa5682362c94ba2b4972f1b5a0070ef@centrodesoluciones-gs.com>
+2026-07-29T13:08:18.774-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <1e8318eda6c64e6ea3f3cdd120763e6a@centrodesoluciones-gs.com>
+2026-07-29T13:08:18.789-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <338a841e59e14de88a7cc6290fbf7696@centrodesoluciones-gs.com>
+2026-07-29T13:08:18.789-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-29T13:08:18.790-06:00  INFO 12316 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-29T13:08:23.319-06:00  INFO 12316 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2026-07-29T13:08:23.324-06:00  INFO 12316 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-29T13:08:23.345-06:00  INFO 12316 --- [gestion-incidencias-operativas] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-07-29T13:08:23.354-06:00  INFO 12316 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-29T13:08:23.359-06:00  INFO 12316 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-29T13:08:23.383-06:00  INFO 12316 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-29T13:48:22.983-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : Starting GestionIncidenciasOperativasApplication using Java 21.0.7 with PID 45240 (E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas\target\classes started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-29T13:48:22.991-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : The following 1 profile is active: "local"
+2026-07-29T13:48:23.933-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-29T13:48:24.104-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 151 ms. Found 7 JPA repository interfaces.
+2026-07-29T13:48:24.695-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-07-29T13:48:24.726-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-29T13:48:24.727-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2026-07-29T13:48:24.835-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-29T13:48:24.836-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1773 ms
+2026-07-29T13:48:25.065-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-29T13:48:25.140-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-29T13:48:25.186-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-29T13:48:25.507-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-29T13:48:25.541-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-29T13:48:25.737-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@432c0f1
+2026-07-29T13:48:25.740-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-29T13:48:25.825-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-29T13:48:27.162-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-29T13:48:27.257-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-29T13:48:27.608-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-29T13:48:34.867-06:00  WARN 45240 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-29T13:48:36.764-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-07-29T13:48:36.818-06:00  INFO 45240 --- [gestion-incidencias-operativas] [main] .GestionIncidenciasOperativasApplication : Started GestionIncidenciasOperativasApplication in 14.921 seconds (process running for 17.046)
+2026-07-29T13:48:36.842-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:48:36.844-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-29T13:48:36.844-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:48:37.003-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-29T13:48:37.177-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8b45e4b1465c4d1394c076aff164a97f@centrodesoluciones-gs.com.mx>
+2026-07-29T13:48:37.190-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <b93d24b994414ee3bafa2d96a6347250@tecnologiaaccionable.mx>
+2026-07-29T13:48:37.229-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8125217122db497ab9d9a385f4476070@centrodesoluciones-gs.com.mx>
+2026-07-29T13:48:37.244-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <30b8e7248dc74f58903c26cd1e0ccbbf@elektra.com.mx>
+2026-07-29T13:48:37.255-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <3f62256a920b40e9ba00e63e305309da@centrodesoluciones-gs.com.mx>
+2026-07-29T13:48:37.271-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <86c7119082f049eaa0d039be44bbd2be@elektra.com.mx>
+2026-07-29T13:48:37.284-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <686ccd37f79e4afaab0338ab2918c928@centrodesoluciones-gs.com.mx>
+2026-07-29T13:48:37.293-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <7a1aac00ab114866b966bf657d0f0b49@centrodesoluciones-gs.com.mx>
+2026-07-29T13:48:37.303-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <13378dcfce654bde8d1388131a665274@centrodesoluciones-gs.com.mx>
+2026-07-29T13:48:37.313-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <2fa5682362c94ba2b4972f1b5a0070ef@centrodesoluciones-gs.com>
+2026-07-29T13:48:37.325-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <1e8318eda6c64e6ea3f3cdd120763e6a@centrodesoluciones-gs.com>
+2026-07-29T13:48:37.335-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <338a841e59e14de88a7cc6290fbf7696@centrodesoluciones-gs.com>
+2026-07-29T13:48:37.336-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-29T13:48:37.336-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-29T13:49:02.149-06:00  INFO 45240 --- [gestion-incidencias-operativas] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-29T13:49:02.149-06:00  INFO 45240 --- [gestion-incidencias-operativas] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-29T13:49:02.152-06:00  INFO 45240 --- [gestion-incidencias-operativas] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-07-29T13:49:37.341-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:49:37.343-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-29T13:49:37.343-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:49:37.422-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-29T13:49:37.458-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8b45e4b1465c4d1394c076aff164a97f@centrodesoluciones-gs.com.mx>
+2026-07-29T13:49:37.480-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <b93d24b994414ee3bafa2d96a6347250@tecnologiaaccionable.mx>
+2026-07-29T13:49:37.498-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8125217122db497ab9d9a385f4476070@centrodesoluciones-gs.com.mx>
+2026-07-29T13:49:37.514-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <30b8e7248dc74f58903c26cd1e0ccbbf@elektra.com.mx>
+2026-07-29T13:49:37.529-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <3f62256a920b40e9ba00e63e305309da@centrodesoluciones-gs.com.mx>
+2026-07-29T13:49:37.553-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <86c7119082f049eaa0d039be44bbd2be@elektra.com.mx>
+2026-07-29T13:49:37.574-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <686ccd37f79e4afaab0338ab2918c928@centrodesoluciones-gs.com.mx>
+2026-07-29T13:49:37.598-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <7a1aac00ab114866b966bf657d0f0b49@centrodesoluciones-gs.com.mx>
+2026-07-29T13:49:37.618-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <13378dcfce654bde8d1388131a665274@centrodesoluciones-gs.com.mx>
+2026-07-29T13:49:37.642-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <2fa5682362c94ba2b4972f1b5a0070ef@centrodesoluciones-gs.com>
+2026-07-29T13:49:37.675-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <1e8318eda6c64e6ea3f3cdd120763e6a@centrodesoluciones-gs.com>
+2026-07-29T13:49:37.698-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <338a841e59e14de88a7cc6290fbf7696@centrodesoluciones-gs.com>
+2026-07-29T13:49:37.700-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-29T13:49:37.701-06:00  INFO 45240 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-29T13:50:21.727-06:00  INFO 45240 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2026-07-29T13:50:21.733-06:00  INFO 45240 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-29T13:50:21.748-06:00  INFO 45240 --- [gestion-incidencias-operativas] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-07-29T13:50:21.759-06:00  INFO 45240 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-29T13:50:21.764-06:00  INFO 45240 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-29T13:50:21.779-06:00  INFO 45240 --- [gestion-incidencias-operativas] [RMI TCP Connection(4)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-29T13:57:15.268-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Starting GestionIncidenciasOperativasApplicationTests using Java 21.0.7 with PID 40412 (started by 325934 in E:\xfiles\MisProyectos\gestion-incidencias-operativas_ws\gestion-incidencias-operativas)
+2026-07-29T13:57:15.282-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : The following 1 profile is active: "local"
+2026-07-29T13:57:16.448-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-29T13:57:16.628-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 159 ms. Found 7 JPA repository interfaces.
+2026-07-29T13:57:17.345-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-29T13:57:17.476-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2026-07-29T13:57:17.533-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-29T13:57:18.324-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-29T13:57:18.387-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-29T13:57:18.884-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4756e5cc
+2026-07-29T13:57:18.886-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-29T13:57:19.058-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 9.7.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-29T13:57:20.943-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-29T13:57:21.061-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-29T13:57:21.917-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-29T13:57:25.338-06:00  WARN 40412 --- [gestion-incidencias-operativas] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-29T13:57:25.903-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] ionIncidenciasOperativasApplicationTests : Started GestionIncidenciasOperativasApplicationTests in 11.055 seconds (process running for 12.686)
+2026-07-29T13:57:25.909-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:57:25.910-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : Revisando correos pendientes...
+2026-07-29T13:57:25.911-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.schedule.MailScheduler           : ========================================
+2026-07-29T13:57:26.016-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Carpeta PST encontrada: Incidencias a Asignar
+2026-07-29T13:57:26.190-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8b45e4b1465c4d1394c076aff164a97f@centrodesoluciones-gs.com.mx>
+2026-07-29T13:57:26.208-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <b93d24b994414ee3bafa2d96a6347250@tecnologiaaccionable.mx>
+2026-07-29T13:57:26.219-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <8125217122db497ab9d9a385f4476070@centrodesoluciones-gs.com.mx>
+2026-07-29T13:57:26.234-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <30b8e7248dc74f58903c26cd1e0ccbbf@elektra.com.mx>
+2026-07-29T13:57:26.243-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <3f62256a920b40e9ba00e63e305309da@centrodesoluciones-gs.com.mx>
+2026-07-29T13:57:26.255-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <86c7119082f049eaa0d039be44bbd2be@elektra.com.mx>
+2026-07-29T13:57:26.269-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <686ccd37f79e4afaab0338ab2918c928@centrodesoluciones-gs.com.mx>
+2026-07-29T13:57:26.281-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <7a1aac00ab114866b966bf657d0f0b49@centrodesoluciones-gs.com.mx>
+2026-07-29T13:57:26.290-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <13378dcfce654bde8d1388131a665274@centrodesoluciones-gs.com.mx>
+2026-07-29T13:57:26.308-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <2fa5682362c94ba2b4972f1b5a0070ef@centrodesoluciones-gs.com>
+2026-07-29T13:57:26.322-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <1e8318eda6c64e6ea3f3cdd120763e6a@centrodesoluciones-gs.com>
+2026-07-29T13:57:26.333-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correo PST omitido desde lectura: <338a841e59e14de88a7cc6290fbf7696@centrodesoluciones-gs.com>
+2026-07-29T13:57:26.333-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.pst.client.PstMailClient       : Correos leídos desde PST: 0
+2026-07-29T13:57:26.334-06:00  INFO 40412 --- [gestion-incidencias-operativas] [scheduling-1] c.m.b.i.i.mail.service.MailService       : Correos pendientes encontrados: 0
+2026-07-29T13:57:29.307-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo ya procesado, se omite: MAIL-1
+2026-07-29T13:57:29.367-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: null, cliente: null, CU: null, motivo: null
+2026-07-29T13:57:29.370-06:00  WARN 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata incompleta para correo MAIL-1. Campos faltantes: [sucursal, clienteUnico, nombreCliente, equipo, motivo]
+2026-07-29T13:57:29.375-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-29T13:57:29.396-06:00  WARN 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo rechazado. idCorreo: MAIL-1, motivo: Asunto obligatorio
+2026-07-29T13:57:29.418-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Metadata extraída - folio: INC000001, sucursal: 9711 Mega Portal Durango, cliente: MARIA ANTONIA RESENDIZ HERRERA, CU: 0107-09283-2985, motivo: INACTIVIDAD
+2026-07-29T13:57:29.421-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.i.mail.processor.MailProcessor   : Correo procesado correctamente. idCorreo: MAIL-1, folio: INC000001
+2026-07-29T13:57:29.632-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Nuevo
+2026-07-29T13:57:29.636-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.schedule.AssignmentService       : Empleado seleccionado para asignación: Juan
+2026-07-29T13:57:29.799-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.HistorialIncidenciaService     : Cambio de estado registrado en historial. Folio: INC000024108083, estadoAnterior: RESUELTA, estadoNuevo: REABIERTA, usuario: SISTEMA
+2026-07-29T13:57:29.805-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.HistorialIncidenciaService     : Cambio de estado registrado en historial. Folio: INC000024108083, estadoAnterior: RESUELTA, estadoNuevo: REABIERTA, usuario: SISTEMA
+2026-07-29T13:57:29.822-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.HistorialIncidenciaService     : Cambio de estado registrado en historial. Folio: INC000024108083, estadoAnterior: RESUELTA, estadoNuevo: REABIERTA, usuario: SISTEMA
+2026-07-29T13:57:30.065-06:00  WARN 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.service.IncidenciaEstadoService  : Incidencia reabierta automáticamente. Folio: INC000024108083, estadoAnterior: RESUELTA, estadoNuevo: REABIERTA
+2026-07-29T13:57:30.275-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: RESPUESTA, requiereAtencion: false, estadoModificado: false
+2026-07-29T13:57:30.311-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: REASIGNACION, requiereAtencion: true, estadoModificado: false
+2026-07-29T13:57:30.325-06:00  INFO 40412 --- [gestion-incidencias-operativas] [main] c.m.b.i.s.SeguimientoIncidenciaService   : Correo registrado como seguimiento. Folio: INC000024108083, idCorreo: null, estadoActual: null, tipoSeguimiento: PERSISTE_ERROR, requiereAtencion: true, estadoModificado: false
+2026-07-29T13:57:30.448-06:00  INFO 40412 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-29T13:57:30.452-06:00  INFO 40412 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-29T13:57:30.483-06:00  INFO 40412 --- [gestion-incidencias-operativas] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

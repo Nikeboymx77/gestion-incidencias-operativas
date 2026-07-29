@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia, 
                  obtener_pendientes_empleado,obtener_pendientes_por_empleado,obtener_resumen_empleados,
-                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking)
+                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking,obtener_incidencias_atrasadas)
 
 
 
@@ -30,7 +30,8 @@ async def help_command(
         "/empleados - Muestra la carga operativa del equipo.\n\n"
         "/empleado usuarioTelegram - Muestra el detalle de un integrante.\n\n"
         "/estadisticas - Muestra el resumen general de SGIO.\n\n"
-        "/ranking - Muestra el ranking operativo del equipo."
+        "/ranking - Muestra el ranking operativo del equipo.\n\n"
+        "/atrasadas [dias] - Muestra incidencias abiertas con cierta antigüedad."
     )
 
     await update.message.reply_text(mensaje)
@@ -425,6 +426,72 @@ async def ranking_command(
             f"🟡 En proceso: {empleado.get('enProceso', 0)}\n"
             f"🔴 Reabiertas: {empleado.get('reabiertas', 0)}\n"
             f"📊 Activas: {empleado.get('totalActivas', 0)}\n\n"
+        )
+
+    await update.message.reply_text(
+        mensaje,
+        parse_mode="Markdown"
+    )
+    
+async def atrasadas_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+):
+
+    dias = 3
+
+    if context.args:
+        try:
+            dias = int(context.args[0])
+
+            if dias < 1:
+                await update.message.reply_text(
+                    "⚠️ El número de días debe ser mayor a 0."
+                )
+                return
+
+        except ValueError:
+            await update.message.reply_text(
+                "⚠️ Uso correcto: /atrasadas 5"
+            )
+            return
+
+    incidencias = obtener_incidencias_atrasadas(dias)
+
+    if incidencias is None:
+        await update.message.reply_text(
+            "❌ No fue posible consultar las incidencias atrasadas."
+        )
+        return
+
+    if not incidencias:
+        await update.message.reply_text(
+            f"✅ No hay incidencias abiertas con {dias} días o más."
+        )
+        return
+
+    mensaje = (
+        "⏰ *Incidencias atrasadas*\n"
+        f"📅 Antigüedad mínima: {dias} días\n\n"
+    )
+
+    for incidencia in incidencias:
+
+        dias_abierta = incidencia.get("diasAbierta", 0)
+
+        if dias_abierta >= 8:
+            indicador = "🔴"
+        elif dias_abierta >= 5:
+            indicador = "🟡"
+        else:
+            indicador = "🟢"
+
+        mensaje += (
+            f"{indicador} *{incidencia.get('folio', 'Sin folio')}*\n"
+            f"📌 {incidencia.get('asunto', 'Sin asunto')}\n"
+            f"👤 {incidencia.get('empleado', 'Sin asignar')}\n"
+            f"📊 Estado: {incidencia.get('estado', 'Sin estado')}\n"
+            f"⏳ Días abierta: {dias_abierta}\n\n"
         )
 
     await update.message.reply_text(

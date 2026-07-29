@@ -2,7 +2,7 @@ from telegram.ext import Application, CommandHandler
 
 from config import TELEGRAM_BOT_TOKEN
 from commands import (help_command, pendientes_command, estado_command, resuelto_command, chatid_command, tomar_command,mis_pendientes_command,
-                      empleados,empleado_command,estadisticas_command,ranking_command)
+                      empleados,empleado_command,estadisticas_command,ranking_command,atrasadas_command)
 
 
 def main():
@@ -23,6 +23,7 @@ def main():
     app.add_handler(CommandHandler("empleado", empleado_command))
     app.add_handler(CommandHandler("estadisticas", estadisticas_command))
     app.add_handler(CommandHandler("ranking", ranking_command))
+    app.add_handler(CommandHandler("atrasadas", atrasadas_command))
 
     print("🤖 Bot de incidencias iniciado...")
     app.run_polling()
