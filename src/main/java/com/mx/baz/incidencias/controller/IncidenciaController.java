@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,5 +51,30 @@ public class IncidenciaController {
             @RequestBody ActualizarEstadoIncidenciaRequest request) {
 
         return incidenciaService.tomarIncidencia(folio, request);
+    }
+    
+    @GetMapping("/empleado/{usernameTelegram}/pendientes")
+    public ResponseEntity<List<IncidenciaResponse>>
+            obtenerPendientesPorEmpleado(
+                    @PathVariable String usernameTelegram) {
+
+        return ResponseEntity.ok(
+                incidenciaService.obtenerPendientesPorEmpleado(
+                        usernameTelegram
+                )
+        );
+    }
+    
+    @GetMapping("/empleado/nombre/{nombreEmpleado}/pendientes")
+    public ResponseEntity<List<IncidenciaResponse>>
+    obtenerPendientesPorNombreEmpleado(
+            @PathVariable String nombreEmpleado) {
+
+        return ResponseEntity.ok(
+                incidenciaService
+                        .obtenerPendientesPorNombreEmpleado(
+                                nombreEmpleado
+                        )
+        );
     }
 }

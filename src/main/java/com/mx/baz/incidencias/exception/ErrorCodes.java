@@ -12,4 +12,5 @@ public final class ErrorCodes {
     public static final String EMPLEADO_FIN_SEMANA = "EMP-001";
     public static final String EMPLEADO_SEMANA = "EMP-002";
     public static final String EMPLEADO_NO_DISPONIBLE = "EMP-003";
+    public static final String USUARIO_TELEGRAM_INVALIDO = "EMP-004";
 }

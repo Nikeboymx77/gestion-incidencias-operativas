@@ -23,7 +23,10 @@ public class ClasificadorSeguimientoService {
         "se volvio a intentar y continua",
         "se realizo nuevamente y presenta error",
         "favor de validar nuevamente",
-        "nos apoyan a revisar nuevamente"
+        "nos apoyan a revisar nuevamente",
+        "Se tendra algun comentario",
+        "De su apoyo para confirmar si se tiene algun comentario o avance",
+        "Se contara con algun comentario respecto"
     );
 
     public TipoSeguimiento clasificar(

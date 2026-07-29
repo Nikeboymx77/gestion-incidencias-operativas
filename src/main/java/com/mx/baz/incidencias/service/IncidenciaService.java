@@ -1,6 +1,7 @@
 package com.mx.baz.incidencias.service;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
+import com.mx.baz.incidencias.dto.EmpleadoResumenOperativoResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
@@ -189,5 +190,119 @@ public class IncidenciaService {
         );
 
         return incidenciaMapper.toResponse(incidencia);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<IncidenciaResponse> obtenerPendientesPorEmpleado(
+            String usernameTelegram) {
+
+    	if (usernameTelegram == null
+    	        || usernameTelegram.isBlank()) {
+
+    	    throw new BusinessException(
+    	            ErrorCodes.USUARIO_TELEGRAM_INVALIDO,
+    	            "No se recibió un usuario de Telegram válido."
+    	    );
+    	}
+
+        String usernameNormalizado =
+                normalizarUsername(usernameTelegram);
+
+        List<EstadoIncidencia> estadosPendientes =
+                List.of(
+                        EstadoIncidencia.EN_PROCESO,
+                        EstadoIncidencia.REABIERTA
+                );
+
+        return incidenciaRepository
+                .findByEmpleadoAsignadoUsernameTelegramAndEstadoInOrderByFechaCorreoAsc(
+                        usernameNormalizado,
+                        estadosPendientes
+                )
+                .stream()
+                .map(incidenciaMapper::toResponse)
+                .toList();
+    }
+
+    private String normalizarUsername(String username) {
+
+        String valor = username.trim();
+
+        return valor.startsWith("@")
+                ? valor.substring(1)
+                : valor;
+    }
+    
+    @Transactional(readOnly = true)
+    public List<IncidenciaResponse> obtenerPendientesPorNombreEmpleado(
+            String nombreEmpleado) {
+
+        if (nombreEmpleado == null || nombreEmpleado.isBlank()) {
+            throw new BusinessException(
+                    ErrorCodes.EMPLEADO_NO_DISPONIBLE,
+                    "Debe proporcionar el nombre del empleado."
+            );
+        }
+
+        return incidenciaRepository
+                .findByEmpleadoAsignadoNombreContainingIgnoreCaseAndEstadoOrderByFechaCorreoAsc(
+                        nombreEmpleado.trim(),
+                        EstadoIncidencia.PENDIENTE
+                )
+                .stream()
+                .map(incidenciaMapper::toResponse)
+                .toList();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<EmpleadoResumenOperativoResponse> obtenerResumenOperativo() {
+
+        return empleadoRepository.findAll()
+                .stream()
+                .map((Empleado empleado) -> {
+
+                    long pendientes =
+                            incidenciaRepository.countByEmpleadoAsignadoIdAndEstado(
+                                    empleado.getId(),
+                                    EstadoIncidencia.PENDIENTE
+                            );
+
+                    long enProceso =
+                            incidenciaRepository.countByEmpleadoAsignadoIdAndEstado(
+                                    empleado.getId(),
+                                    EstadoIncidencia.EN_PROCESO
+                            );
+
+                    long reabiertas =
+                            incidenciaRepository.countByEmpleadoAsignadoIdAndEstado(
+                                    empleado.getId(),
+                                    EstadoIncidencia.REABIERTA
+                            );
+
+                    return EmpleadoResumenOperativoResponse.builder()
+                            .id(empleado.getId())
+                            .nombre(empleado.getNombre())
+                            .usernameTelegram(empleado.getUsernameTelegram())
+                            .email(empleado.getEmail())
+                            .activo(empleado.getActivo())
+                            .pendientes(pendientes)
+                            .enProceso(enProceso)
+                            .reabiertas(reabiertas)
+                            .totalActivas(
+                                    pendientes + enProceso + reabiertas
+                            )
+                            .ultimaAsignacion(
+                                    empleado.getUltimaAsignacion()
+                            )
+                            .build();
+                })
+                .sorted((
+                        EmpleadoResumenOperativoResponse empleado1,
+                        EmpleadoResumenOperativoResponse empleado2
+                ) -> Long.compare(
+                        empleado2.getTotalActivas(),
+                        empleado1.getTotalActivas()
+                ))
+                .toList();
     }
 }

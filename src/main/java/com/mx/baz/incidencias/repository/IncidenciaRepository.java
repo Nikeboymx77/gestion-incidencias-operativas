@@ -10,6 +10,8 @@ import java.util.Optional;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.Collection;
+import java.util.List;
 
 public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
 
@@ -37,5 +39,21 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
     List<Incidencia> buscarParaDashboard(
             @Param("texto") String texto,
             @Param("estado") EstadoIncidencia estado
+    );
+    
+    List<Incidencia> findByEmpleadoAsignadoUsernameTelegramAndEstadoInOrderByFechaCorreoAsc(
+            String usernameTelegram,
+            Collection<EstadoIncidencia> estados
+    );
+    
+    List<Incidencia>
+    findByEmpleadoAsignadoNombreContainingIgnoreCaseAndEstadoOrderByFechaCorreoAsc(
+            String nombreEmpleado,
+            EstadoIncidencia estado
+    );
+    
+    long countByEmpleadoAsignadoIdAndEstado(
+            Long empleadoId,
+            EstadoIncidencia estado
     );
 }

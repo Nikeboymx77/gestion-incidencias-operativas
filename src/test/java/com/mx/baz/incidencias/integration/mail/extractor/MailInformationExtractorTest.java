@@ -127,4 +127,64 @@ class MailInformationExtractorTest {
                 metadata.getFolio()
         );
     }
+    
+    @Test
+    void debeExtraerSucursalAntesDelCampoCu() {
+
+        CorreoDTO correo = new CorreoDTO();
+
+        correo.setAsunto(
+                "Apoyo con incidente INC000024168142"
+        );
+
+        correo.setDescripcion(
+                """
+                Buen día
+
+                Solicito de su apoyo para validar un problema al generar
+                una solicitud de crédito.
+
+                Sucursal: 2111 Comonfort
+                CU: 0101-02111-6368-4
+                Nombre: MARIA DE LOURDES PUCHOTE SOTO
+
+                Se valida que si da clic en Solicitar pero no le deja continuar.
+
+                Gracias y Saludos.
+                """
+        );
+
+        CorreoMetadata resultado =
+        		extractor.extraer(correo);
+
+        assertEquals(
+                "2111 Comonfort",
+                resultado.getSucursal()
+        );
+    }
+    
+    @Test
+    void debeDetenerSucursalCuandoComienzaLaSolicitudDeApoyo() {
+
+        CorreoDTO correo = new CorreoDTO();
+
+        correo.setAsunto(
+                "Incidente INC000024168143"
+        );
+
+        correo.setDescripcion(
+                """
+                Sucursal: 7582 MEGA CABO SAN LUCAS
+                Se solicita de su apoyo para validar el incidente.
+                """
+        );
+
+        CorreoMetadata resultado =
+        		extractor.extraer(correo);
+
+        assertEquals(
+                "7582 MEGA CABO SAN LUCAS",
+                resultado.getSucursal()
+        );
+    }
 }
