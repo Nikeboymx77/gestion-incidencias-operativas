@@ -1,0 +1,62 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="dashboardCards">
+     
+     <section class="cards row g-4 mb-4">
+
+	<div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'Total',
+	                ${total},
+	                'Incidencias registradas',
+	                'bi-clipboard-data',
+	                'metric-icon-total'
+	        )}">
+	        </div>
+	    </div>
+	
+	    <div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'Pendientes',
+	                ${pendientes},
+	                'Esperando atención',
+	                'bi-hourglass-split',
+	                'metric-icon-pendiente'
+	        )}">
+	        </div>
+	    </div>
+	
+	    <div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'En proceso',
+	                ${enProceso},
+	                'Actualmente atendidas',
+	                'bi-arrow-repeat',
+	                'metric-icon-proceso'
+	        )}">
+	        </div>
+	    </div>
+	
+	    <div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'Resueltas',
+	                ${resueltas},
+	                'Atención terminada',
+	                'bi-check-circle',
+	                'metric-icon-resuelta'
+	        )}">
+	        </div>
+	    </div>
+	    
+	    <div class="col-xl-3 col-md-6">
+		    <div th:replace="~{fragments/metric-card :: metricCard(
+		            'Reabiertas',
+		            ${reabiertas},
+		            'Requieren seguimiento',
+		            'bi-arrow-counterclockwise',
+		            'metric-icon-reabierta'
+		    )}">
+		    </div>
+		</div>	
+	</section>
+     
+</div>

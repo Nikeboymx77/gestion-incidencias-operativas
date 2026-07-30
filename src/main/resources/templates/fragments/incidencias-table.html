@@ -56,7 +56,10 @@
             </td>
         </tr>
 
-        <tr th:each="incidencia : ${incidencias}">
+        <tr th:each="incidencia : ${incidencias}"
+		    class="incidencia-row"
+		    th:attr="data-folio=${incidencia.folio},
+		             data-estado=${incidencia.estado}">
 
             <td>
                 <a class="folio-link"
@@ -140,5 +143,69 @@
         </tbody>
 
     </table>
-
+    
+    <nav th:if="${totalPaginas > 1}"
+		     class="d-flex justify-content-between align-items-center p-3"
+		     aria-label="Paginación de incidencias">
+		
+		    <span class="text-muted small"
+		          th:text="'Página ' + (${paginaActual} + 1)
+		                   + ' de ' + ${totalPaginas}">
+		        Página 1 de 1
+		    </span>
+		
+		    <ul class="pagination pagination-sm mb-0">
+		
+		        <li class="page-item"
+		            th:classappend="${paginaActual == 0} ? 'disabled'">
+		
+		            <a class="page-link"
+		               th:href="@{/dashboard(
+		                    page=${paginaActual - 1},
+		                    size=10,
+		                    texto=${texto},
+		                    estado=${estadoSeleccionado}
+		               )}">
+		                <i class="bi bi-chevron-left"></i>
+		                Anterior
+		            </a>
+		
+		        </li>
+		
+		        <li class="page-item"
+		            th:each="numero : ${#numbers.sequence(0, totalPaginas - 1)}"
+		            th:classappend="${numero == paginaActual} ? 'active'">
+		
+		            <a class="page-link"
+		               th:href="@{/dashboard(
+		                    page=${numero},
+		                    size=10,
+		                    texto=${texto},
+		                    estado=${estadoSeleccionado}
+		               )}"
+		               th:text="${numero + 1}">
+		                1
+		            </a>
+		
+		        </li>
+		
+		        <li class="page-item"
+		            th:classappend="${paginaActual + 1 >= totalPaginas} ? 'disabled'">
+		
+		            <a class="page-link"
+		               th:href="@{/dashboard(
+		                    page=${paginaActual + 1},
+		                    size=10,
+		                    texto=${texto},
+		                    estado=${estadoSeleccionado}
+		               )}">
+		                Siguiente
+		                <i class="bi bi-chevron-right"></i>
+		            </a>
+		
+		        </li>
+		
+		    </ul>
+		
+		</nav>
 </div>

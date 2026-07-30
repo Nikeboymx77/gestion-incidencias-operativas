@@ -24,68 +24,50 @@
             </p>
         </div>
 
-        <a class="refresh-button" th:href="@{/dashboard}">
-            Actualizar
-        </a>
+        <div class="refresh-area">
+
+		    <div class="refresh-actions">
+		
+		        <a class="refresh-button"
+		           th:href="@{/dashboard}">
+		            <i class="bi bi-arrow-clockwise"></i>
+		            Actualizar
+		        </a>
+		
+		        <button id="toggleAutoRefresh"
+		                type="button"
+		                class="auto-refresh-button active">
+		            <i id="iconoAutoRefresh"
+		               class="bi bi-pause-circle"></i>
+		
+		            <span id="textoAutoRefresh">
+		                Pausar auto-refresh
+		            </span>
+		        </button>
+		
+		    </div>
+		
+		    <div class="last-update">
+		        <span id="indicadorRefresh"
+		              class="update-indicator"></span>
+		
+		        <span>
+		            Última actualización:
+		            <strong id="ultimaActualizacion">
+		                --
+		            </strong>
+		        </span>
+		    </div>
+		
+		</div>
     </section>
 
-    <section class="cards row g-4 mb-4">
+    <div id="contenedorCards">
 
-	<div class="col-xl-3 col-md-6">
-	        <div th:replace="~{fragments/metric-card :: metricCard(
-	                'Total',
-	                ${total},
-	                'Incidencias registradas',
-	                'bi-clipboard-data',
-	                'metric-icon-total'
-	        )}">
-	        </div>
+	    <div th:replace="~{fragments/dashboard-cards :: dashboardCards}">
 	    </div>
 	
-	    <div class="col-xl-3 col-md-6">
-	        <div th:replace="~{fragments/metric-card :: metricCard(
-	                'Pendientes',
-	                ${pendientes},
-	                'Esperando atención',
-	                'bi-hourglass-split',
-	                'metric-icon-pendiente'
-	        )}">
-	        </div>
-	    </div>
-	
-	    <div class="col-xl-3 col-md-6">
-	        <div th:replace="~{fragments/metric-card :: metricCard(
-	                'En proceso',
-	                ${enProceso},
-	                'Actualmente atendidas',
-	                'bi-arrow-repeat',
-	                'metric-icon-proceso'
-	        )}">
-	        </div>
-	    </div>
-	
-	    <div class="col-xl-3 col-md-6">
-	        <div th:replace="~{fragments/metric-card :: metricCard(
-	                'Resueltas',
-	                ${resueltas},
-	                'Atención terminada',
-	                'bi-check-circle',
-	                'metric-icon-resuelta'
-	        )}">
-	        </div>
-	    </div>
-	    
-	    <div class="col-xl-3 col-md-6">
-		    <div th:replace="~{fragments/metric-card :: metricCard(
-		            'Reabiertas',
-		            ${reabiertas},
-		            'Requieren seguimiento',
-		            'bi-arrow-counterclockwise',
-		            'metric-icon-reabierta'
-		    )}">
-		    </div>
-		</div>	
-	</section>
+	</div>
 
     <section class="table-card">
 
@@ -163,78 +145,296 @@
 	
 	</section>
 
-       <div th:replace="~{fragments/incidencias-table :: tablaIncidencias}"></div>
-        
-        <nav th:if="${totalPaginas > 1}"
-		     class="d-flex justify-content-between align-items-center p-3"
-		     aria-label="Paginación de incidencias">
-		
-		    <span class="text-muted small"
-		          th:text="'Página ' + (${paginaActual} + 1)
-		                   + ' de ' + ${totalPaginas}">
-		        Página 1 de 1
-		    </span>
-		
-		    <ul class="pagination pagination-sm mb-0">
-		
-		        <li class="page-item"
-		            th:classappend="${paginaActual == 0} ? 'disabled'">
-		
-		            <a class="page-link"
-		               th:href="@{/dashboard(
-		                    page=${paginaActual - 1},
-		                    size=10,
-		                    texto=${texto},
-		                    estado=${estadoSeleccionado}
-		               )}">
-		                <i class="bi bi-chevron-left"></i>
-		                Anterior
-		            </a>
-		
-		        </li>
-		
-		        <li class="page-item"
-		            th:each="numero : ${#numbers.sequence(0, totalPaginas - 1)}"
-		            th:classappend="${numero == paginaActual} ? 'active'">
-		
-		            <a class="page-link"
-		               th:href="@{/dashboard(
-		                    page=${numero},
-		                    size=10,
-		                    texto=${texto},
-		                    estado=${estadoSeleccionado}
-		               )}"
-		               th:text="${numero + 1}">
-		                1
-		            </a>
-		
-		        </li>
-		
-		        <li class="page-item"
-		            th:classappend="${paginaActual + 1 >= totalPaginas} ? 'disabled'">
-		
-		            <a class="page-link"
-		               th:href="@{/dashboard(
-		                    page=${paginaActual + 1},
-		                    size=10,
-		                    texto=${texto},
-		                    estado=${estadoSeleccionado}
-		               )}">
-		                Siguiente
-		                <i class="bi bi-chevron-right"></i>
-		            </a>
-		
-		        </li>
-		
-		    </ul>
-		
-		</nav>
+      <div id="contenedorTabla">
+	    <div th:replace="~{fragments/incidencias-table :: tablaIncidencias}">
+	    </div>
+	  </div>
 
     </section>
 
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script>
+    const INTERVALO_REFRESH = 15000;
+    
+    function obtenerEstadoActualTabla() {
+        const filas =
+            document.querySelectorAll(
+                "#contenedorTabla .incidencia-row"
+            );
+
+        const incidencias = new Map();
+
+        filas.forEach(fila => {
+            const folio = fila.dataset.folio;
+            const estado = fila.dataset.estado;
+
+            if (folio) {
+                incidencias.set(folio, estado);
+            }
+        });
+
+        return incidencias;
+    }
+
+    function resaltarCambios(estadoAnterior) {
+        const filas =
+            document.querySelectorAll(
+                "#contenedorTabla .incidencia-row"
+            );
+
+        filas.forEach(fila => {
+            const folio = fila.dataset.folio;
+            const estadoNuevo = fila.dataset.estado;
+
+            if (!folio) {
+                return;
+            }
+
+            if (!estadoAnterior.has(folio)) {
+                aplicarAnimacion(
+                    fila,
+                    "incidencia-nueva"
+                );
+
+                return;
+            }
+
+            const estadoAnteriorFila =
+                estadoAnterior.get(folio);
+
+            if (estadoAnteriorFila !== estadoNuevo) {
+                aplicarAnimacion(
+                    fila,
+                    "incidencia-actualizada"
+                );
+            }
+        });
+    }
+
+    function aplicarAnimacion(elemento, clase) {
+        elemento.classList.add(clase);
+
+        setTimeout(() => {
+            elemento.classList.remove(clase);
+        }, 3500);
+    }
+
+    async function actualizarTabla() {
+        const contenedorTabla =
+            document.getElementById("contenedorTabla");
+
+        if (!contenedorTabla) {
+            console.error(
+                "No se encontró el contenedor de la tabla."
+            );
+            return;
+        }
+
+        const url = construirUrl(
+            "/dashboard/fragment/incidencias"
+        );
+
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(
+                    `Error HTTP al actualizar tabla: ${response.status}`
+                );
+            }
+
+            const estadoAnterior =
+                obtenerEstadoActualTabla();
+
+            const nuevoContenido =
+                await response.text();
+
+            contenedorTabla.innerHTML =
+                nuevoContenido;
+
+            resaltarCambios(estadoAnterior);
+
+        } catch (error) {
+            console.error(
+                "Error actualizando la tabla:",
+                error
+            );
+        }
+    }
+
+    async function actualizarCards() {
+        const contenedorCards =
+            document.getElementById("contenedorCards");
+
+        if (!contenedorCards) {
+            console.error(
+                "No se encontró el contenedor de las tarjetas."
+            );
+            return;
+        }
+
+        const url = construirUrl(
+            "/dashboard/fragment/cards"
+        );
+
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(
+                    `Error HTTP al actualizar tarjetas: ${response.status}`
+                );
+            }
+
+            contenedorCards.innerHTML =
+                await response.text();
+
+        } catch (error) {
+            console.error(
+                "Error actualizando las tarjetas:",
+                error
+            );
+        }
+    }
+
+    function construirUrl(endpoint) {
+        const parametrosActuales =
+            new URLSearchParams(window.location.search);
+
+        return parametrosActuales.toString()
+            ? `${endpoint}?${parametrosActuales.toString()}`
+            : endpoint;
+    }
+    
+    function actualizarHora() {
+        const elemento =
+            document.getElementById("ultimaActualizacion");
+
+        if (!elemento) {
+            return;
+        }
+
+        const ahora = new Date();
+
+        elemento.textContent =
+            ahora.toLocaleTimeString(
+                "es-MX",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
+    }
+
+    async function actualizarDashboard() {
+        try {
+            await Promise.all([
+                actualizarCards(),
+                actualizarTabla()
+            ]);
+
+            actualizarHora();
+
+            console.log(
+                "Dashboard actualizado:",
+                new Date().toLocaleTimeString()
+            );
+
+        } catch (error) {
+            console.error(
+                "Error actualizando el Dashboard:",
+                error
+            );
+        }
+    }
+
+    let autoRefreshActivo = true;
+    let temporizadorRefresh = null;
+
+    function iniciarAutoRefresh() {
+        detenerAutoRefresh();
+
+        temporizadorRefresh = setInterval(
+            actualizarDashboard,
+            INTERVALO_REFRESH
+        );
+    }
+
+    function detenerAutoRefresh() {
+        if (temporizadorRefresh !== null) {
+            clearInterval(temporizadorRefresh);
+            temporizadorRefresh = null;
+        }
+    }
+
+    function actualizarEstadoAutoRefresh() {
+        const boton =
+            document.getElementById("toggleAutoRefresh");
+
+        const texto =
+            document.getElementById("textoAutoRefresh");
+
+        const icono =
+            document.getElementById("iconoAutoRefresh");
+
+        const indicador =
+            document.getElementById("indicadorRefresh");
+
+        if (!boton || !texto || !icono || !indicador) {
+            return;
+        }
+
+        if (autoRefreshActivo) {
+            boton.classList.add("active");
+
+            texto.textContent =
+                "Pausar auto-refresh";
+
+            icono.className =
+                "bi bi-pause-circle";
+
+            indicador.classList.remove("paused");
+        } else {
+            boton.classList.remove("active");
+
+            texto.textContent =
+                "Activar auto-refresh";
+
+            icono.className =
+                "bi bi-play-circle";
+
+            indicador.classList.add("paused");
+        }
+    }
+
+    function alternarAutoRefresh() {
+        autoRefreshActivo = !autoRefreshActivo;
+
+        if (autoRefreshActivo) {
+            actualizarDashboard();
+            iniciarAutoRefresh();
+        } else {
+            detenerAutoRefresh();
+        }
+
+        actualizarEstadoAutoRefresh();
+    }
+
+    document
+        .getElementById("toggleAutoRefresh")
+        ?.addEventListener(
+            "click",
+            alternarAutoRefresh
+        );
+
+    actualizarDashboard();
+    iniciarAutoRefresh();
+    actualizarEstadoAutoRefresh();
+</script>
 
 </body>
 </html>

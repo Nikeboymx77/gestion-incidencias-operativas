@@ -28,68 +28,11 @@ public class DashboardController {
             @RequestParam(required = false) EstadoIncidencia estado,
             Model model) {
 
-        Page<Incidencia> paginaIncidencias =
-                dashboardService.buscarIncidencias(
-                        texto,
-                        estado,
-                        page,
-                        size
-                );
-
-        model.addAttribute(
-                "incidencias",
-                paginaIncidencias.getContent()
-        );
-
-        model.addAttribute(
-                "paginaActual",
-                paginaIncidencias.getNumber()
-        );
-
-        model.addAttribute(
-                "totalPaginas",
-                paginaIncidencias.getTotalPages()
-        );
-
-        model.addAttribute(
-                "totalRegistros",
-                paginaIncidencias.getTotalElements()
-        );
-
-        model.addAttribute("texto", texto);
-        model.addAttribute("estadoSeleccionado", estado); model.addAttribute("estados", EstadoIncidencia.values());
-
-        /*
-         * Totales generales para las tarjetas.
-         * Estos conteos no dependen de la página actual.
-         */
-        model.addAttribute(
-                "total",
-                dashboardService.contarTotal()
-        );
-
-        model.addAttribute(
-                "pendientes",
-                dashboardService.contarPendientes()
-        );
-
-        model.addAttribute(
-                "enProceso",
-                dashboardService.contarEnProceso()
-        );
-
-        model.addAttribute(
-                "resueltas",
-                dashboardService.contarResueltas()
-        );
-
-        model.addAttribute(
-                "reabiertas",
-                dashboardService.contarReabiertas()
-        );
+        cargarDashboard(model, texto, estado, page, size);
 
         return "dashboard";
     }
+    
     @GetMapping("/dashboard/incidencias/{folio}")
     public String mostrarDetalle(
             @PathVariable String folio,
@@ -101,5 +44,62 @@ public class DashboardController {
         );
 
         return "incidencia-detalle";
+    }
+    
+    @GetMapping("/dashboard/fragment/incidencias")
+    public String actualizarTabla(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String texto,
+            @RequestParam(required = false) EstadoIncidencia estado,
+            Model model) {
+
+        cargarDashboard(model, texto, estado, page, size);
+
+        return "fragments/incidencias-table :: tablaIncidencias";
+    }
+    
+    @GetMapping("/dashboard/fragment/cards")
+    public String actualizarCards(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String texto,
+            @RequestParam(required = false) EstadoIncidencia estado,
+            Model model) {
+
+        cargarDashboard(model, texto, estado, page, size);
+
+        return "fragments/dashboard-cards :: dashboardCards";
+    }
+    
+    private void cargarDashboard(
+            Model model,
+            String texto,
+            EstadoIncidencia estado,
+            int page,
+            int size) {
+
+        Page<Incidencia> paginaIncidencias =
+                dashboardService.buscarIncidencias(
+                        texto,
+                        estado,
+                        page,
+                        size
+                );
+
+        model.addAttribute("incidencias", paginaIncidencias.getContent());
+        model.addAttribute("paginaActual", paginaIncidencias.getNumber());
+        model.addAttribute("totalPaginas", paginaIncidencias.getTotalPages());
+        model.addAttribute("totalRegistros", paginaIncidencias.getTotalElements());
+
+        model.addAttribute("texto", texto);
+        model.addAttribute("estadoSeleccionado", estado);
+        model.addAttribute("estados", EstadoIncidencia.values());
+
+        model.addAttribute("total", dashboardService.contarTotal());
+        model.addAttribute("pendientes", dashboardService.contarPendientes());
+        model.addAttribute("enProceso", dashboardService.contarEnProceso());
+        model.addAttribute("resueltas", dashboardService.contarResueltas());
+        model.addAttribute("reabiertas", dashboardService.contarReabiertas());
     }
 }
