@@ -17,6 +17,11 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
 
     Optional<Incidencia> findByFolio(String folio);
@@ -30,20 +35,25 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
     List<Incidencia> findByEstado(EstadoIncidencia estado);
     
     @Query("""
-            SELECT i
-            FROM Incidencia i
-            WHERE (:texto IS NULL
-                   OR LOWER(i.folio) LIKE LOWER(CONCAT('%', :texto, '%'))
-                   OR LOWER(i.nombreCliente) LIKE LOWER(CONCAT('%', :texto, '%'))
-                   OR LOWER(i.clienteUnico) LIKE LOWER(CONCAT('%', :texto, '%'))
-                   OR LOWER(i.sucursal) LIKE LOWER(CONCAT('%', :texto, '%')))
-              AND (:estado IS NULL OR i.estado = :estado)
-            ORDER BY i.createdAt DESC
-            """)
-    List<Incidencia> buscarParaDashboard(
-            @Param("texto") String texto,
-            @Param("estado") EstadoIncidencia estado
-    );
+    	    SELECT i
+    	    FROM Incidencia i
+    	    WHERE (
+    	        :texto IS NULL
+    	        OR :texto = ''
+    	        OR LOWER(i.folio) LIKE LOWER(CONCAT('%', :texto, '%'))
+    	        OR LOWER(i.nombreCliente) LIKE LOWER(CONCAT('%', :texto, '%'))
+    	        OR LOWER(i.sucursal) LIKE LOWER(CONCAT('%', :texto, '%'))
+    	    )
+    	    AND (
+    	        :estado IS NULL
+    	        OR i.estado = :estado
+    	    )
+    	""")
+    	Page<Incidencia> buscarParaDashboard(
+    	        @Param("texto") String texto,
+    	        @Param("estado") EstadoIncidencia estado,
+    	        Pageable pageable
+    	);
     
     List<Incidencia> findByEmpleadoAsignadoUsernameTelegramAndEstadoInOrderByFechaCorreoAsc(
             String usernameTelegram,

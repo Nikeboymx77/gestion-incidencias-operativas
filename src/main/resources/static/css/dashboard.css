@@ -97,10 +97,7 @@ body {
 }
 
 .cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 28px;
+    margin-top: 1.5rem;
 }
 
 .metric-card {
@@ -166,9 +163,6 @@ body {
     font-size: 13px;
 }
 
-.table-container {
-    overflow-x: auto;
-}
 
 table {
     width: 100%;
@@ -369,4 +363,146 @@ footer {
 
 .folio-link:hover {
     text-decoration: underline;
+}
+
+.cards {
+    margin-top: 1.5rem;
+}
+
+.metric-card {
+    border-radius: 16px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12) !important;
+}
+
+.metric-card .card-body {
+    min-height: 145px;
+    padding: 1.5rem;
+}
+
+.metric-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    font-size: 1.6rem;
+}
+
+.metric-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.metric-value {
+    color: #1e293b;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.metric-description {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.metric-icon-total {
+    color: #2563eb;
+    background-color: #dbeafe;
+}
+
+.metric-icon-pendiente {
+    color: #d97706;
+    background-color: #fef3c7;
+}
+
+.metric-icon-proceso {
+    color: #7c3aed;
+    background-color: #ede9fe;
+}
+
+.metric-icon-resuelta {
+    color: #059669;
+    background-color: #d1fae5;
+}
+
+.table-container {
+    width: 100%;
+    border-radius: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    min-width: 1100px;
+}
+
+.table thead th {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.table tbody tr {
+    transition: background-color .2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.table .badge {
+    font-size: .80rem;
+}
+
+/* Badges de prioridad */
+
+.badge-prioridad {
+    padding: 7px 11px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+}
+
+.badge-prioridad.prioridad-baja {
+    color: #166534;
+    border-color: #bbf7d0;
+    background-color: #dcfce7;
+}
+
+.badge-prioridad.prioridad-media {
+    color: #92400e;
+    border-color: #fde68a;
+    background-color: #fef3c7;
+}
+
+.badge-prioridad.prioridad-alta {
+    color: #c2410c;
+    border-color: #fdba74;
+    background-color: #ffedd5;
+}
+
+.badge-prioridad.prioridad-critica {
+    color: #b91c1c;
+    border-color: #fecaca;
+    background-color: #fee2e2;
+}
+
+.badge-prioridad.prioridad-sin-definir {
+    color: #475569;
+    border-color: #cbd5e1;
+    background-color: #f1f5f9;
 }

@@ -2,30 +2,15 @@
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>SGIO | Dashboard</title>
-
-    <link rel="stylesheet"
-          th:href="@{/css/dashboard.css}">
+<head th:replace="~{fragments/head :: head(
+        'SGIO | Dashboard',
+        ~{}
+)}">
 </head>
 
 <body>
 
-<header class="topbar">
-    <div>
-        <h1>SGIO</h1>
-        <p>Sistema de Gestión de Incidencias Operativas</p>
-    </div>
-
-    <div class="status">
-        <span class="status-dot"></span>
-        Sistema activo
-    </div>
-</header>
+<header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container">
 
@@ -44,33 +29,63 @@
         </a>
     </section>
 
-    <section class="cards">
+    <section class="cards row g-4 mb-4">
 
-        <article class="metric-card">
-            <p>Total</p>
-            <strong th:text="${total}">0</strong>
-            <span>Incidencias registradas</span>
-        </article>
-
-        <article class="metric-card pending">
-            <p>Pendientes</p>
-            <strong th:text="${pendientes}">0</strong>
-            <span>Esperando atención</span>
-        </article>
-
-        <article class="metric-card progress">
-            <p>En proceso</p>
-            <strong th:text="${enProceso}">0</strong>
-            <span>Actualmente atendidas</span>
-        </article>
-
-        <article class="metric-card resolved">
-            <p>Resueltas</p>
-            <strong th:text="${resueltas}">0</strong>
-            <span>Atención terminada</span>
-        </article>
-
-    </section>
+	<div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'Total',
+	                ${total},
+	                'Incidencias registradas',
+	                'bi-clipboard-data',
+	                'metric-icon-total'
+	        )}">
+	        </div>
+	    </div>
+	
+	    <div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'Pendientes',
+	                ${pendientes},
+	                'Esperando atención',
+	                'bi-hourglass-split',
+	                'metric-icon-pendiente'
+	        )}">
+	        </div>
+	    </div>
+	
+	    <div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'En proceso',
+	                ${enProceso},
+	                'Actualmente atendidas',
+	                'bi-arrow-repeat',
+	                'metric-icon-proceso'
+	        )}">
+	        </div>
+	    </div>
+	
+	    <div class="col-xl-3 col-md-6">
+	        <div th:replace="~{fragments/metric-card :: metricCard(
+	                'Resueltas',
+	                ${resueltas},
+	                'Atención terminada',
+	                'bi-check-circle',
+	                'metric-icon-resuelta'
+	        )}">
+	        </div>
+	    </div>
+	    
+	    <div class="col-xl-3 col-md-6">
+		    <div th:replace="~{fragments/metric-card :: metricCard(
+		            'Reabiertas',
+		            ${reabiertas},
+		            'Requieren seguimiento',
+		            'bi-arrow-counterclockwise',
+		            'metric-icon-reabierta'
+		    )}">
+		    </div>
+		</div>	
+	</section>
 
     <section class="table-card">
 
@@ -80,7 +95,7 @@
                 <h3>Últimas incidencias</h3>
             </div>
 
-            <span th:text="${#lists.size(incidencias)} + ' registros encontrados'">
+            <span th:text="${totalRegistros} + ' registros encontrados'">
 			    0 registros encontrados
 			</span>
         </div>
@@ -148,96 +163,78 @@
 	
 	</section>
 
-        <div class="table-container">
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Folio</th>
-                    <th>Cliente</th>
-                    <th>Sucursal</th>
-                    <th>Estado</th>
-                    <th>Prioridad</th>
-                    <th>Asignado</th>
-                    <th>Fecha</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                <tr th:if="${#lists.isEmpty(incidencias)}">
-                    <td colspan="7" class="empty-state">
-                        No hay incidencias registradas.
-                    </td>
-                </tr>
-
-                <tr th:each="incidencia : ${incidencias}">
-
-                    <td>
-					    <a class="folio-link"
-					       th:href="@{/dashboard/incidencias/{folio}(
-					            folio=${incidencia.folio}
-					       )}"
-					       th:text="${incidencia.folio}">
-					        INC000001
-					    </a>
-					</td>
-
-                    <td th:text="${incidencia.nombreCliente != null
-                            ? incidencia.nombreCliente
-                            : 'No identificado'}">
-                        Cliente
-                    </td>
-
-                    <td th:text="${incidencia.sucursal != null
-                            ? incidencia.sucursal
-                            : 'No identificada'}">
-                        Sucursal
-                    </td>
-
-                    <td>
-                        <span class="badge"
-                              th:classappend="${#strings.toLowerCase(
-                                  incidencia.estado.toString()
-                              )}"
-                              th:text="${incidencia.estado}">
-                            PENDIENTE
-                        </span>
-                    </td>
-
-                    <td th:text="${incidencia.prioridad}">
-                        MEDIA
-                    </td>
-
-                    <td th:text="${incidencia.empleadoAsignado != null
-                            ? incidencia.empleadoAsignado.nombre
-                            : 'Sin asignar'}">
-                        Empleado
-                    </td>
-
-                    <td th:text="${incidencia.fechaAsignacion  != null
-                            ? #temporals.format(
-                                incidencia.fechaAsignacion,
-                                'dd/MM/yyyy HH:mm'
-                              )
-                            : '-'}">
-                        15/07/2026
-                    </td>
-
-                </tr>
-
-                </tbody>
-            </table>
-
-        </div>
+       <div th:replace="~{fragments/incidencias-table :: tablaIncidencias}"></div>
+        
+        <nav th:if="${totalPaginas > 1}"
+		     class="d-flex justify-content-between align-items-center p-3"
+		     aria-label="Paginación de incidencias">
+		
+		    <span class="text-muted small"
+		          th:text="'Página ' + (${paginaActual} + 1)
+		                   + ' de ' + ${totalPaginas}">
+		        Página 1 de 1
+		    </span>
+		
+		    <ul class="pagination pagination-sm mb-0">
+		
+		        <li class="page-item"
+		            th:classappend="${paginaActual == 0} ? 'disabled'">
+		
+		            <a class="page-link"
+		               th:href="@{/dashboard(
+		                    page=${paginaActual - 1},
+		                    size=10,
+		                    texto=${texto},
+		                    estado=${estadoSeleccionado}
+		               )}">
+		                <i class="bi bi-chevron-left"></i>
+		                Anterior
+		            </a>
+		
+		        </li>
+		
+		        <li class="page-item"
+		            th:each="numero : ${#numbers.sequence(0, totalPaginas - 1)}"
+		            th:classappend="${numero == paginaActual} ? 'active'">
+		
+		            <a class="page-link"
+		               th:href="@{/dashboard(
+		                    page=${numero},
+		                    size=10,
+		                    texto=${texto},
+		                    estado=${estadoSeleccionado}
+		               )}"
+		               th:text="${numero + 1}">
+		                1
+		            </a>
+		
+		        </li>
+		
+		        <li class="page-item"
+		            th:classappend="${paginaActual + 1 >= totalPaginas} ? 'disabled'">
+		
+		            <a class="page-link"
+		               th:href="@{/dashboard(
+		                    page=${paginaActual + 1},
+		                    size=10,
+		                    texto=${texto},
+		                    estado=${estadoSeleccionado}
+		               )}">
+		                Siguiente
+		                <i class="bi bi-chevron-right"></i>
+		            </a>
+		
+		        </li>
+		
+		    </ul>
+		
+		</nav>
 
     </section>
 
 </main>
 
-<footer>
-    SGIO · Sistema de Gestión de Incidencias Operativas
-</footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

@@ -37,6 +37,7 @@ public class MailInformationExtractor {
                             + "|\\s+Cc\\s*:"
                             + "|\\s+CC\\s*:"
                             + "|\\s+Asunto\\s*:"
+                            + "|\\s+fi[A-Za-z0-9_]+\\s*"
                             + "|$)",
                     REGEX_FLAGS
             );
@@ -66,6 +67,7 @@ public class MailInformationExtractor {
                             + "|\\s+Cc\\s*:"
                             + "|\\s+CC\\s*:"
                             + "|\\s+Asunto\\s*:"
+                            + "|\\s+fi[A-Za-z0-9_]+\\s*"
                             + "|$)",
                     REGEX_FLAGS
             );

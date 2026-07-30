@@ -1,6 +1,7 @@
 package com.mx.baz.incidencias.dashboard.service;
 
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
+import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import com.mx.baz.incidencias.mapper.IncidenciaMapper;
 import com.mx.baz.incidencias.repository.IncidenciaRepository;
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.mx.baz.incidencias.exception.BusinessException;
 import com.mx.baz.incidencias.exception.ErrorCodes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -38,6 +43,11 @@ public class DashboardService {
     public long contarResueltas() {
         return incidenciaRepository.countByEstado(EstadoIncidencia.RESUELTA);
     }
+    
+    @Transactional(readOnly = true)
+    public long contarReabiertas() {
+        return incidenciaRepository.countByEstado(EstadoIncidencia.REABIERTA);
+    }
 
     @Transactional(readOnly = true)
     public List<IncidenciaResponse> obtenerIncidenciasRecientes() {
@@ -48,20 +58,26 @@ public class DashboardService {
     }
     
     @Transactional(readOnly = true)
-    public List<IncidenciaResponse> buscarIncidencias(
+    public Page<Incidencia> buscarIncidencias(
             String texto,
-            EstadoIncidencia estado) {
+            EstadoIncidencia estado,
+            int page,
+            int size) {
 
-        String textoNormalizado =
-                texto == null || texto.isBlank()
-                        ? null
-                        : texto.trim();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                        Sort.Direction.DESC,
+                        "fechaAsignacion"
+                )
+        );
 
-        return incidenciaRepository
-                .buscarParaDashboard(textoNormalizado, estado)
-                .stream()
-                .map(incidenciaMapper::toResponse)
-                .toList();
+        return incidenciaRepository.buscarParaDashboard(
+                texto,
+                estado,
+                pageable
+        );
     }
     
     @Transactional(readOnly = true)
