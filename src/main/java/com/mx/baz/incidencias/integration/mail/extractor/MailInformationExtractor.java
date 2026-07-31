@@ -26,6 +26,7 @@ public class MailInformationExtractor {
             Pattern.compile(
                     "Nombre\\s*:\\s*(.+?)"
                             + "(?=\\s+Cliente\\s+[ÚU]nico\\s*:"
+                            + "|\\s+CU\\s*:"
                             + "|\\s+Fecha\\s+de\\s+Nacimiento\\s*:"
                             + "|\\s+Estado\\s+de\\s+L[ií]nea"
                             + "|\\s+Sucursal(?:\\s+gestora)?\\s*:"
@@ -37,7 +38,21 @@ public class MailInformationExtractor {
                             + "|\\s+Cc\\s*:"
                             + "|\\s+CC\\s*:"
                             + "|\\s+Asunto\\s*:"
+                            + "|\\s+Versión\\s*:"
+                            + "|\\s+Versi[oó]n(?:\\s+aplicaci[oó]n)?\\s*:"
                             + "|\\s+fi[A-Za-z0-9_]+\\s*"
+                            + "|\\s+Agradezco\\s+su"
+                            + "|\\s+Cliente\\s+con"
+                            + "|\\s+Se\\s+valida\\b"
+                            + "|\\s+Se\\s+solicita\\b"
+                            + "|\\s+Solicito\\b"
+                            + "|\\s+Les\\s+agradezco\\b"
+                            + "|\\s+Agradezco\\b"
+                            + "|\\s+Gracias\\b"
+                            + "|\\s+Buen\\s+d[ií]a\\b"
+                            + "|\\s+Buena\\s+tarde\\b"
+                            + "|\\s+Quedo\\s+(?:atento|pendiente)\\b"
+                            + "|\\s+Saludos\\b"
                             + "|$)",
                     REGEX_FLAGS
             );
@@ -88,6 +103,13 @@ public class MailInformationExtractor {
                             + "|\\s+Agradezco\\b"
                             + "|\\s+Quedo\\s+(?:atento|pendiente)\\b"
                             + "|\\s+Saludos\\b"
+                            + "|\\s+De\\s*:"
+                            + "|\\s+Enviado\\s*:"
+                            + "|\\s+Para\\s*:"
+                            + "|\\s+Cc\\s*:"
+                            + "|\\s+CC\\s*:"
+                            + "|\\s+Asunto\\s*:"
+                            + "|\\s+fi[A-Za-z0-9_]+\\s*"
                             + "|$)",
                     REGEX_FLAGS
             );
@@ -163,6 +185,7 @@ public class MailInformationExtractor {
         if (texto == null || texto.isBlank()) {
             return null;
         }
+        
 
         Matcher matcher = pattern.matcher(texto);
 
