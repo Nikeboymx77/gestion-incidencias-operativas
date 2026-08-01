@@ -2,11 +2,15 @@ package com.mx.baz.incidencias.integration.mail.extractor;
 
 import com.mx.baz.incidencias.integration.mail.dto.CorreoDTO;
 import com.mx.baz.incidencias.integration.mail.model.CorreoMetadata;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Component
 public class MailInformationExtractor {
 	
@@ -173,12 +177,63 @@ public class MailInformationExtractor {
         String textoCompleto = normalizarTexto(asunto + " " + descripcion);
 
         return CorreoMetadata.builder()
-                .folio(extraerPrimero(FOLIO_PATTERN, textoCompleto))
-                .sucursal(extraerSucursal(asunto, textoCompleto))
-                .clienteUnico(extraerPrimero(CLIENTE_UNICO_PATTERN, textoCompleto))
-                .nombreCliente(extraerPrimero(NOMBRE_CLIENTE_PATTERN, textoCompleto))
-                .motivo(limitarMotivo(extraerMotivo(textoCompleto)))
-                .equipo(extraerPrimero(EQUIPO_PATTERN, textoCompleto))
+                .folio(
+                        limitarLongitud(
+                                "folio",
+                                extraerPrimero(
+                                        FOLIO_PATTERN,
+                                        textoCompleto
+                                ),
+                                MAX_FOLIO
+                        )
+                )
+                .sucursal(
+                        limitarLongitud(
+                                "sucursal",
+                                extraerSucursal(
+                                        asunto,
+                                        textoCompleto
+                                ),
+                                MAX_SUCURSAL
+                        )
+                )
+                .clienteUnico(
+                        limitarLongitud(
+                                "clienteUnico",
+                                extraerPrimero(
+                                        CLIENTE_UNICO_PATTERN,
+                                        textoCompleto
+                                ),
+                                MAX_CLIENTE_UNICO
+                        )
+                )
+                .nombreCliente(
+                        limitarLongitud(
+                                "nombreCliente",
+                                extraerPrimero(
+                                        NOMBRE_CLIENTE_PATTERN,
+                                        textoCompleto
+                                ),
+                                MAX_NOMBRE_CLIENTE
+                        )
+                )
+                .motivo(
+                        limitarLongitud(
+                                "motivo",
+                                extraerMotivo(textoCompleto),
+                                MAX_LONGITUD_MOTIVO
+                        )
+                )
+                .equipo(
+                        limitarLongitud(
+                                "equipo",
+                                extraerPrimero(
+                                        EQUIPO_PATTERN,
+                                        textoCompleto
+                                ),
+                                MAX_EQUIPO
+                        )
+                )
                 .build();
     }
 
@@ -275,23 +330,42 @@ public class MailInformationExtractor {
     }
     
     private static final int MAX_LONGITUD_MOTIVO = 1000;
+    private static final int MAX_FOLIO = 255;
+    private static final int MAX_SUCURSAL = 255;
+    private static final int MAX_CLIENTE_UNICO = 255;
+    private static final int MAX_NOMBRE_CLIENTE = 255;
+        private static final int MAX_EQUIPO = 255;
 
-    private String limitarMotivo(String motivo) {
+        
+    private String limitarLongitud(
+            String campo,
+            String valor,
+            int longitudMaxima
+    ) {
 
-        if (motivo == null) {
+        if (valor == null) {
             return null;
         }
 
-        String limpio = limpiarValor(motivo);
+        String limpio = limpiarValor(valor);
 
-        if (limpio == null ||
-                limpio.length() <= MAX_LONGITUD_MOTIVO) {
+        if (limpio == null) {
+            return null;
+        }
+
+        if (limpio.length() <= longitudMaxima) {
             return limpio;
         }
 
-        return limpio.substring(
-                0,
-                MAX_LONGITUD_MOTIVO
+        log.warn(
+                "El campo [{}] excede la longitud máxima. "
+                        + "Longitud original: {}, máximo: {}, valor: [{}]",
+                campo,
+                limpio.length(),
+                longitudMaxima,
+                limpio
         );
+
+        return limpio.substring(0, longitudMaxima);
     }
 }
