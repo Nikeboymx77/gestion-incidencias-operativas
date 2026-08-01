@@ -126,6 +126,30 @@
 	            </select>
 	
 	        </div>
+	        
+	        <div class="filter-field">
+
+			    <label for="empleadoId">
+			        Empleado
+			    </label>
+			
+			    <select id="empleadoId"
+			            name="empleadoId">
+			
+			        <option value="">
+			            Todos los empleados
+			        </option>
+			
+			        <option th:each="empleado : ${empleados}"
+			                th:value="${empleado.id}"
+			                th:text="${empleado.nombre}"
+			                th:selected="${empleado.id == empleadoSeleccionado}">
+			            César Chávez
+			        </option>
+			
+			    </select>
+			
+			</div>
 	
 	        <div class="filter-actions">
 	

@@ -1,9 +1,11 @@
 package com.mx.baz.incidencias.dashboard.service;
 
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
+import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import com.mx.baz.incidencias.mapper.IncidenciaMapper;
+import com.mx.baz.incidencias.repository.EmpleadoRepository;
 import com.mx.baz.incidencias.repository.IncidenciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class DashboardService {
 
     private final IncidenciaRepository incidenciaRepository;
     private final IncidenciaMapper incidenciaMapper;
+    private final EmpleadoRepository empleadoRepository;
 
     @Transactional(readOnly = true)
     public long contarTotal() {
@@ -61,21 +64,29 @@ public class DashboardService {
     public Page<Incidencia> buscarIncidencias(
             String texto,
             EstadoIncidencia estado,
+            Long empleadoId,
             int page,
-            int size) {
+            int size
+    ) {
+
+        String textoNormalizado =
+                texto == null || texto.isBlank()
+                        ? null
+                        : texto.trim();
 
         Pageable pageable = PageRequest.of(
                 page,
                 size,
                 Sort.by(
                         Sort.Direction.DESC,
-                        "fechaAsignacion"
+                        "createdAt"
                 )
         );
 
         return incidenciaRepository.buscarParaDashboard(
-                texto,
+                textoNormalizado,
                 estado,
+                empleadoId,
                 pageable
         );
     }
@@ -89,6 +100,18 @@ public class DashboardService {
                         ErrorCodes.INCIDENCIA_NO_ENCONTRADA,
                         "Incidencia no encontrada: " + folio
                 ));
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Empleado> obtenerEmpleadosActivos() {
+        return empleadoRepository.findByActivoTrueOrderByNombreAsc();
+    }
+    
+    @Transactional(readOnly = true)
+    public long contarCanceladas() {
+        return incidenciaRepository.countByEstado(
+                EstadoIncidencia.CANCELADA
+        );
     }
     
 }

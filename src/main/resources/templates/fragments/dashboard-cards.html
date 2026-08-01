@@ -56,6 +56,17 @@
 		            'metric-icon-reabierta'
 		    )}">
 		    </div>
+		</div>
+		<div class="col-xl-3 col-md-6">
+
+		    <div th:replace="~{fragments/metric-card :: metricCard(
+		            'Canceladas',
+		            ${canceladas},
+		            'No requieren atención',
+		            'bi-x-circle',
+		            'metric-icon-cancelada'
+		    )}">
+		    </div>
 		</div>	
 	</section>
      

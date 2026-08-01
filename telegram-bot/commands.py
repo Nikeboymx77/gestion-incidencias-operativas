@@ -1,8 +1,10 @@
+import requests
+
 from telegram import Update
 from telegram.ext import ContextTypes
 from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia, 
                  obtener_pendientes_empleado,obtener_pendientes_por_empleado,obtener_resumen_empleados,
-                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking,obtener_incidencias_atrasadas)
+                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking,obtener_incidencias_atrasadas,cancelar_incidencia)
 
 
 
@@ -21,10 +23,12 @@ async def help_command(
         "Ejemplo: /pendientes cesar chavez\n\n"
         "/estado INC-1001\n"
         "Consulta el estado de una incidencia.\n\n"
-        "/tomar INC-1001\n"
+        "/tomar INC-1001 comentario\n"
         "Toma una incidencia pendiente y la marca como EN_PROCESO.\n\n"
         "/resuelto INC-1001 comentario\n"
         "Marca una incidencia como resuelta.\n\n"
+        "/cancelar INC-1001 motivo\n"
+        "Cancela una incidencia que no corresponde al equipo.\n\n"
         "/mis_pendientes\n"
         "Consulta las incidencias EN_PROCESO o REABIERTAS asignadas a tu usuario.\n\n"
         "/empleados - Muestra la carga operativa del equipo.\n\n"
@@ -35,6 +39,9 @@ async def help_command(
     )
 
     await update.message.reply_text(mensaje)
+
+
+LIMITE_MENSAJE_TELEGRAM = 4000
 
 
 async def pendientes_command(
@@ -77,12 +84,12 @@ async def pendientes_command(
             )
             return
 
-        mensajes = []
+        bloques_incidencias = []
 
         for incidencia in incidencias:
             empleado = incidencia.get("empleadoAsignado") or {}
 
-            mensajes.append(
+            bloque = (
                 f"🚨 {incidencia.get('folio', 'Sin folio')}\n"
                 f"📌 Asunto: "
                 f"{incidencia.get('asunto') or 'Sin asunto'}\n"
@@ -96,9 +103,50 @@ async def pendientes_command(
                 f"{incidencia.get('estado') or 'Sin estado'}"
             )
 
-        await update.effective_message.reply_text(
-            encabezado + "\n\n".join(mensajes)
-        )
+            bloques_incidencias.append(bloque)
+
+        mensajes_a_enviar = []
+        mensaje_actual = encabezado
+
+        for bloque in bloques_incidencias:
+            bloque_completo = bloque + "\n\n"
+
+            if (
+                len(mensaje_actual)
+                + len(bloque_completo)
+                <= LIMITE_MENSAJE_TELEGRAM
+            ):
+                mensaje_actual += bloque_completo
+                continue
+
+            mensajes_a_enviar.append(
+                mensaje_actual.rstrip()
+            )
+
+            mensaje_actual = encabezado + bloque_completo
+
+        if mensaje_actual.strip():
+            mensajes_a_enviar.append(
+                mensaje_actual.rstrip()
+            )
+
+        total_partes = len(mensajes_a_enviar)
+
+        for indice, mensaje in enumerate(
+                mensajes_a_enviar,
+                start=1
+        ):
+
+            if total_partes > 1:
+                titulo_parte = (
+                    f"📄 Parte {indice} de {total_partes}\n\n"
+                )
+            else:
+                titulo_parte = ""
+
+            await update.effective_message.reply_text(
+                titulo_parte + mensaje
+            )
 
     except Exception as error:
         await update.effective_message.reply_text(
@@ -498,4 +546,119 @@ async def atrasadas_command(
         mensaje,
         parse_mode="Markdown"
     )
+    
+LIMITE_MENSAJE_TELEGRAM = 4000
+
+
+async def enviar_mensaje_largo(
+        update: Update,
+        mensaje: str,
+        parse_mode: str | None = None
+) -> None:
+
+    if not mensaje:
+        return
+
+    partes = []
+    parte_actual = ""
+
+    # Separa por bloques para no cortar una incidencia a la mitad.
+    bloques = mensaje.split("\n\n")
+
+    for bloque in bloques:
+        bloque_con_separador = bloque + "\n\n"
+
+        if len(parte_actual) + len(bloque_con_separador) <= LIMITE_MENSAJE_TELEGRAM:
+            parte_actual += bloque_con_separador
+            continue
+
+        if parte_actual:
+            partes.append(parte_actual.rstrip())
+            parte_actual = ""
+
+        # Protección adicional si un solo bloque supera el límite.
+        while len(bloque_con_separador) > LIMITE_MENSAJE_TELEGRAM:
+            partes.append(
+                bloque_con_separador[:LIMITE_MENSAJE_TELEGRAM]
+            )
+            bloque_con_separador = bloque_con_separador[
+                LIMITE_MENSAJE_TELEGRAM:
+            ]
+
+        parte_actual = bloque_con_separador
+
+    if parte_actual:
+        partes.append(parte_actual.rstrip())
+
+    total_partes = len(partes)
+
+    for indice, parte in enumerate(partes, start=1):
+
+        encabezado = (
+            f"📄 Parte {indice}/{total_partes}\n\n"
+            if total_partes > 1
+            else ""
+        )
+
+        await update.message.reply_text(
+            encabezado + parte,
+            parse_mode=parse_mode
+        )
+        
+async def cancelar_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+
+    try:
+        if len(context.args) < 2:
+            await update.effective_message.reply_text(
+                "⚠️ Uso correcto:\n\n"
+                "/cancelar <folio> <motivo>\n\n"
+                "Ejemplo:\n"
+                "/cancelar INC-1001 "
+                "Es un seguimiento que no corresponde al equipo."
+            )
+            return
+
+        folio = context.args[0].strip().upper()
+
+        comentario = " ".join(
+            context.args[1:]
+        ).strip()
+
+        usuario_telegram = update.effective_user
+
+        if usuario_telegram is None:
+            await update.effective_message.reply_text(
+                "❌ No fue posible identificar al usuario de Telegram."
+            )
+            return
+
+        usuario = (
+            usuario_telegram.username
+            or usuario_telegram.full_name
+            or usuario_telegram.first_name
+        )
+
+        incidencia = cancelar_incidencia(
+            folio=folio,
+            usuario=usuario,
+            comentario=comentario
+        )
+
+        await update.effective_message.reply_text(
+            "🚫 Incidencia cancelada correctamente\n\n"
+            f"📌 Folio: "
+            f"{incidencia.get('folio', folio)}\n"
+            f"👤 Cancelada por: {usuario}\n"
+            f"📝 Motivo: {comentario}\n"
+            f"📍 Estado: "
+            f"{incidencia.get('estado', 'CANCELADA')}"
+        )
+
+    except Exception as error:
+        await update.effective_message.reply_text(
+            f"❌ Error cancelando incidencia: {error}"
+        )
         

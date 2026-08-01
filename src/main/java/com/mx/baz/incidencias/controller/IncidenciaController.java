@@ -2,6 +2,7 @@ package com.mx.baz.incidencias.controller;
 
 import com.mx.baz.incidencias.dto.ActualizarEstadoIncidenciaRequest;
 import com.mx.baz.incidencias.dto.BalanceResponse;
+import com.mx.baz.incidencias.dto.CancelarIncidenciaRequest;
 import com.mx.baz.incidencias.dto.EstadisticasResponse;
 import com.mx.baz.incidencias.dto.IncidenciaAtrasadaResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
@@ -10,6 +11,8 @@ import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -109,5 +112,21 @@ public class IncidenciaController {
         return ResponseEntity.ok(
                 incidenciaService.obtenerIncidenciasAtrasadas(dias)
         );
+    }
+    
+    @PutMapping("/{folio}/cancelar")
+    public ResponseEntity<IncidenciaResponse> cancelarIncidencia(
+            @PathVariable String folio,
+            @Valid @RequestBody CancelarIncidenciaRequest request
+    ) {
+
+        IncidenciaResponse response =
+                incidenciaService.cancelarIncidencia(
+                        folio,
+                        request.getUsuario(),
+                        request.getComentario()
+                );
+
+        return ResponseEntity.ok(response);
     }
 }

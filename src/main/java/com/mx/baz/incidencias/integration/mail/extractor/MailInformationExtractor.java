@@ -18,7 +18,7 @@ public class MailInformationExtractor {
 
     private static final Pattern CLIENTE_UNICO_PATTERN =
             Pattern.compile(
-                    "Cliente\\s+[ÚU]nico\\s*:\\s*([0-9\\-]+)",
+                    "Cliente\\s+[ÚUúu]nico\\s*:\\s*([0-9\\-]+)",
                     REGEX_FLAGS
             );
 
@@ -113,11 +113,41 @@ public class MailInformationExtractor {
                             + "|$)",
                     REGEX_FLAGS
             );
+    
+    private static final Pattern ERRORES_REACTIVACION_PATTERN =
+            Pattern.compile(
+                    "(?:1\\.-\\s*Error\\s*)?"
+                            + "((?:Lo\\s+sentimos\\s+)?"
+                            + "Inconveniente\\s+con\\s+el\\s+API.+?)"
+                            + "(?=\\s+Se\\s+pide\\s+de\\s+su\\s+apoyo"
+                            + "|\\s+Información\\s+del\\s+cliente"
+                            + "|\\s+Nombre\\s*:"
+                            + "|\\s+Cliente\\s+[ÚUúu]nico\\s*:"
+                            + "|\\s+De\\s*:"
+                            + "|\\s+Enviado\\s*:"
+                            + "|\\s+Para\\s*:"
+                            + "|\\s+CC\\s*:"
+                            + "|\\s+Asunto\\s*:"
+                            + "|$)",
+                    REGEX_FLAGS
+            );
 
     private static final Pattern ERROR_PATTERN =
             Pattern.compile(
-                    "(Inconveniente\\s+con\\s+el\\s+API.+?)(?=\\s+Validaciones\\s*:|\\s+Se\\s+consulta|$)",
-                    Pattern.CASE_INSENSITIVE
+                    "(Inconveniente\\s+con\\s+el\\s+API.+?)"
+                            + "(?=\\s+Validaciones\\s*:"
+                            + "|\\s+Se\\s+consulta"
+                            + "|\\s+Se\\s+pide\\s+de\\s+su\\s+apoyo"
+                            + "|\\s+Información\\s+del\\s+cliente"
+                            + "|\\s+Nombre\\s*:"
+                            + "|\\s+Cliente\\s+[ÚUúu]nico\\s*:"
+                            + "|\\s+De\\s*:"
+                            + "|\\s+Enviado\\s*:"
+                            + "|\\s+Para\\s*:"
+                            + "|\\s+CC\\s*:"
+                            + "|\\s+Asunto\\s*:"
+                            + "|$)",
+                    REGEX_FLAGS
             );
     
     private static final Pattern EQUIPO_PATTERN =
@@ -147,7 +177,7 @@ public class MailInformationExtractor {
                 .sucursal(extraerSucursal(asunto, textoCompleto))
                 .clienteUnico(extraerPrimero(CLIENTE_UNICO_PATTERN, textoCompleto))
                 .nombreCliente(extraerPrimero(NOMBRE_CLIENTE_PATTERN, textoCompleto))
-                .motivo(extraerMotivo(textoCompleto))
+                .motivo(limitarMotivo(extraerMotivo(textoCompleto)))
                 .equipo(extraerPrimero(EQUIPO_PATTERN, textoCompleto))
                 .build();
     }
@@ -165,19 +195,37 @@ public class MailInformationExtractor {
 
     private String extraerMotivo(String textoCompleto) {
 
-        String motivo = extraerPrimero(MOTIVO_ETIQUETA_PATTERN, textoCompleto);
+        String motivo = extraerPrimero(
+                MOTIVO_ETIQUETA_PATTERN,
+                textoCompleto
+        );
 
         if (motivo != null) {
             return motivo;
         }
 
-        motivo = extraerPrimero(MENSAJE_REPORTADO_PATTERN, textoCompleto);
+        motivo = extraerPrimero(
+                MENSAJE_REPORTADO_PATTERN,
+                textoCompleto
+        );
 
         if (motivo != null) {
             return motivo;
         }
 
-        return extraerPrimero(ERROR_PATTERN, textoCompleto);
+        motivo = extraerPrimero(
+                ERRORES_REACTIVACION_PATTERN,
+                textoCompleto
+        );
+
+        if (motivo != null) {
+            return motivo;
+        }
+
+        return extraerPrimero(
+                ERROR_PATTERN,
+                textoCompleto
+        );
     }
 
     private String extraerPrimero(Pattern pattern, String texto) {
@@ -224,5 +272,26 @@ public class MailInformationExtractor {
                 .trim();
 
         return limpio.isBlank() ? null : limpio;
+    }
+    
+    private static final int MAX_LONGITUD_MOTIVO = 1000;
+
+    private String limitarMotivo(String motivo) {
+
+        if (motivo == null) {
+            return null;
+        }
+
+        String limpio = limpiarValor(motivo);
+
+        if (limpio == null ||
+                limpio.length() <= MAX_LONGITUD_MOTIVO) {
+            return limpio;
+        }
+
+        return limpio.substring(
+                0,
+                MAX_LONGITUD_MOTIVO
+        );
     }
 }

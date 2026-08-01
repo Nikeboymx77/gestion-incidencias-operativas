@@ -1,5 +1,6 @@
 package com.mx.baz.incidencias.repository;
 
+import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import com.mx.baz.incidencias.repository.projection.RankingEmpleadoProjection;
@@ -34,24 +35,32 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
     
     List<Incidencia> findByEstado(EstadoIncidencia estado);
     
+       
+    
     @Query("""
     	    SELECT i
     	    FROM Incidencia i
+    	    LEFT JOIN i.empleadoAsignado e
     	    WHERE (
     	        :texto IS NULL
-    	        OR :texto = ''
     	        OR LOWER(i.folio) LIKE LOWER(CONCAT('%', :texto, '%'))
     	        OR LOWER(i.nombreCliente) LIKE LOWER(CONCAT('%', :texto, '%'))
+    	        OR LOWER(i.clienteUnico) LIKE LOWER(CONCAT('%', :texto, '%'))
     	        OR LOWER(i.sucursal) LIKE LOWER(CONCAT('%', :texto, '%'))
     	    )
     	    AND (
     	        :estado IS NULL
     	        OR i.estado = :estado
     	    )
+    	    AND (
+    	        :empleadoId IS NULL
+    	        OR e.id = :empleadoId
+    	    )
     	""")
     	Page<Incidencia> buscarParaDashboard(
     	        @Param("texto") String texto,
     	        @Param("estado") EstadoIncidencia estado,
+    	        @Param("empleadoId") Long empleadoId,
     	        Pageable pageable
     	);
     

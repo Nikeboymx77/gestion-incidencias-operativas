@@ -51,6 +51,7 @@ public class IncidenciaService {
     private final AssignmentService assignmentService;
     private final IncidenciaMapper incidenciaMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final HistorialIncidenciaService historialIncidenciaService;
 
     @Transactional
     public IncidenciaResponse crearIncidencia(IncidenciaRequest request) {
@@ -133,6 +134,85 @@ public class IncidenciaService {
         );
 
         return incidenciaMapper.toResponse(incidencia);
+    }
+    
+    @Transactional
+    public IncidenciaResponse cancelarIncidencia(
+            String folio,
+            String usuario,
+            String comentario
+    ) {
+
+        Incidencia incidencia = incidenciaRepository.findByFolio(folio)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.INCIDENCIA_NO_ENCONTRADA,
+                        "Incidencia no encontrada: " + folio
+                ));
+
+        EstadoIncidencia estadoAnterior =
+                incidencia.getEstado();
+
+        if (estadoAnterior == EstadoIncidencia.CANCELADA) {
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "La incidencia " + folio
+                            + " ya se encuentra cancelada."
+            );
+        }
+
+        if (estadoAnterior == EstadoIncidencia.RESUELTA) {
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "La incidencia " + folio
+                            + " ya fue resuelta y no puede cancelarse."
+            );
+        }
+
+        if (comentario == null || comentario.isBlank()) {
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "Debe indicar el motivo de la cancelación."
+            );
+        }
+
+        String usuarioRegistro =
+                usuario == null || usuario.isBlank()
+                        ? "SISTEMA"
+                        : usuario.trim();
+
+        String comentarioRegistro =
+                comentario.trim();
+
+        incidencia.setEstado(
+                EstadoIncidencia.CANCELADA
+        );
+
+        /*
+         * La cancelación representa el cierre operativo del caso.
+         */
+        incidencia.setFechaResolucion(
+                LocalDateTime.now()
+        );
+
+        Incidencia incidenciaGuardada =
+                incidenciaRepository.save(incidencia);
+
+        historialIncidenciaService.registrarCambioEstado(
+                incidenciaGuardada,
+                estadoAnterior,
+                EstadoIncidencia.CANCELADA,
+                usuarioRegistro,
+                comentarioRegistro
+        );
+
+        /*
+         * Por ahora no publicamos evento hasta crear
+         * IncidenciaCanceladaEvent y su listener.
+         */
+
+        return incidenciaMapper.toResponse(
+                incidenciaGuardada
+        );
     }
     
     public List<IncidenciaResponse> obtenerPendientes() {

@@ -40,6 +40,28 @@ def resolver_incidencia(folio, usuario, comentario):
 
     return response.json()
 
+def cancelar_incidencia(
+        folio: str,
+        usuario: str,
+        comentario: str
+) -> dict:
+
+    payload = {
+        "usuario": usuario,
+        "comentario": comentario
+    }
+
+    response = requests.put(
+        f"{API_BASE_URL}/incidencias/{folio}/cancelar",
+        json=payload,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+
 def tomar_incidencia(folio, usuario, comentario):
     payload = {
         "usuario": usuario,

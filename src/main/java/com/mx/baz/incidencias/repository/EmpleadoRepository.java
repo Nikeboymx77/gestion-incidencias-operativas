@@ -9,9 +9,11 @@ import java.util.Optional;
 public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
 
     List<Empleado> findByActivoTrue();
-    
+
+    List<Empleado> findByActivoTrueOrderByNombreAsc();
+
     Optional<Empleado> findByUsernameTelegramIgnoreCase(String usernameTelegram);
-    
+
     long countByActivoTrue();
 
 }
