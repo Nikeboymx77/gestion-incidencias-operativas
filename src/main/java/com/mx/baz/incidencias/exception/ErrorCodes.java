@@ -9,6 +9,7 @@ public final class ErrorCodes {
     public static final String INCIDENCIA_RESUELTA = "INC-002";
     public static final String INCIDENCIA_YA_TOMADA = "INC-003";
     public static final String ESTADO_INVALIDO = "INC-004";
+    public static final String REASIGNACION_INVALIDA = "INC-005";
 
     public static final String EMPLEADO_FIN_SEMANA = "EMP-001";
     public static final String EMPLEADO_SEMANA = "EMP-002";

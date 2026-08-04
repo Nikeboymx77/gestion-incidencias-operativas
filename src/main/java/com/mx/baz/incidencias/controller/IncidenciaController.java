@@ -8,6 +8,7 @@ import com.mx.baz.incidencias.dto.IncidenciaAtrasadaResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
+import com.mx.baz.incidencias.dto.ReasignarIncidenciaRequest;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
@@ -128,5 +129,21 @@ public class IncidenciaController {
                 );
 
         return ResponseEntity.ok(response);
+    }
+    
+    @PutMapping("/{folio}/reasignar")
+    public ResponseEntity<IncidenciaResponse> reasignarIncidencia(
+            @PathVariable String folio,
+            @Valid
+            @RequestBody ReasignarIncidenciaRequest request
+    ) {
+
+        IncidenciaResponse respuesta =
+                incidenciaService.reasignarIncidencia(
+                        folio,
+                        request
+                );
+
+        return ResponseEntity.ok(respuesta);
     }
 }

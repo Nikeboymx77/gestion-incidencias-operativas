@@ -9,6 +9,7 @@ import com.mx.baz.incidencias.dto.IncidenciaAtrasadaResponse;
 import com.mx.baz.incidencias.dto.IncidenciaRequest;
 import com.mx.baz.incidencias.dto.IncidenciaResponse;
 import com.mx.baz.incidencias.dto.RankingEmpleadoResponse;
+import com.mx.baz.incidencias.dto.ReasignarIncidenciaRequest;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.HistorialIncidencia;
@@ -215,6 +216,132 @@ public class IncidenciaService {
         );
     }
     
+    @Transactional
+    public IncidenciaResponse reasignarIncidencia(
+            String folio,
+            ReasignarIncidenciaRequest request
+    ) {
+
+        Incidencia incidencia = incidenciaRepository
+                .findByFolio(folio)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.INCIDENCIA_NO_ENCONTRADA,
+                        "Incidencia no encontrada: " + folio
+                ));
+
+        EstadoIncidencia estadoAnterior =
+                incidencia.getEstado();
+
+        if (estadoAnterior == EstadoIncidencia.RESUELTA) {
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "La incidencia " + folio
+                            + " ya fue resuelta y no puede reasignarse."
+            );
+        }
+
+        if (estadoAnterior == EstadoIncidencia.CANCELADA) {
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "La incidencia " + folio
+                            + " está cancelada y no puede reasignarse."
+            );
+        }
+
+        String usernameDestino =
+                normalizarUsername(
+                        request.getUsernameTelegram()
+                );
+
+        Empleado nuevoEmpleado = empleadoRepository
+                .findByUsernameTelegramIgnoreCase(
+                        usernameDestino
+                )
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.EMPLEADO_NO_DISPONIBLE,
+                        "No se encontró un empleado con el usuario @"
+                                + usernameDestino
+                ));
+
+        if (!Boolean.TRUE.equals(
+                nuevoEmpleado.getActivo()
+        )) {
+            throw new BusinessException(
+                    ErrorCodes.EMPLEADO_NO_DISPONIBLE,
+                    "El empleado "
+                            + nuevoEmpleado.getNombre()
+                            + " no se encuentra activo."
+            );
+        }
+
+        Empleado empleadoAnterior =
+                incidencia.getEmpleadoAsignado();
+
+        if (empleadoAnterior != null
+                && empleadoAnterior.getId().equals(
+                        nuevoEmpleado.getId()
+                )) {
+
+            throw new BusinessException(
+                    ErrorCodes.REASIGNACION_INVALIDA,
+                    "La incidencia " + folio
+                            + " ya está asignada a "
+                            + nuevoEmpleado.getNombre() + "."
+            );
+        }
+
+        String nombreAnterior =
+                empleadoAnterior != null
+                        ? empleadoAnterior.getNombre()
+                        : "Sin asignar";
+
+        String comentarioHistorial =
+                "Reasignación de "
+                        + nombreAnterior
+                        + " a "
+                        + nuevoEmpleado.getNombre()
+                        + ". Motivo: "
+                        + request.getComentario().trim();
+
+        incidencia.setEmpleadoAsignado(
+                nuevoEmpleado
+        );
+
+        incidencia.setEstado(
+                EstadoIncidencia.REASIGNADA
+        );
+
+        incidencia.setFechaAsignacion(
+                LocalDateTime.now()
+        );
+
+        /*
+         * El nuevo responsable todavía debe tomar la incidencia.
+         */
+        incidencia.setUsuarioQueLaTomo(null);
+        incidencia.setFechaInicio(null);
+        incidencia.setFechaResolucion(null);
+
+        Incidencia incidenciaGuardada =
+                incidenciaRepository.save(incidencia);
+
+        assignmentService.actualizarUltimaAsignacion(
+                nuevoEmpleado
+        );
+
+        historialIncidenciaService.registrarCambioEstado(
+                incidenciaGuardada,
+                estadoAnterior,
+                EstadoIncidencia.REASIGNADA,
+                request.getUsuario(),
+                comentarioHistorial
+        );
+
+        return incidenciaMapper.toResponse(
+                incidenciaGuardada
+        );
+    }
+    
     public List<IncidenciaResponse> obtenerPendientes() {
     	return incidenciaRepository.findByEstado(EstadoIncidencia.PENDIENTE)
                 .stream()
@@ -251,9 +378,21 @@ public class IncidenciaService {
             );
         }
 
-        if (incidencia.getEstado() != EstadoIncidencia.PENDIENTE) {
-            throw new BusinessException(ErrorCodes.INCIDENCIA_YA_TOMADA,
-                    "La incidencia " + folio + " no puede ser tomada porque está en estado "
+        List<EstadoIncidencia> estadosPermitidos =
+                List.of(
+                        EstadoIncidencia.PENDIENTE,
+                        EstadoIncidencia.REASIGNADA,
+                        EstadoIncidencia.REABIERTA
+                );
+
+        if (!estadosPermitidos.contains(
+                incidencia.getEstado()
+        )) {
+
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "La incidencia " + folio
+                            + " no puede ser tomada porque está en estado "
                             + incidencia.getEstado()
             );
         }
