@@ -162,3 +162,27 @@ def obtener_incidencias_atrasadas(dias=3):
     except requests.RequestException as error:
         print(f"Error al consultar incidencias atrasadas: {error}")
         return None
+    
+def reasignar_incidencia(
+        folio: str,
+        username_telegram: str,
+        usuario: str,
+        comentario: str
+) -> dict:
+
+    payload = {
+        "usernameTelegram": username_telegram,
+        "usuario": usuario,
+        "comentario": comentario
+    }
+
+    response = requests.put(
+        f"{API_BASE_URL}/incidencias/{folio}/reasignar",
+        json=payload,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()

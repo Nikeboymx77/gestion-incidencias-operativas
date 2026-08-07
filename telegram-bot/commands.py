@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia, 
                  obtener_pendientes_empleado,obtener_pendientes_por_empleado,obtener_resumen_empleados,
-                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking,obtener_incidencias_atrasadas,cancelar_incidencia)
+                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking,obtener_incidencias_atrasadas,cancelar_incidencia,reasignar_incidencia)
 
 
 
@@ -27,6 +27,9 @@ async def help_command(
         "Toma una incidencia pendiente y la marca como EN_PROCESO.\n\n"
         "/resuelto INC-1001 comentario\n"
         "Marca una incidencia como resuelta.\n\n"
+        "/reasignar INC-1050 usuarioTelegram motivo\n"
+        "Reasigna una incidencia a otro integrante del equipo.\n"
+        "Ejemplo: /reasignar INC-1050 jhuertas Vacaciones del responsable.\n\n"
         "/cancelar INC-1001 motivo\n"
         "Cancela una incidencia que no corresponde al equipo.\n\n"
         "/mis_pendientes\n"
@@ -660,5 +663,77 @@ async def cancelar_command(
     except Exception as error:
         await update.effective_message.reply_text(
             f"❌ Error cancelando incidencia: {error}"
+        )
+        
+async def reasignar_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+
+    try:
+        if len(context.args) < 3:
+            await update.effective_message.reply_text(
+                "⚠️ Uso correcto:\n\n"
+                "/reasignar <folio> <usuarioTelegram> <motivo>\n\n"
+                "Ejemplo:\n"
+                "/reasignar INC-1050 jhuertas "
+                "El responsable actual no está disponible."
+            )
+            return
+
+        folio = context.args[0].strip().upper()
+
+        username_destino = (
+            context.args[1]
+            .strip()
+            .replace("@", "")
+        )
+
+        comentario = " ".join(
+            context.args[2:]
+        ).strip()
+
+        usuario_telegram = update.effective_user
+
+        if usuario_telegram is None:
+            await update.effective_message.reply_text(
+                "❌ No fue posible identificar al usuario."
+            )
+            return
+
+        usuario = (
+            usuario_telegram.username
+            or usuario_telegram.full_name
+            or usuario_telegram.first_name
+        )
+
+        incidencia = reasignar_incidencia(
+            folio=folio,
+            username_telegram=username_destino,
+            usuario=usuario,
+            comentario=comentario
+        )
+
+        empleado = (
+            incidencia.get("empleadoAsignado")
+            or {}
+        )
+
+        await update.effective_message.reply_text(
+            "🔄 Incidencia reasignada correctamente\n\n"
+            f"📌 Folio: "
+            f"{incidencia.get('folio', folio)}\n"
+            f"👤 Nuevo responsable: "
+            f"{empleado.get('nombre', 'No identificado')}\n"
+            f"📱 Telegram: "
+            f"@{empleado.get('usernameTelegram', username_destino)}\n"
+            f"📝 Motivo: {comentario}\n"
+            f"📍 Estado: "
+            f"{incidencia.get('estado', 'REASIGNADA')}"
+        )
+
+    except Exception as error:
+        await update.effective_message.reply_text(
+            f"❌ Error reasignando incidencia: {error}"
         )
         
