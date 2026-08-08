@@ -12,4 +12,14 @@ public interface NotificationService {
     
     void notificarIncidenciaReabierta(Incidencia incidencia,String motivoReapertura);
     
+    void notificarIncidenciaCancelada(Incidencia incidencia, String usuario, String comentario);
+    
+    void notificarIncidenciaReasignada(
+            Incidencia incidencia,
+            String empleadoAnterior,
+            String empleadoNuevo,
+            String usuario,
+            String comentario
+    );
+    
 }

@@ -3,6 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -17,35 +18,74 @@
 
     <link rel="stylesheet"
           th:href="@{/css/incidencia-detalle.css}">
+
 </head>
 
 <body>
 
+
+<!-- ========================================================= -->
+<!-- HEADER                                                    -->
+<!-- ========================================================= -->
+
 <header class="topbar">
+
     <div>
+
         <h1>SGIO</h1>
-        <p>Sistema de Gestión de Incidencias Operativas</p>
+
+        <p>
+            Sistema de Gestión de Incidencias Operativas
+        </p>
+
     </div>
 
+
     <div class="status">
+
         <span class="status-dot"></span>
+
         Sistema activo
+
     </div>
+
 </header>
+
+
+<!-- ========================================================= -->
+<!-- CONTENIDO PRINCIPAL                                       -->
+<!-- ========================================================= -->
 
 <main class="detail-container">
 
+
+    <!-- ===================================================== -->
+    <!-- NAVEGACIÓN                                            -->
+    <!-- ===================================================== -->
+
     <div class="detail-navigation">
+
         <a th:href="@{/dashboard}"
            class="back-link">
+
             ← Volver al dashboard
+
         </a>
+
     </div>
+
+
+    <!-- ===================================================== -->
+    <!-- CABECERA DE LA INCIDENCIA                             -->
+    <!-- ===================================================== -->
 
     <section class="detail-header">
 
         <div>
-            <p class="eyebrow">Detalle de incidencia</p>
+
+            <p class="eyebrow">
+                Detalle de incidencia
+            </p>
 
             <h2 th:text="${incidencia.folio}">
                 INC000001
@@ -55,7 +95,9 @@
                th:text="${incidencia.asunto}">
                 Asunto de la incidencia
             </p>
+
         </div>
+
 
         <div class="detail-header-status">
 
@@ -64,197 +106,1177 @@
                       incidencia.estado.toString()
                   )}"
                   th:text="${incidencia.estado}">
+
                 PENDIENTE
+
             </span>
 
         </div>
 
     </section>
 
-    <section class="detail-grid">
 
-        <article class="detail-card">
+    <!-- ===================================================== -->
+    <!-- SGIO V2 - WORKSPACE                                   -->
+    <!-- ===================================================== -->
 
-            <div class="card-title">
-                <p class="eyebrow">Datos del cliente</p>
-                <h3>Información operativa</h3>
-            </div>
+    <div class="detail-workspace">
 
-            <div class="data-grid">
 
-                <div class="data-item">
-                    <span>Cliente</span>
-                    <strong th:text="${incidencia.nombreCliente != null
-                            ? incidencia.nombreCliente
-                            : 'No identificado'}">
-                        Cliente
-                    </strong>
+        <!-- ================================================= -->
+        <!-- COLUMNA PRINCIPAL                                 -->
+        <!-- ================================================= -->
+
+        <div class="detail-main-column">
+
+
+            <!-- ============================================= -->
+            <!-- INFORMACIÓN OPERATIVA + SEGUIMIENTO           -->
+            <!-- ============================================= -->
+
+            <section class="detail-grid">
+
+
+                <!-- ========================================= -->
+                <!-- INFORMACIÓN OPERATIVA                     -->
+                <!-- ========================================= -->
+
+                <article class="detail-card">
+
+                    <div class="card-title">
+
+                        <p class="eyebrow">
+                            Datos del cliente
+                        </p>
+
+                        <h3>
+                            Información operativa
+                        </h3>
+
+                    </div>
+
+
+                    <div class="data-grid">
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Cliente
+                            </span>
+
+                            <strong th:text="${incidencia.nombreCliente != null
+                                    ? incidencia.nombreCliente
+                                    : 'No identificado'}">
+
+                                Cliente
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Cliente único
+                            </span>
+
+                            <strong th:text="${incidencia.clienteUnico != null
+                                    ? incidencia.clienteUnico
+                                    : 'No identificado'}">
+
+                                CU
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Sucursal
+                            </span>
+
+                            <strong th:text="${incidencia.sucursal != null
+                                    ? incidencia.sucursal
+                                    : 'No identificada'}">
+
+                                Sucursal
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Equipo
+                            </span>
+
+                            <strong th:text="${incidencia.equipo != null
+                                    ? incidencia.equipo
+                                    : 'No identificado'}">
+
+                                Equipo
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+
+                <!-- ========================================= -->
+                <!-- SEGUIMIENTO                               -->
+                <!-- ========================================= -->
+
+                <article class="detail-card">
+
+                    <div class="card-title">
+
+                        <p class="eyebrow">
+                            Atención
+                        </p>
+
+                        <h3>
+                            Seguimiento
+                        </h3>
+
+                    </div>
+
+
+                    <div class="data-grid">
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Estado
+                            </span>
+
+                            <strong th:text="${incidencia.estado}">
+                                PENDIENTE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Prioridad
+                            </span>
+
+                            <strong th:text="${incidencia.prioridad != null
+                                    ? incidencia.prioridad
+                                    : 'SIN DEFINIR'}">
+
+                                MEDIA
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Asignado
+                            </span>
+
+                            <strong th:text="${incidencia.empleadoAsignado != null
+                                    ? incidencia.empleadoAsignado.nombre
+                                    : 'Sin asignar'}">
+
+                                Empleado
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Fecha de registro
+                            </span>
+
+                            <strong th:text="${incidencia.fechaCorreo != null
+                                    ? #temporals.format(
+                                        incidencia.fechaCorreo,
+                                        'dd/MM/yyyy HH:mm'
+                                      )
+                                    : '-'}">
+
+                                Fecha
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+
+            </section>
+
+
+            <!-- ============================================= -->
+            <!-- DIAGNÓSTICO                                   -->
+            <!-- ============================================= -->
+
+            <section class="detail-card full-width">
+
+                <div class="card-title">
+
+                    <p class="eyebrow">
+                        Diagnóstico
+                    </p>
+
+                    <h3>
+                        Motivo identificado
+                    </h3>
+
                 </div>
 
-                <div class="data-item">
-                    <span>Cliente único</span>
-                    <strong th:text="${incidencia.clienteUnico != null
-                            ? incidencia.clienteUnico
-                            : 'No identificado'}">
-                        CU
-                    </strong>
+
+                <p class="content-text"
+                   th:text="${incidencia.motivo != null
+                           ? incidencia.motivo
+                           : 'No fue posible identificar el motivo.'}">
+
+                    Motivo
+
+                </p>
+
+            </section>
+
+
+            <!-- ============================================= -->
+            <!-- CORREO ORIGINAL                               -->
+            <!-- ============================================= -->
+
+            <section class="detail-card full-width">
+
+                <div class="card-title">
+
+                    <p class="eyebrow">
+                        Correo original
+                    </p>
+
+                    <h3>
+                        Descripción completa
+                    </h3>
+
                 </div>
 
-                <div class="data-item">
-                    <span>Sucursal</span>
-                    <strong th:text="${incidencia.sucursal != null
-                            ? incidencia.sucursal
-                            : 'No identificada'}">
-                        Sucursal
-                    </strong>
+
+                <div class="description-box"
+                     th:text="${incidencia.descripcion != null
+                             ? incidencia.descripcion
+                             : 'Sin descripción disponible.'}">
+
+                    Descripción
+
                 </div>
 
-                <div class="data-item">
-                    <span>Equipo</span>
-                    <strong th:text="${incidencia.equipo != null
-                            ? incidencia.equipo
-                            : 'No identificado'}">
-                        Equipo
-                    </strong>
-                </div>
+            </section>
 
-            </div>
 
-        </article>
-
-        <article class="detail-card">
-
-            <div class="card-title">
-                <p class="eyebrow">Atención</p>
-                <h3>Seguimiento</h3>
-            </div>
-
-            <div class="data-grid">
-
-                <div class="data-item">
-                    <span>Estado</span>
-                    <strong th:text="${incidencia.estado}">
-                        PENDIENTE
-                    </strong>
-                </div>
-
-                <div class="data-item">
-                    <span>Prioridad</span>
-                    <strong th:text="${incidencia.prioridad}">
-                        MEDIA
-                    </strong>
-                </div>
-
-                <div class="data-item">
-                    <span>Asignado</span>
-                    <strong th:text="${incidencia.empleadoAsignado != null
-                            ? incidencia.empleadoAsignado.nombre
-                            : 'Sin asignar'}">
-                        Empleado
-                    </strong>
-                </div>
-
-                <div class="data-item">
-                    <span>Fecha de registro</span>
-
-                    <strong th:text="${incidencia.fechaCorreo != null
-					        ? #temporals.format(
-					            incidencia.fechaCorreo,
-					            'dd/MM/yyyy HH:mm'
-					          )
-					        : '-'}">
-					</strong>
-                </div>
-
-            </div>
-
-        </article>
-
-    </section>
-
-    <section class="detail-card full-width">
-
-        <div class="card-title">
-            <p class="eyebrow">Diagnóstico</p>
-            <h3>Motivo identificado</h3>
         </div>
 
-        <p class="content-text"
-           th:text="${incidencia.motivo != null
-                   ? incidencia.motivo
-                   : 'No fue posible identificar el motivo.'}">
-            Motivo
-        </p>
 
-    </section>
+        <!-- ================================================= -->
+        <!-- PANEL LATERAL                                     -->
+        <!-- ================================================= -->
 
-    <section class="detail-card full-width">
+        <aside class="detail-side-column">
 
-        <div class="card-title">
-            <p class="eyebrow">Correo original</p>
-            <h3>Descripción completa</h3>
-        </div>
 
-        <div class="description-box"
-             th:text="${incidencia.descripcion != null
-                     ? incidencia.descripcion
-                     : 'Sin descripción disponible.'}">
-            Descripción
-        </div>
+            <!-- ============================================= -->
+            <!-- ACCIONES                                      -->
+            <!-- ============================================= -->
 
-    </section>
+            <section class="detail-card side-card">
 
-    <section class="detail-card full-width">
+                <div class="card-title">
 
-        <div class="card-title">
-            <p class="eyebrow">Origen</p>
-            <h3>Información del correo</h3>
-        </div>
+                    <p class="eyebrow">
+                        Operación
+                    </p>
 
-        <div class="data-grid">
+                    <h3>
+                        ⚡ Acciones
+                    </h3>
 
-            <div class="data-item">
-                <span>Remitente</span>
+                </div>
 
-                <strong th:text="${incidencia.remitente != null
-                        ? incidencia.remitente
-                        : 'No identificado'}">
-                    Remitente
-                </strong>
-            </div>
 
-            <div class="data-item">
-                <span>Carpeta</span>
+                <div class="incident-actions">
 
-                <strong th:text="${incidencia.carpetaOrigen != null
-                        ? incidencia.carpetaOrigen
-                        : 'No identificada'}">
-                    Carpeta
-                </strong>
-            </div>
 
-            <div class="data-item">
-                <span>Fecha del correo</span>
+                    <!-- ===================================== -->
+                    <!-- TOMAR                                 -->
+                    <!-- ===================================== -->
 
-                <strong th:text="${incidencia.fechaCorreo != null
-                        ? #temporals.format(
-                            incidencia.fechaCorreo,
-                            'dd/MM/yyyy HH:mm'
-                          )
-                        : '-'}">
-                    Fecha
-                </strong>
-            </div>
+                    <button type="button"
+                            id="btnTomar"
+                            class="action-btn action-btn-primary"
+                            th:if="${incidencia.estado.name() == 'PENDIENTE'
+                                    or incidencia.estado.name() == 'REABIERTA'
+                                    or incidencia.estado.name() == 'REASIGNADA'}">
 
-        </div>
+                        <i class="bi bi-play-circle"></i>
 
-    </section>
+                        <span>
+                            Tomar incidencia
+                        </span>
+
+                    </button>
+
+
+                    <!-- ===================================== -->
+                    <!-- RESOLVER                              -->
+                    <!-- ===================================== -->
+
+                    <button type="button"
+                            id="btnResolver"
+                            class="action-btn action-btn-success"
+                            th:if="${incidencia.estado.name() == 'EN_PROCESO'}">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        <span>
+                            Resolver
+                        </span>
+
+                    </button>
+
+
+                    <!-- ===================================== -->
+                    <!-- REASIGNAR                             -->
+                    <!-- ===================================== -->
+
+                    <button type="button"
+                            id="btnReasignar"
+                            class="action-btn action-btn-warning"
+                            th:if="${incidencia.estado.name() == 'PENDIENTE'
+                                    or incidencia.estado.name() == 'EN_PROCESO'
+                                    or incidencia.estado.name() == 'REABIERTA'
+                                    or incidencia.estado.name() == 'REASIGNADA'}">
+
+                        <i class="bi bi-arrow-left-right"></i>
+
+                        <span>
+                            Reasignar
+                        </span>
+
+                    </button>
+
+
+                    <!-- ===================================== -->
+                    <!-- CANCELAR                              -->
+                    <!-- ===================================== -->
+
+                    <button type="button"
+                            id="btnCancelarIncidencia"
+                            class="action-btn action-btn-danger"
+                            th:if="${incidencia.estado.name() == 'PENDIENTE'
+                                    or incidencia.estado.name() == 'EN_PROCESO'
+                                    or incidencia.estado.name() == 'REABIERTA'
+                                    or incidencia.estado.name() == 'REASIGNADA'}">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        <span>
+                            Cancelar
+                        </span>
+
+                    </button>
+
+
+                    <!-- ===================================== -->
+                    <!-- REABRIR                               -->
+                    <!-- ===================================== -->
+
+                    <button type="button"
+                            id="btnReabrir"
+                            class="action-btn action-btn-secondary"
+                            th:if="${incidencia.estado.name() == 'RESUELTA'}">
+
+                        <i class="bi bi-arrow-counterclockwise"></i>
+
+                        <span>
+                            Reabrir
+                        </span>
+
+                    </button>
+
+
+                    <!-- ===================================== -->
+                    <!-- SIN ACCIONES                          -->
+                    <!-- ===================================== -->
+
+                    <div class="no-actions"
+                         th:if="${incidencia.estado.name() == 'CANCELADA'}">
+
+                        <i class="bi bi-lock"></i>
+
+                        <p>
+                            Esta incidencia se encuentra cancelada
+                            y no tiene acciones disponibles.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================================= -->
+            <!-- INFORMACIÓN DEL CORREO                        -->
+            <!-- ============================================= -->
+
+            <section class="detail-card side-card">
+
+                <div class="card-title">
+
+                    <p class="eyebrow">
+                        Origen
+                    </p>
+
+                    <h3>
+                        Información del correo
+                    </h3>
+
+                </div>
+
+
+                <div class="side-data-list">
+
+
+                    <div class="data-item">
+
+                        <span>
+                            Remitente
+                        </span>
+
+                        <strong th:text="${incidencia.remitente != null
+                                ? incidencia.remitente
+                                : 'No identificado'}">
+
+                            Remitente
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="data-item">
+
+                        <span>
+                            Carpeta
+                        </span>
+
+                        <strong th:text="${incidencia.carpetaOrigen != null
+                                ? incidencia.carpetaOrigen
+                                : 'No identificada'}">
+
+                            Carpeta
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="data-item">
+
+                        <span>
+                            Fecha del correo
+                        </span>
+
+                        <strong th:text="${incidencia.fechaCorreo != null
+                                ? #temporals.format(
+                                    incidencia.fechaCorreo,
+                                    'dd/MM/yyyy HH:mm'
+                                  )
+                                : '-'}">
+
+                            Fecha
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================================= -->
+            <!-- HISTORIAL                                     -->
+            <!-- ============================================= -->
+
+            <section class="detail-card side-card">
+
+                <div class="card-title">
+
+                    <p class="eyebrow">
+                        Seguimiento
+                    </p>
+
+                    <h3>
+                        🕘 Historial
+                    </h3>
+
+                </div>
+
+
+                <div class="timeline-placeholder">
+
+                    <p>
+                        El historial de movimientos de la incidencia
+                        aparecerá en esta sección.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </aside>
+
+
+    </div>
 
 </main>
 
+
+<!-- ========================================================= -->
+<!-- FOOTER                                                    -->
+<!-- ========================================================= -->
+
 <footer>
+
     SGIO · Sistema de Gestión de Incidencias Operativas
+
 </footer>
 
+
+<!-- ========================================================= -->
+<!-- MODAL TOMAR INCIDENCIA                                    -->
+<!-- ========================================================= -->
+
+<div id="modalTomar"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Atención
+                </p>
+
+                <h3>
+                    Tomar incidencia
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarModalTomar"
+                    class="sgio-modal-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+
+            <p class="modal-description">
+
+                La incidencia cambiará a
+
+                <strong>
+                    EN_PROCESO
+                </strong>.
+
+            </p>
+
+
+            <div class="modal-field">
+
+                <label for="tomarUsuario">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       id="tomarUsuario"
+                       placeholder="Ej. cchavez">
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="tomarComentario">
+                    Comentario
+                </label>
+
+                <textarea id="tomarComentario"
+                          rows="4"
+                          placeholder="Ej. Inicio revisión de la incidencia."></textarea>
+
+            </div>
+
+
+            <div id="tomarError"
+                 class="modal-error">
+            </div>
+
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+
+            <button type="button"
+                    id="btnCancelarTomar"
+                    class="modal-btn modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnConfirmarTomar"
+                    class="modal-btn modal-btn-primary">
+
+                <i class="bi bi-play-circle"></i>
+
+                Tomar incidencia
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- MODAL RESOLVER INCIDENCIA                                 -->
+<!-- ========================================================= -->
+
+<div id="modalResolver"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Resolución
+                </p>
+
+                <h3>
+                    Resolver incidencia
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarModalResolver"
+                    class="sgio-modal-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+
+            <p class="modal-description">
+
+                La incidencia cambiará a
+
+                <strong>
+                    RESUELTA
+                </strong>.
+
+            </p>
+
+
+            <div class="modal-field">
+
+                <label for="resolverUsuario">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       id="resolverUsuario"
+                       placeholder="Ej. cchavez">
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="resolverComentario">
+                    Comentario de resolución
+                </label>
+
+                <textarea id="resolverComentario"
+                          rows="5"
+                          placeholder="Describe qué se realizó para solucionar la incidencia."></textarea>
+
+            </div>
+
+
+            <div id="resolverError"
+                 class="modal-error">
+            </div>
+
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+
+            <button type="button"
+                    id="btnCancelarResolver"
+                    class="modal-btn modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnConfirmarResolver"
+                    class="modal-btn modal-btn-success">
+
+                <i class="bi bi-check-circle"></i>
+
+                Resolver incidencia
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- MODAL CANCELAR INCIDENCIA                                 -->
+<!-- ========================================================= -->
+
+<div id="modalCancelar"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Cancelación
+                </p>
+
+                <h3 class="modal-title-danger">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Cancelar incidencia
+
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarModalCancelar"
+                    class="sgio-modal-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+
+            <div class="modal-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+
+                <div>
+
+                    <strong>
+                        Esta acción cerrará la incidencia.
+                    </strong>
+
+                    <p>
+                        Utilízala cuando el caso no corresponda
+                        al equipo, sea informativo o no requiera atención.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="cancelarUsuario">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       id="cancelarUsuario"
+                       placeholder="Ej. cchavez">
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="cancelarComentario">
+                    ¿Por qué se cancela?
+                </label>
+
+                <textarea id="cancelarComentario"
+                          rows="5"
+                          placeholder="Ej. El correo corresponde a un seguimiento informativo que no requiere atención del equipo."></textarea>
+
+            </div>
+
+
+            <div id="cancelarError"
+                 class="modal-error">
+            </div>
+
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+
+            <button type="button"
+                    id="btnCerrarCancelar"
+                    class="modal-btn modal-btn-secondary">
+
+                Regresar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnConfirmarCancelar"
+                    class="modal-btn modal-btn-danger">
+
+                <i class="bi bi-x-circle"></i>
+
+                Cancelar incidencia
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- MODAL REASIGNAR INCIDENCIA                                -->
+<!-- ========================================================= -->
+
+<div id="modalReasignar"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+                <p class="eyebrow">
+                    Asignación
+                </p>
+
+                <h3 class="modal-title-warning">
+                    <i class="bi bi-arrow-left-right"></i>
+                    Reasignar incidencia
+                </h3>
+            </div>
+
+            <button type="button"
+                    id="btnCerrarModalReasignar"
+                    class="sgio-modal-close">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <p class="modal-description">
+                Selecciona al nuevo responsable de la incidencia.
+            </p>
+
+
+            <div class="modal-field">
+
+                <label for="reasignarUsuario">
+                    Usuario que realiza la reasignación
+                </label>
+
+                <input type="text"
+                       id="reasignarUsuario"
+                       placeholder="Ej. cchavez">
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="reasignarEmpleado">
+                    Nuevo responsable
+                </label>
+
+                <select id="reasignarEmpleado">
+
+                    <option value="">
+                        Selecciona un empleado
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="reasignarComentario">
+                    Motivo de la reasignación
+                </label>
+
+                <textarea id="reasignarComentario"
+                          rows="4"
+                          placeholder="Ej. El responsable actual no se encuentra disponible."></textarea>
+
+            </div>
+
+
+            <div id="reasignarError"
+                 class="modal-error">
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarReasignar"
+                    class="modal-btn modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+            <button type="button"
+                    id="btnConfirmarReasignar"
+                    class="modal-btn modal-btn-warning">
+
+                <i class="bi bi-arrow-left-right"></i>
+
+                Reasignar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- MODAL REABRIR INCIDENCIA                                  -->
+<!-- ========================================================= -->
+<div id="modalReabrir"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Reapertura
+                </p>
+
+                <h3 class="modal-title-secondary">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Reabrir incidencia
+                </h3>
+
+            </div>
+
+            <button type="button"
+                    id="btnCerrarModalReabrir"
+                    class="sgio-modal-close">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <p class="modal-description">
+                La incidencia cambiará de
+                <strong>RESUELTA</strong>
+                a
+                <strong>REABIERTA</strong>.
+            </p>
+
+
+            <div class="modal-field">
+
+                <label for="reabrirUsuario">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       id="reabrirUsuario"
+                       placeholder="Ej. cchavez">
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="reabrirComentario">
+                    ¿Por qué debe reabrirse?
+                </label>
+
+                <textarea id="reabrirComentario"
+                          rows="5"
+                          placeholder="Ej. El usuario reporta que el problema continúa."></textarea>
+
+            </div>
+
+
+            <div id="reabrirError"
+                 class="modal-error">
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarReabrir"
+                    class="modal-btn modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+            <button type="button"
+                    id="btnConfirmarReabrir"
+                    class="modal-btn modal-btn-reopen">
+
+                <i class="bi bi-arrow-counterclockwise"></i>
+
+                Reabrir incidencia
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- DATOS THYMELEAF PARA JAVASCRIPT                           -->
+<!-- ========================================================= -->
+
+<script th:inline="javascript">
+
+    window.SGIO = {
+        folio: /*[[${incidencia.folio}]]*/ ""
+    };
+
+</script>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT SGIO V2                                       -->
+<!-- ========================================================= -->
+
+<script th:src="@{/js/incidencia-detalle.js}"></script>
+
+
 </body>
+
 </html>

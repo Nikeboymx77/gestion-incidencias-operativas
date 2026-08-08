@@ -10,6 +10,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import com.mx.baz.incidencias.events.IncidenciaReabiertaEvent;
+import com.mx.baz.incidencias.events.IncidenciaCanceladaEvent;
+import com.mx.baz.incidencias.events.IncidenciaReasignadaEvent;
 
 @Slf4j
 @Component
@@ -71,6 +73,44 @@ public class TelegramNotificationListener {
         notificationService.notificarIncidenciaReabierta(
                 event.getIncidencia(),
                 event.getMotivo()
+        );
+    }
+    
+    @Async
+    @EventListener
+    public void onIncidenciaCancelada(
+            IncidenciaCanceladaEvent event
+    ) {
+
+        log.info(
+                "Evento recibido: IncidenciaCanceladaEvent. Folio: {}",
+                event.getIncidencia().getFolio()
+        );
+
+        notificationService.notificarIncidenciaCancelada(
+                event.getIncidencia(),
+                event.getUsuario(),
+                event.getComentario()
+        );
+    }
+    
+    @Async
+    @EventListener
+    public void onIncidenciaReasignada(
+            IncidenciaReasignadaEvent event
+    ) {
+
+        log.info(
+                "Evento recibido: IncidenciaReasignadaEvent. Folio: {}",
+                event.getIncidencia().getFolio()
+        );
+
+        notificationService.notificarIncidenciaReasignada(
+                event.getIncidencia(),
+                event.getEmpleadoAnterior(),
+                event.getEmpleadoNuevo(),
+                event.getUsuario(),
+                event.getComentario()
         );
     }
 

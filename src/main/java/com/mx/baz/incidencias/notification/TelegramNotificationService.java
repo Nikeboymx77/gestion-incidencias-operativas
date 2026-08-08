@@ -186,4 +186,76 @@ public class TelegramNotificationService implements NotificationService {
                 ? "No disponible"
                 : valor;
     }
+    
+    @Override
+    public void notificarIncidenciaCancelada(
+            Incidencia incidencia,
+            String usuario,
+            String comentario) {
+
+        String mensaje = """
+                ❌ <b>INCIDENCIA CANCELADA</b>
+
+                📌 <b>Folio:</b> %s
+                🏢 <b>Sucursal:</b> %s
+                👤 <b>Cliente:</b> %s
+
+                🙋 <b>Cancelada por:</b> %s
+
+                📝 <b>Motivo:</b>
+                %s
+
+                📍 <b>Estado:</b> %s
+                """.formatted(
+                html(valor(incidencia.getFolio())),
+                html(valor(incidencia.getSucursal())),
+                html(valor(incidencia.getNombreCliente())),
+                html(valor(usuario)),
+                html(comentario),
+                html(valor(incidencia.getEstado()))
+        );
+
+        telegramClient.sendMessage(mensaje);
+    }
+    
+    @Override
+    public void notificarIncidenciaReasignada(
+            Incidencia incidencia,
+            String empleadoAnterior,
+            String empleadoNuevo,
+            String usuario,
+            String comentario
+    ) {
+
+        String mensaje = """
+                🔄 <b>INCIDENCIA REASIGNADA</b>
+
+                📌 <b>Folio:</b> %s
+
+                👤 <b>Responsable anterior:</b>
+                %s
+
+                ➡️ <b>Nuevo responsable:</b>
+                %s
+
+                🙋 <b>Reasignada por:</b>
+                %s
+
+                📝 <b>Motivo:</b>
+                %s
+
+                📍 <b>Estado:</b> %s
+
+                ⚠️ <b>El nuevo responsable debe tomar la incidencia.</b>
+                """.formatted(
+                html(valor(incidencia.getFolio())),
+                html(valor(empleadoAnterior)),
+                html(valor(empleadoNuevo)),
+                html(valor(usuario)),
+                html(valor(comentario)),
+                html(valor(incidencia.getEstado()))
+        );
+
+        telegramClient.sendMessage(mensaje);
+    }
 }

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="'SGIO | ' + ${incidencia.folio}">
+        SGIO | Detalle
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/incidencia-detalle.css}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div>
+        <h1>SGIO</h1>
+        <p>Sistema de Gestión de Incidencias Operativas</p>
+    </div>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        Sistema activo
+    </div>
+</header>
+
+<main class="detail-container">
+
+    <div class="detail-navigation">
+        <a th:href="@{/dashboard}"
+           class="back-link">
+            ← Volver al dashboard
+        </a>
+    </div>
+
+    <section class="detail-header">
+
+        <div>
+            <p class="eyebrow">Detalle de incidencia</p>
+
+            <h2 th:text="${incidencia.folio}">
+                INC000001
+            </h2>
+
+            <p class="detail-subject"
+               th:text="${incidencia.asunto}">
+                Asunto de la incidencia
+            </p>
+        </div>
+
+        <div class="detail-header-status">
+
+            <span class="badge detail-badge"
+                  th:classappend="${#strings.toLowerCase(
+                      incidencia.estado.toString()
+                  )}"
+                  th:text="${incidencia.estado}">
+                PENDIENTE
+            </span>
+
+        </div>
+
+    </section>
+
+    <section class="detail-grid">
+
+        <article class="detail-card">
+
+            <div class="card-title">
+                <p class="eyebrow">Datos del cliente</p>
+                <h3>Información operativa</h3>
+            </div>
+
+            <div class="data-grid">
+
+                <div class="data-item">
+                    <span>Cliente</span>
+                    <strong th:text="${incidencia.nombreCliente != null
+                            ? incidencia.nombreCliente
+                            : 'No identificado'}">
+                        Cliente
+                    </strong>
+                </div>
+
+                <div class="data-item">
+                    <span>Cliente único</span>
+                    <strong th:text="${incidencia.clienteUnico != null
+                            ? incidencia.clienteUnico
+                            : 'No identificado'}">
+                        CU
+                    </strong>
+                </div>
+
+                <div class="data-item">
+                    <span>Sucursal</span>
+                    <strong th:text="${incidencia.sucursal != null
+                            ? incidencia.sucursal
+                            : 'No identificada'}">
+                        Sucursal
+                    </strong>
+                </div>
+
+                <div class="data-item">
+                    <span>Equipo</span>
+                    <strong th:text="${incidencia.equipo != null
+                            ? incidencia.equipo
+                            : 'No identificado'}">
+                        Equipo
+                    </strong>
+                </div>
+
+            </div>
+
+        </article>
+
+        <article class="detail-card">
+
+            <div class="card-title">
+                <p class="eyebrow">Atención</p>
+                <h3>Seguimiento</h3>
+            </div>
+
+            <div class="data-grid">
+
+                <div class="data-item">
+                    <span>Estado</span>
+                    <strong th:text="${incidencia.estado}">
+                        PENDIENTE
+                    </strong>
+                </div>
+
+                <div class="data-item">
+                    <span>Prioridad</span>
+                    <strong th:text="${incidencia.prioridad}">
+                        MEDIA
+                    </strong>
+                </div>
+
+                <div class="data-item">
+                    <span>Asignado</span>
+                    <strong th:text="${incidencia.empleadoAsignado != null
+                            ? incidencia.empleadoAsignado.nombre
+                            : 'Sin asignar'}">
+                        Empleado
+                    </strong>
+                </div>
+
+                <div class="data-item">
+                    <span>Fecha de registro</span>
+
+                    <strong th:text="${incidencia.fechaCorreo != null
+					        ? #temporals.format(
+					            incidencia.fechaCorreo,
+					            'dd/MM/yyyy HH:mm'
+					          )
+					        : '-'}">
+					</strong>
+                </div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+    <section class="detail-card full-width">
+
+        <div class="card-title">
+            <p class="eyebrow">Diagnóstico</p>
+            <h3>Motivo identificado</h3>
+        </div>
+
+        <p class="content-text"
+           th:text="${incidencia.motivo != null
+                   ? incidencia.motivo
+                   : 'No fue posible identificar el motivo.'}">
+            Motivo
+        </p>
+
+    </section>
+
+    <section class="detail-card full-width">
+
+        <div class="card-title">
+            <p class="eyebrow">Correo original</p>
+            <h3>Descripción completa</h3>
+        </div>
+
+        <div class="description-box"
+             th:text="${incidencia.descripcion != null
+                     ? incidencia.descripcion
+                     : 'Sin descripción disponible.'}">
+            Descripción
+        </div>
+
+    </section>
+
+    <section class="detail-card full-width">
+
+        <div class="card-title">
+            <p class="eyebrow">Origen</p>
+            <h3>Información del correo</h3>
+        </div>
+
+        <div class="data-grid">
+
+            <div class="data-item">
+                <span>Remitente</span>
+
+                <strong th:text="${incidencia.remitente != null
+                        ? incidencia.remitente
+                        : 'No identificado'}">
+                    Remitente
+                </strong>
+            </div>
+
+            <div class="data-item">
+                <span>Carpeta</span>
+
+                <strong th:text="${incidencia.carpetaOrigen != null
+                        ? incidencia.carpetaOrigen
+                        : 'No identificada'}">
+                    Carpeta
+                </strong>
+            </div>
+
+            <div class="data-item">
+                <span>Fecha del correo</span>
+
+                <strong th:text="${incidencia.fechaCorreo != null
+                        ? #temporals.format(
+                            incidencia.fechaCorreo,
+                            'dd/MM/yyyy HH:mm'
+                          )
+                        : '-'}">
+                    Fecha
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    SGIO · Sistema de Gestión de Incidencias Operativas
+</footer>
+
+</body>
+</html>

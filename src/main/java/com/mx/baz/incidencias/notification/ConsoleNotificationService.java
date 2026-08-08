@@ -54,4 +54,37 @@ public class ConsoleNotificationService implements NotificationService {
                 incidencia.getFolio(), motivoReapertura);
 		
 	}
+	
+	@Override
+	public void notificarIncidenciaCancelada(
+	        Incidencia incidencia,
+	        String usuario,
+	        String comentario) {
+
+	    log.info(
+	            "Incidencia cancelada: {} - Usuario: {} - Comentario: {}",
+	            incidencia.getFolio(),
+	            usuario,
+	            comentario
+	    );
+	}
+	
+	@Override
+	public void notificarIncidenciaReasignada(
+	        Incidencia incidencia,
+	        String empleadoAnterior,
+	        String empleadoNuevo,
+	        String usuario,
+	        String comentario
+	) {
+
+	    log.info(
+	            "Incidencia reasignada: {} - De: {} - A: {} - Usuario: {} - Comentario: {}",
+	            incidencia.getFolio(),
+	            empleadoAnterior,
+	            empleadoNuevo,
+	            usuario,
+	            comentario
+	    );
+	}
 }

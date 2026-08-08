@@ -141,3 +141,743 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================
+   SGIO V2 - WORKSPACE DE INCIDENCIA
+   ========================================================= */
+
+.detail-workspace {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 2.2fr)
+        minmax(300px, 0.8fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   COLUMNA PRINCIPAL
+   ========================================================= */
+
+.detail-main-column {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+
+/* =========================================================
+   PANEL LATERAL
+   ========================================================= */
+
+.detail-side-column {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+
+/* =========================================================
+   TARJETAS LATERALES
+   ========================================================= */
+
+.side-card {
+    width: 100%;
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+.actions-placeholder {
+    margin-top: 14px;
+
+    padding: 16px;
+
+    border-radius: 10px;
+
+    color: #64748b;
+
+    background: #f8fafc;
+
+    font-size: 0.92rem;
+
+    line-height: 1.5;
+}
+
+.actions-placeholder p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   INFORMACIÓN DEL CORREO
+   ========================================================= */
+
+.side-data-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+
+    margin-top: 18px;
+}
+
+.side-data-list .data-item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.side-data-list .data-item span {
+    color: #64748b;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+}
+
+.side-data-list .data-item strong {
+    color: #1e293b;
+
+    font-size: 0.92rem;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   HISTORIAL
+   ========================================================= */
+
+.timeline-placeholder {
+    margin-top: 15px;
+
+    padding: 16px;
+
+    border-radius: 10px;
+
+    color: #64748b;
+
+    background: #f8fafc;
+
+    font-size: 0.92rem;
+
+    line-height: 1.5;
+}
+
+.timeline-placeholder p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .detail-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-side-column {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .detail-side-column {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =========================================================
+   SGIO V2 - ACCIONES DE INCIDENCIA
+   ========================================================= */
+
+.incident-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    margin-top: 18px;
+}
+
+
+/* Botón base */
+
+.action-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    font-size: 0.92rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        background-color 0.15s ease;
+}
+
+
+.action-btn i {
+    font-size: 1.05rem;
+}
+
+
+.action-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   TOMAR
+   ========================================================= */
+
+.action-btn-primary {
+    color: #ffffff;
+    background: #2563eb;
+}
+
+.action-btn-primary:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================================================
+   RESOLVER
+   ========================================================= */
+
+.action-btn-success {
+    color: #ffffff;
+    background: #16a34a;
+}
+
+.action-btn-success:hover {
+    background: #15803d;
+}
+
+
+/* =========================================================
+   REASIGNAR
+   ========================================================= */
+
+.action-btn-warning {
+    color: #854d0e;
+    background: #fef3c7;
+    border-color: #fde68a;
+}
+
+.action-btn-warning:hover {
+    background: #fde68a;
+}
+
+
+/* =========================================================
+   CANCELAR
+   ========================================================= */
+
+.action-btn-danger {
+    color: #b91c1c;
+    background: #fee2e2;
+    border-color: #fecaca;
+}
+
+.action-btn-danger:hover {
+    background: #fecaca;
+}
+
+
+/* =========================================================
+   REABRIR
+   ========================================================= */
+
+.action-btn-secondary {
+    color: #4338ca;
+    background: #eef2ff;
+    border-color: #c7d2fe;
+}
+
+.action-btn-secondary:hover {
+    background: #e0e7ff;
+}
+
+
+/* =========================================================
+   SIN ACCIONES
+   ========================================================= */
+
+.no-actions {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    color: #64748b;
+    background: #f8fafc;
+}
+
+.no-actions i {
+    margin-top: 2px;
+}
+
+.no-actions p {
+    margin: 0;
+
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+/* =========================================================
+   SGIO V2 - MODALES
+   ========================================================= */
+
+.sgio-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 2000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+.sgio-modal.show {
+    display: flex;
+}
+
+
+.sgio-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background:
+        rgba(15, 23, 42, 0.55);
+
+    backdrop-filter: blur(2px);
+}
+
+
+.sgio-modal-dialog {
+    position: relative;
+
+    z-index: 1;
+
+    width: min(520px, 100%);
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 60px
+        rgba(15, 23, 42, 0.25);
+
+    overflow: hidden;
+}
+
+
+.sgio-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+}
+
+
+.sgio-modal-header h3 {
+    margin: 2px 0 0;
+}
+
+
+.sgio-modal-close {
+    border: none;
+    background: transparent;
+
+    color: #64748b;
+
+    font-size: 1.7rem;
+
+    cursor: pointer;
+
+    line-height: 1;
+}
+
+
+.sgio-modal-body {
+    padding: 24px;
+}
+
+
+.modal-description {
+    margin-top: 0;
+    margin-bottom: 22px;
+
+    color: #64748b;
+
+    font-size: 0.92rem;
+}
+
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 18px;
+}
+
+
+.modal-field label {
+    color: #334155;
+
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+
+.modal-field input,
+.modal-field textarea {
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 9px;
+
+    color: #1e293b;
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+
+    outline: none;
+}
+
+
+.modal-field textarea {
+    resize: vertical;
+
+    min-height: 100px;
+}
+
+
+.modal-field input:focus,
+.modal-field textarea:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.10);
+}
+
+
+.sgio-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 18px 24px;
+
+    border-top:
+        1px solid #e2e8f0;
+
+    background: #f8fafc;
+}
+
+
+.modal-btn {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.modal-btn-secondary {
+    color: #475569;
+
+    background: #e2e8f0;
+}
+
+
+.modal-btn-primary {
+    color: #ffffff;
+
+    background: #2563eb;
+}
+
+
+.modal-btn-primary:hover {
+    background: #1d4ed8;
+}
+
+
+.modal-btn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ERROR DEL MODAL
+   ========================================================= */
+
+.modal-error {
+    display: none;
+
+    margin-top: 10px;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    color: #b91c1c;
+
+    background: #fee2e2;
+
+    font-size: 0.86rem;
+}
+
+
+.modal-error.show {
+    display: block;
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner-small {
+    width: 14px;
+    height: 14px;
+
+    display: inline-block;
+
+    border:
+        2px solid rgba(255, 255, 255, 0.45);
+
+    border-top-color:
+        #ffffff;
+
+    border-radius: 50%;
+
+    animation:
+        sgio-spin 0.7s linear infinite;
+}
+
+
+@keyframes sgio-spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal-btn-success {
+    color: #ffffff;
+    background: #16a34a;
+}
+
+.modal-btn-success:hover {
+    background: #15803d;
+}
+
+/* =========================================================
+   MODAL CANCELAR
+   ========================================================= */
+
+.modal-title-danger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #b91c1c;
+}
+
+
+.modal-btn-danger {
+    color: #ffffff;
+    background: #dc2626;
+}
+
+.modal-btn-danger:hover {
+    background: #b91c1c;
+}
+
+
+.modal-warning {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+
+    padding: 14px;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    color: #991b1b;
+    background: #fef2f2;
+}
+
+
+.modal-warning i {
+    margin-top: 2px;
+
+    font-size: 1.1rem;
+}
+
+
+.modal-warning strong {
+    display: block;
+
+    margin-bottom: 4px;
+}
+
+
+.modal-warning p {
+    margin: 0;
+
+    color: #b91c1c;
+
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.modal-field select {
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+
+    color: #1e293b;
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+
+    outline: none;
+}
+
+.modal-field select:focus {
+    border-color: #d97706;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(217, 119, 6, 0.10);
+}
+
+.modal-title-warning {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: #a16207;
+}
+
+.modal-btn-warning {
+    color: #ffffff;
+    background: #d97706;
+}
+
+.modal-btn-warning:hover {
+    background: #b45309;
+}
+
+.modal-title-secondary {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: #4338ca;
+}
+
+.modal-btn-reopen {
+    color: #ffffff;
+    background: #4f46e5;
+}
+
+.modal-btn-reopen:hover {
+    background: #4338ca;
+}

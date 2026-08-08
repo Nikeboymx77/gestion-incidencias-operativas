@@ -26,6 +26,10 @@ import com.mx.baz.incidencias.repository.IncidenciaRepository;
 import com.mx.baz.incidencias.schedule.AssignmentService;
 import com.mx.baz.incidencias.events.IncidenciaEnProcesoEvent;
 import com.mx.baz.incidencias.events.IncidenciaResueltaEvent;
+import com.mx.baz.incidencias.events.IncidenciaCanceladaEvent;
+import com.mx.baz.incidencias.events.IncidenciaReasignadaEvent;
+import com.mx.baz.incidencias.dto.ReabrirIncidenciaRequest;
+import com.mx.baz.incidencias.events.IncidenciaReabiertaEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,6 +46,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+
 @Service
 @RequiredArgsConstructor
 public class IncidenciaService {
@@ -53,6 +58,7 @@ public class IncidenciaService {
     private final IncidenciaMapper incidenciaMapper;
     private final ApplicationEventPublisher eventPublisher;
     private final HistorialIncidenciaService historialIncidenciaService;
+    
 
     @Transactional
     public IncidenciaResponse crearIncidencia(IncidenciaRequest request) {
@@ -206,10 +212,13 @@ public class IncidenciaService {
                 comentarioRegistro
         );
 
-        /*
-         * Por ahora no publicamos evento hasta crear
-         * IncidenciaCanceladaEvent y su listener.
-         */
+        eventPublisher.publishEvent(
+                new IncidenciaCanceladaEvent(
+                        incidenciaGuardada,
+                        usuarioRegistro,
+                        comentarioRegistro
+                )
+        );
 
         return incidenciaMapper.toResponse(
                 incidenciaGuardada
@@ -335,6 +344,16 @@ public class IncidenciaService {
                 EstadoIncidencia.REASIGNADA,
                 request.getUsuario(),
                 comentarioHistorial
+        );
+        
+        eventPublisher.publishEvent(
+                new IncidenciaReasignadaEvent(
+                        incidenciaGuardada,
+                        nombreAnterior,
+                        nuevoEmpleado.getNombre(),
+                        request.getUsuario(),
+                        request.getComentario().trim()
+                )
         );
 
         return incidenciaMapper.toResponse(
@@ -679,5 +698,73 @@ public class IncidenciaService {
                         ).reversed()
                 )
                 .toList();
+    }
+    
+    @Transactional
+    public IncidenciaResponse reabrirIncidencia(
+            String folio,
+            ReabrirIncidenciaRequest request
+    ) {
+
+        Incidencia incidencia =
+                incidenciaRepository.findByFolio(folio)
+                        .orElseThrow(() ->
+                                new BusinessException(
+                                        ErrorCodes.INCIDENCIA_NO_ENCONTRADA,
+                                        "Incidencia no encontrada: " + folio
+                                )
+                        );
+
+
+        if (incidencia.getEstado()
+                != EstadoIncidencia.RESUELTA) {
+
+            throw new BusinessException(
+                    ErrorCodes.ESTADO_INVALIDO,
+                    "La incidencia " + folio
+                            + " no puede reabrirse porque está en estado "
+                            + incidencia.getEstado()
+            );
+        }
+
+
+        EstadoIncidencia estadoAnterior =
+                incidencia.getEstado();
+
+
+        incidencia.setEstado(
+                EstadoIncidencia.REABIERTA
+        );
+
+        /*
+         * Al reabrirse deja de considerarse cerrada.
+         */
+        incidencia.setFechaResolucion(null);
+
+        incidenciaRepository.save(
+                incidencia
+        );
+
+
+        historialIncidenciaService.registrarCambioEstado(
+                incidencia,
+                estadoAnterior,
+                EstadoIncidencia.REABIERTA,
+                request.getUsuario(),
+                request.getComentario()
+        );
+
+
+        eventPublisher.publishEvent(
+                new IncidenciaReabiertaEvent(
+                        incidencia,
+                        request.getComentario()
+                )
+        );
+
+
+        return incidenciaMapper.toResponse(
+                incidencia
+        );
     }
 }

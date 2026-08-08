@@ -12,6 +12,7 @@ import com.mx.baz.incidencias.dto.ReasignarIncidenciaRequest;
 import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
+import com.mx.baz.incidencias.dto.ReabrirIncidenciaRequest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -145,5 +146,20 @@ public class IncidenciaController {
                 );
 
         return ResponseEntity.ok(respuesta);
+    }
+    
+    @PutMapping("/{folio}/reabrir")
+    public ResponseEntity<IncidenciaResponse> reabrirIncidencia(
+            @PathVariable String folio,
+            @Valid
+            @RequestBody ReabrirIncidenciaRequest request
+    ) {
+
+        return ResponseEntity.ok(
+                incidenciaService.reabrirIncidencia(
+                        folio,
+                        request
+                )
+        );
     }
 }
