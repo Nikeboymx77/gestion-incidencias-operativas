@@ -125,82 +125,101 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    async function ejecutarOperacion({
-        endpoint,
-        body,
-        boton,
-        textoLoading,
-        htmlOriginal,
-        contenedorError,
-        mensajeError
-    }) {
+	async function ejecutarOperacion({
+	    endpoint,
+	    body,
+	    boton,
+	    textoLoading,
+	    htmlOriginal,
+	    contenedorError,
+	    mensajeError,
+	    tituloExito,
+	    mensajeExito
+	}) {
 
-        activarLoading(
-            boton,
-            textoLoading
-        );
+	    activarLoading(
+	        boton,
+	        textoLoading
+	    );
 
-        try {
+	    try {
 
-            const response =
-                await fetch(
-                    endpoint,
-                    {
-                        method: "PUT",
+	        const response =
+	            await fetch(
+	                endpoint,
+	                {
+	                    method: "PUT",
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+	                    headers: {
+	                        "Content-Type":
+	                            "application/json"
+	                    },
 
-                        body:
-                            JSON.stringify(body)
-                    }
-                );
+	                    body:
+	                        JSON.stringify(body)
+	                }
+	            );
 
+	        if (!response.ok) {
 
-            if (!response.ok) {
+	            const mensaje =
+	                await obtenerMensajeError(
+	                    response
+	                );
 
-                const mensaje =
-                    await obtenerMensajeError(
-                        response
-                    );
+	            throw new Error(mensaje);
+	        }
 
-                throw new Error(
-                    mensaje
-                );
-            }
-
-
-            /*
-             * No necesitamos realmente utilizar
-             * el JSON de respuesta.
-             *
-             * Si el backend responde correctamente,
-             * recargamos el detalle.
-             */
-            await response.json();
-
-            window.location.reload();
+	        const incidencia =
+	            await response.json();
 
 
-        } catch (error) {
+	        mostrarToast(
+	            "success",
+	            tituloExito,
+	            mensajeExito
+	                || `La incidencia ${incidencia.folio} fue actualizada correctamente.`
+	        );
 
-            mostrarError(
-                contenedorError,
-                error.message
-                || mensajeError
-            );
+
+	        /*
+	         * Damos tiempo para que el usuario
+	         * alcance a ver el Toast.
+	         */
+	        setTimeout(
+	            () => {
+	                window.location.reload();
+	            },
+	            900
+	        );
 
 
-        } finally {
+	    } catch (error) {
 
-            desactivarLoading(
-                boton,
-                htmlOriginal
-            );
-        }
-    }
+	        const mensaje =
+	            error.message
+	            || mensajeError;
+
+	        mostrarError(
+	            contenedorError,
+	            mensaje
+	        );
+
+	        mostrarToast(
+	            "error",
+	            "No fue posible completar la operación",
+	            mensaje
+	        );
+
+
+	    } finally {
+
+	        desactivarLoading(
+	            boton,
+	            htmlOriginal
+	        );
+	    }
+	}
 
 
     // =========================================================
@@ -338,7 +357,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 Tomar.error,
 
             mensajeError:
-                "No fue posible tomar la incidencia."
+                "No fue posible tomar la incidencia.",
+				
+			tituloExito:
+			    "Incidencia tomada",
+	
+			mensajeExito:
+			    `La incidencia ${folio} quedó EN_PROCESO.`
         });
     }
 
@@ -478,7 +503,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 Resolver.error,
 
             mensajeError:
-                "No fue posible resolver la incidencia."
+                "No fue posible resolver la incidencia.",
+			
+			tituloExito:
+			    "Incidencia resuelta",
+
+			mensajeExito:
+			    `La incidencia ${folio} fue resuelta correctamente.`
         });
     }
 
@@ -618,7 +649,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 Cancelar.error,
 
             mensajeError:
-                "No fue posible cancelar la incidencia."
+                "No fue posible cancelar la incidencia.",
+			
+			tituloExito:
+			    "Incidencia cancelada",
+
+			mensajeExito:
+			    `La incidencia ${folio} quedó CANCELADA.`
         });
     }
 
@@ -905,7 +942,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 Reasignar.error,
 
             mensajeError:
-                "No fue posible reasignar la incidencia."
+                "No fue posible reasignar la incidencia.",
+			
+			tituloExito:
+			    "Incidencia reasignada",
+
+			mensajeExito:
+			    `La incidencia ${folio} fue reasignada correctamente.`
         });
     }
 
@@ -1045,9 +1088,338 @@ document.addEventListener("DOMContentLoaded", () => {
                 Reabrir.error,
 
             mensajeError:
-                "No fue posible reabrir la incidencia."
+                "No fue posible reabrir la incidencia.",
+			
+			tituloExito:
+			    "Incidencia reabierta",
+
+			mensajeExito:
+			    `La incidencia ${folio} quedó REABIERTA.`
         });
     }
+	
+	// =========================================================
+	// TIMELINE
+	// =========================================================
+
+	const timelineIncidencia =
+	    document.getElementById(
+	        "timelineIncidencia"
+	    );
+
+
+	async function cargarTimeline() {
+
+	    if (!timelineIncidencia || !folio) {
+	        return;
+	    }
+
+
+	    try {
+
+	        const response =
+	            await fetch(
+	                `/api/incidencias/${encodeURIComponent(folio)}/historial`
+	            );
+
+
+	        if (!response.ok) {
+
+	            throw new Error(
+	                "No fue posible consultar el historial."
+	            );
+	        }
+
+
+	        const historial =
+	            await response.json();
+
+
+	        pintarTimeline(
+	            historial
+	        );
+
+
+	    } catch (error) {
+
+	        timelineIncidencia.innerHTML = `
+	            <div class="timeline-empty">
+	                <i class="bi bi-exclamation-circle"></i>
+	                <p>
+	                    ${escapeHtml(
+	                        error.message
+	                        || "No fue posible cargar el historial."
+	                    )}
+	                </p>
+	            </div>
+	        `;
+	    }
+	}
+	
+	function pintarTimeline(historial) {
+
+	    if (
+	        !Array.isArray(historial)
+	        || historial.length === 0
+	    ) {
+
+	        timelineIncidencia.innerHTML = `
+	            <div class="timeline-empty">
+
+	                <i class="bi bi-clock-history"></i>
+
+	                <p>
+	                    Esta incidencia todavía no tiene
+	                    movimientos registrados.
+	                </p>
+
+	            </div>
+	        `;
+
+	        return;
+	    }
+
+
+	    timelineIncidencia.innerHTML =
+	        historial
+	            .map(
+	                (evento, indice) =>
+	                    construirEventoTimeline(
+	                        evento,
+	                        indice === historial.length - 1
+	                    )
+	            )
+	            .join("");
+	}
+	
+	function construirEventoTimeline(
+	    evento,
+	    esUltimo
+	) {
+
+	    const accion =
+	        evento.accion
+	        || "MOVIMIENTO";
+
+
+	    const configuracion =
+	        obtenerConfiguracionAccion(
+	            accion
+	        );
+
+
+	    const usuario =
+	        evento.usuario
+	        || "SISTEMA";
+
+
+	    const comentario =
+	        evento.comentario
+	        || "Sin comentario";
+
+
+	    const fecha =
+	        formatearFechaEvento(
+	            evento.fechaEvento
+	        );
+
+
+	    return `
+	        <div class="timeline-item
+	                    ${esUltimo ? "timeline-item-last" : ""}">
+
+	            <div class="timeline-marker
+	                        ${configuracion.clase}">
+
+	                <i class="bi ${configuracion.icono}"></i>
+
+	            </div>
+
+
+	            <div class="timeline-content">
+
+	                <div class="timeline-header">
+
+	                    <strong>
+	                        ${escapeHtml(
+	                            configuracion.titulo
+	                        )}
+	                    </strong>
+
+	                    <span class="timeline-date">
+	                        ${escapeHtml(fecha)}
+	                    </span>
+
+	                </div>
+
+
+	                <div class="timeline-user">
+
+	                    <i class="bi bi-person"></i>
+
+	                    ${escapeHtml(usuario)}
+
+	                </div>
+
+
+	                <p class="timeline-comment">
+	                    ${escapeHtml(comentario)}
+	                </p>
+
+	            </div>
+
+	        </div>
+	    `;
+	}
+	
+	function obtenerConfiguracionAccion(
+	    accion
+	) {
+
+	    const configuraciones = {
+
+	        PENDIENTE: {
+	            titulo:
+	                "Incidencia registrada",
+
+	            icono:
+	                "bi-inbox",
+
+	            clase:
+	                "timeline-pendiente"
+	        },
+
+	        EN_PROCESO: {
+	            titulo:
+	                "Incidencia tomada",
+
+	            icono:
+	                "bi-play-circle",
+
+	            clase:
+	                "timeline-proceso"
+	        },
+
+	        RESUELTA: {
+	            titulo:
+	                "Incidencia resuelta",
+
+	            icono:
+	                "bi-check-circle",
+
+	            clase:
+	                "timeline-resuelta"
+	        },
+
+	        CANCELADA: {
+	            titulo:
+	                "Incidencia cancelada",
+
+	            icono:
+	                "bi-x-circle",
+
+	            clase:
+	                "timeline-cancelada"
+	        },
+
+	        REASIGNADA: {
+	            titulo:
+	                "Incidencia reasignada",
+
+	            icono:
+	                "bi-arrow-left-right",
+
+	            clase:
+	                "timeline-reasignada"
+	        },
+
+	        REABIERTA: {
+	            titulo:
+	                "Incidencia reabierta",
+
+	            icono:
+	                "bi-arrow-counterclockwise",
+
+	            clase:
+	                "timeline-reabierta"
+	        }
+
+	    };
+
+
+	    return configuraciones[accion]
+	        || {
+	            titulo: accion,
+
+	            icono:
+	                "bi-circle",
+
+	            clase:
+	                "timeline-default"
+	        };
+	}
+	
+	function formatearFechaEvento(
+	    fecha
+	) {
+
+	    if (!fecha) {
+	        return "-";
+	    }
+
+
+	    const valor =
+	        new Date(fecha);
+
+
+	    if (
+	        Number.isNaN(
+	            valor.getTime()
+	        )
+	    ) {
+	        return fecha;
+	    }
+
+
+	    return valor.toLocaleString(
+	        "es-MX",
+	        {
+	            day: "2-digit",
+	            month: "2-digit",
+	            year: "numeric",
+
+	            hour: "2-digit",
+	            minute: "2-digit"
+	        }
+	    );
+	}
+	
+	function escapeHtml(
+	    valor
+	) {
+
+	    return String(valor ?? "")
+	        .replaceAll(
+	            "&",
+	            "&amp;"
+	        )
+	        .replaceAll(
+	            "<",
+	            "&lt;"
+	        )
+	        .replaceAll(
+	            ">",
+	            "&gt;"
+	        )
+	        .replaceAll(
+	            '"',
+	            "&quot;"
+	        )
+	        .replaceAll(
+	            "'",
+	            "&#039;"
+	        );
+	}
 
 
     // =========================================================
@@ -1253,5 +1625,107 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     );
+	
+	cargarTimeline();
+	
+	const toastContainer =
+	    document.getElementById(
+	        "toastContainer"
+	    );
+
+
+	function mostrarToast(
+	    tipo,
+	    titulo,
+	    mensaje,
+	    duracion = 4500
+	) {
+
+	    if (!toastContainer) {
+	        return;
+	    }
+
+	    const iconos = {
+	        success: "bi-check-circle-fill",
+	        error: "bi-x-circle-fill",
+	        warning: "bi-exclamation-triangle-fill",
+	        info: "bi-info-circle-fill"
+	    };
+
+	    const toast =
+	        document.createElement("div");
+
+	    toast.className =
+	        `sgio-toast sgio-toast-${tipo}`;
+
+	    const icono =
+	        iconos[tipo]
+	        || iconos.info;
+
+	    toast.innerHTML = `
+	        <div class="sgio-toast-icon">
+	            <i class="bi ${icono}"></i>
+	        </div>
+
+	        <div class="sgio-toast-content">
+
+	            <strong>
+	                ${escapeHtmlToast(titulo)}
+	            </strong>
+
+	            <span>
+	                ${escapeHtmlToast(mensaje)}
+	            </span>
+
+	        </div>
+
+	        <button type="button"
+	                class="sgio-toast-close"
+	                aria-label="Cerrar">
+
+	            <i class="bi bi-x-lg"></i>
+
+	        </button>
+	    `;
+
+	    toastContainer.appendChild(toast);
+
+	    requestAnimationFrame(() => {
+	        toast.classList.add("show");
+	    });
+
+	    const cerrar = () => {
+
+	        toast.classList.remove("show");
+
+	        setTimeout(
+	            () => toast.remove(),
+	            250
+	        );
+	    };
+
+	    toast
+	        .querySelector(".sgio-toast-close")
+	        ?.addEventListener(
+	            "click",
+	            cerrar
+	        );
+
+	    setTimeout(
+	        cerrar,
+	        duracion
+	    );
+	}
+
+
+	function escapeHtmlToast(valor) {
+
+	    return String(valor ?? "")
+	        .replaceAll("&", "&amp;")
+	        .replaceAll("<", "&lt;")
+	        .replaceAll(">", "&gt;")
+	        .replaceAll('"', "&quot;")
+	        .replaceAll("'", "&#039;");
+	}
 
 });

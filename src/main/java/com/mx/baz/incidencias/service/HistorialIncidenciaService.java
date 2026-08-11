@@ -7,6 +7,8 @@ import com.mx.baz.incidencias.repository.HistorialIncidenciaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import com.mx.baz.incidencias.dto.HistorialIncidenciaResponse;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -71,6 +73,48 @@ public class HistorialIncidenciaService {
 
         return historialGuardado;
     }
+    
+    public HistorialIncidencia registrarCreacion(
+            Incidencia incidencia,
+            String usuario,
+            String comentario) {
+
+        if (incidencia == null) {
+            throw new IllegalArgumentException(
+                    "La incidencia es obligatoria para registrar el historial"
+            );
+        }
+
+        String usuarioRegistro =
+                usuario == null || usuario.isBlank()
+                        ? USUARIO_SISTEMA
+                        : usuario.trim();
+
+        String comentarioRegistro =
+                comentario == null || comentario.isBlank()
+                        ? "Incidencia creada y asignada automáticamente"
+                        : comentario.trim();
+
+        HistorialIncidencia historial =
+                HistorialIncidencia.builder()
+                        .incidencia(incidencia)
+                        .accion(EstadoIncidencia.PENDIENTE.name())
+                        .usuario(usuarioRegistro)
+                        .comentario(comentarioRegistro)
+                        .build();
+
+        HistorialIncidencia historialGuardado =
+                historialIncidenciaRepository.save(historial);
+
+        log.info(
+                "Creación registrada en historial. Folio: {}, estado: {}, usuario: {}",
+                incidencia.getFolio(),
+                EstadoIncidencia.PENDIENTE,
+                usuarioRegistro
+        );
+
+        return historialGuardado;
+    }
 
     private String construirComentarioPorDefecto(
             EstadoIncidencia estadoAnterior,
@@ -80,5 +124,26 @@ public class HistorialIncidenciaService {
                 + estadoAnterior
                 + " a "
                 + estadoNuevo;
+    }
+    
+    public List<HistorialIncidenciaResponse> obtenerPorFolio(
+            String folio
+    ) {
+
+        return historialIncidenciaRepository
+                .findByIncidenciaFolioOrderByFechaEventoAsc(
+                        folio
+                )
+                .stream()
+                .map(historial ->
+                        HistorialIncidenciaResponse.builder()
+                                .id(historial.getId())
+                                .accion(historial.getAccion())
+                                .comentario(historial.getComentario())
+                                .usuario(historial.getUsuario())
+                                .fechaEvento(historial.getFechaEvento())
+                                .build()
+                )
+                .toList();
     }
 }

@@ -881,3 +881,454 @@ body.modal-open {
 .modal-btn-reopen:hover {
     background: #4338ca;
 }
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+.timeline {
+    position: relative;
+
+    margin-top: 8px;
+}
+
+
+.timeline-item {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 38px 1fr;
+
+    gap: 12px;
+
+    padding-bottom: 24px;
+}
+
+
+.timeline-item::before {
+    content: "";
+
+    position: absolute;
+
+    top: 34px;
+    bottom: 0;
+    left: 17px;
+
+    width: 2px;
+
+    background: #e2e8f0;
+}
+
+
+.timeline-item-last {
+    padding-bottom: 0;
+}
+
+
+.timeline-item-last::before {
+    display: none;
+}
+
+
+.timeline-marker {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    font-size: 0.9rem;
+}
+
+
+.timeline-content {
+    min-width: 0;
+
+    padding-top: 2px;
+}
+
+
+.timeline-header {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.timeline-header strong {
+    color: #1e293b;
+
+    font-size: 0.9rem;
+}
+
+
+.timeline-date {
+    flex-shrink: 0;
+
+    color: #94a3b8;
+
+    font-size: 0.72rem;
+}
+
+
+.timeline-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 5px;
+
+    color: #64748b;
+
+    font-size: 0.78rem;
+}
+
+
+.timeline-comment {
+    margin:
+        7px 0 0;
+
+    color: #475569;
+
+    font-size: 0.82rem;
+    line-height: 1.45;
+
+    overflow-wrap: anywhere;
+}
+
+
+.timeline-pendiente {
+    background: #2563eb;
+}
+
+
+.timeline-proceso {
+    background: #d97706;
+}
+
+
+.timeline-resuelta {
+    background: #16a34a;
+}
+
+
+.timeline-cancelada {
+    background: #dc2626;
+}
+
+
+.timeline-reasignada {
+    background: #ea580c;
+}
+
+
+.timeline-reabierta {
+    background: #7c3aed;
+}
+
+
+.timeline-default {
+    background: #64748b;
+}
+
+
+.timeline-loading,
+.timeline-empty {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    color: #64748b;
+    background: #f8fafc;
+
+    font-size: 0.82rem;
+}
+
+
+.timeline-empty p {
+    margin: 0;
+}
+
+/* =========================================================
+   TOASTS SGIO
+   ========================================================= */
+
+.toast-container {
+    position: fixed;
+
+    top: 24px;
+    right: 24px;
+
+    z-index: 5000;
+
+    display: flex;
+    flex-direction: column;
+
+    width: min(390px, calc(100vw - 32px));
+
+    gap: 12px;
+
+    pointer-events: none;
+}
+
+
+.sgio-toast {
+    display: grid;
+
+    grid-template-columns:
+        36px 1fr 30px;
+
+    align-items: start;
+
+    gap: 11px;
+
+    padding: 15px 14px;
+
+    border: 1px solid #e2e8f0;
+    border-left-width: 4px;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 14px 35px
+        rgba(15, 23, 42, 0.16);
+
+    opacity: 0;
+
+    transform:
+        translateX(35px);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+
+    pointer-events: auto;
+}
+
+
+.sgio-toast.show {
+    opacity: 1;
+
+    transform:
+        translateX(0);
+}
+
+
+.sgio-toast-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.25rem;
+}
+
+
+.sgio-toast-content {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    gap: 4px;
+}
+
+
+.sgio-toast-content strong {
+    color: #1e293b;
+
+    font-size: 0.9rem;
+}
+
+
+.sgio-toast-content span {
+    color: #64748b;
+
+    font-size: 0.8rem;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+.sgio-toast-close {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+
+    color: #94a3b8;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+.sgio-toast-close:hover {
+    color: #475569;
+
+    background: #f1f5f9;
+}
+
+
+/* SUCCESS */
+
+.sgio-toast-success {
+    border-left-color: #16a34a;
+}
+
+.sgio-toast-success
+.sgio-toast-icon {
+    color: #16a34a;
+}
+
+
+/* ERROR */
+
+.sgio-toast-error {
+    border-left-color: #dc2626;
+}
+
+.sgio-toast-error
+.sgio-toast-icon {
+    color: #dc2626;
+}
+
+
+/* WARNING */
+
+.sgio-toast-warning {
+    border-left-color: #d97706;
+}
+
+.sgio-toast-warning
+.sgio-toast-icon {
+    color: #d97706;
+}
+
+
+/* INFO */
+
+.sgio-toast-info {
+    border-left-color: #2563eb;
+}
+
+.sgio-toast-info
+.sgio-toast-icon {
+    color: #2563eb;
+}
+
+
+@media (max-width: 600px) {
+
+    .toast-container {
+        top: 14px;
+        right: 16px;
+        left: 16px;
+
+        width: auto;
+    }
+}
+
+/* =========================================================
+   VOLVER AL DASHBOARD
+   ========================================================= */
+
+.back-dashboard-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 44px;
+
+    padding: 10px 17px;
+
+    color: #ffffff;
+
+    font-size: 0.86rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    border: 1px solid #1e3a5f;
+    border-radius: 11px;
+
+    background: #1e3a5f;
+
+    box-shadow:
+        0 4px 12px rgba(30, 58, 95, 0.18);
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.back-dashboard-button i {
+    font-size: 1rem;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.back-dashboard-button:hover {
+    color: #ffffff;
+
+    background: #172f4f;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 7px 16px rgba(30, 58, 95, 0.24);
+}
+
+
+.back-dashboard-button:hover i {
+    transform:
+        translateX(-3px);
+}
+
+
+.back-dashboard-button:active {
+    transform:
+        translateY(0);
+}
+

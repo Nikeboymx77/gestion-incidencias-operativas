@@ -66,11 +66,13 @@
     <div class="detail-navigation">
 
         <a th:href="@{/dashboard}"
-           class="back-link">
-
-            ← Volver al dashboard
-
-        </a>
+		   class="back-dashboard-button">
+		
+		    <i class="bi bi-arrow-left"></i>
+		
+		    <span>Volver al Dashboard</span>
+		
+		</a>
 
     </div>
 
@@ -643,14 +645,18 @@
                 </div>
 
 
-                <div class="timeline-placeholder">
-
-                    <p>
-                        El historial de movimientos de la incidencia
-                        aparecerá en esta sección.
-                    </p>
-
-                </div>
+                <div id="timelineIncidencia"
+				     class="timeline">
+				
+				    <div class="timeline-loading">
+				
+				        <span class="spinner-small"></span>
+				
+				        Cargando historial...
+				
+				    </div>
+				
+				</div>
 
             </section>
 
@@ -1276,6 +1282,11 @@
 
 <script th:src="@{/js/incidencia-detalle.js}"></script>
 
+<div id="toastContainer"
+     class="toast-container"
+     aria-live="polite"
+     aria-atomic="true">
+</div>
 
 </body>
 

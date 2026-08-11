@@ -651,3 +651,581 @@ footer {
     color: #475569;
     background-color: #e2e8f0;
 }
+
+/* =========================================================
+   ALTA MANUAL DE INCIDENCIAS
+   ========================================================= */
+
+.new-incident-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+
+    padding: 11px 18px;
+
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+
+    border: 1px solid #15803d;
+    border-radius: 10px;
+
+    background: #15803d;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.new-incident-button:hover {
+    background: #166534;
+    transform: translateY(-1px);
+}
+
+
+/* MODAL */
+
+.sgio-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 2000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+.sgio-modal.show {
+    display: flex;
+}
+
+.sgio-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(15, 23, 42, 0.58);
+    backdrop-filter: blur(2px);
+}
+
+.sgio-modal-dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(620px, 100%);
+    max-height: 90vh;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 24px 70px rgba(15, 23, 42, 0.28);
+}
+
+.sgio-modal-dialog-large {
+    width: min(820px, 100%);
+}
+
+.sgio-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.sgio-modal-header h3 {
+    margin: 3px 0 0;
+
+    font-size: 1.3rem;
+}
+
+.sgio-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border: 0;
+    border-radius: 10px;
+
+    color: #64748b;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.sgio-modal-close:hover {
+    color: #1e293b;
+    background: #f1f5f9;
+}
+
+.sgio-modal-body {
+    max-height: calc(90vh - 155px);
+
+    overflow-y: auto;
+
+    padding: 24px;
+}
+
+.sgio-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 18px 24px;
+
+    border-top: 1px solid var(--border);
+
+    background: #f8fafc;
+}
+
+
+/* ORIGEN WHATSAPP */
+
+.manual-origin {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+    padding: 14px 16px;
+
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+
+    color: #166534;
+    background: #f0fdf4;
+}
+
+.manual-origin > i {
+    font-size: 1.6rem;
+}
+
+.manual-origin div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.manual-origin span {
+    color: #4b5563;
+    font-size: 0.82rem;
+}
+
+
+/* FORMULARIO */
+
+.manual-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.manual-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.manual-field-full {
+    grid-column: 1 / -1;
+}
+
+.manual-field label {
+    color: #475569;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+}
+
+.manual-field input,
+.manual-field select,
+.manual-field textarea {
+    width: 100%;
+
+    padding: 11px 13px;
+
+    color: var(--text);
+    font: inherit;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #ffffff;
+}
+
+.manual-field textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.manual-field input:focus,
+.manual-field select:focus,
+.manual-field textarea:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px rgba(28, 93, 153, 0.12);
+}
+
+
+/* ERROR */
+
+.modal-error {
+    display: none;
+
+    margin-bottom: 18px;
+    padding: 12px 14px;
+
+    color: #991b1b;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    background: #fef2f2;
+
+    font-size: 0.85rem;
+}
+
+.modal-error.show {
+    display: block;
+}
+
+
+/* BOTONES */
+
+.modal-primary-button,
+.modal-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 42px;
+
+    padding: 10px 17px;
+
+    font: inherit;
+    font-weight: 600;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.modal-primary-button {
+    color: #ffffff;
+
+    border: 1px solid var(--primary);
+
+    background: var(--primary);
+}
+
+.modal-primary-button:hover {
+    filter: brightness(0.94);
+}
+
+.modal-primary-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.modal-secondary-button {
+    color: #475569;
+
+    border: 1px solid #cbd5e1;
+
+    background: #ffffff;
+}
+
+.modal-secondary-button:hover {
+    background: #f8fafc;
+}
+
+
+/* EVITAMOS SCROLL DEL BODY */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+@media (max-width: 700px) {
+
+    .manual-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .manual-field-full {
+        grid-column: auto;
+    }
+
+    .sgio-modal {
+        padding: 12px;
+    }
+
+    .sgio-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .modal-primary-button,
+    .modal-secondary-button {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   ESTADO REABIERTA
+   ========================================================= */
+
+.badge.reabierta {
+    color: #6d28d9;
+    background-color: #ede9fe;
+    border: 1px solid #c4b5fd;
+}
+
+.spinner-small {
+    width: 16px;
+    height: 16px;
+
+    display: inline-block;
+
+    border: 2px solid
+        rgba(255, 255, 255, 0.45);
+
+    border-top-color: #ffffff;
+
+    border-radius: 50%;
+
+    animation:
+        spinnerSgio 0.7s linear infinite;
+}
+
+
+@keyframes spinnerSgio {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+   TOASTS SGIO
+   ========================================================= */
+
+.toast-container {
+    position: fixed;
+
+    top: 24px;
+    right: 24px;
+
+    z-index: 5000;
+
+    display: flex;
+    flex-direction: column;
+
+    width: min(390px, calc(100vw - 32px));
+
+    gap: 12px;
+
+    pointer-events: none;
+}
+
+
+.sgio-toast {
+    display: grid;
+
+    grid-template-columns:
+        36px 1fr 30px;
+
+    align-items: start;
+
+    gap: 11px;
+
+    padding: 15px 14px;
+
+    border: 1px solid #e2e8f0;
+    border-left-width: 4px;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 14px 35px
+        rgba(15, 23, 42, 0.16);
+
+    opacity: 0;
+
+    transform:
+        translateX(35px);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+
+    pointer-events: auto;
+}
+
+
+.sgio-toast.show {
+    opacity: 1;
+
+    transform:
+        translateX(0);
+}
+
+
+.sgio-toast-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.25rem;
+}
+
+
+.sgio-toast-content {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    gap: 4px;
+}
+
+
+.sgio-toast-content strong {
+    color: #1e293b;
+
+    font-size: 0.9rem;
+}
+
+
+.sgio-toast-content span {
+    color: #64748b;
+
+    font-size: 0.8rem;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+.sgio-toast-close {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+
+    color: #94a3b8;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+.sgio-toast-close:hover {
+    color: #475569;
+
+    background: #f1f5f9;
+}
+
+
+/* SUCCESS */
+
+.sgio-toast-success {
+    border-left-color: #16a34a;
+}
+
+.sgio-toast-success
+.sgio-toast-icon {
+    color: #16a34a;
+}
+
+
+/* ERROR */
+
+.sgio-toast-error {
+    border-left-color: #dc2626;
+}
+
+.sgio-toast-error
+.sgio-toast-icon {
+    color: #dc2626;
+}
+
+
+/* WARNING */
+
+.sgio-toast-warning {
+    border-left-color: #d97706;
+}
+
+.sgio-toast-warning
+.sgio-toast-icon {
+    color: #d97706;
+}
+
+
+/* INFO */
+
+.sgio-toast-info {
+    border-left-color: #2563eb;
+}
+
+.sgio-toast-info
+.sgio-toast-icon {
+    color: #2563eb;
+}
+
+
+@media (max-width: 600px) {
+
+    .toast-container {
+        top: 14px;
+        right: 16px;
+        left: 16px;
+
+        width: auto;
+    }
+}

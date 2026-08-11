@@ -11,25 +11,52 @@ import java.util.regex.Pattern;
 @Component
 public class FolioGenerator {
 
-    private static final Pattern INC_PATTERN = Pattern.compile("(INC\\d+)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern INC_PATTERN =
+            Pattern.compile(
+                    "(INC\\d+)",
+                    Pattern.CASE_INSENSITIVE
+            );
 
-    public String generarDesdeCorreo(String asunto) {
+
+    public String generarDesdeCorreo(
+            String asunto
+    ) {
 
         if (asunto != null) {
-            Matcher matcher = INC_PATTERN.matcher(asunto);
+
+            Matcher matcher =
+                    INC_PATTERN.matcher(asunto);
 
             if (matcher.find()) {
-                return matcher.group(1).toUpperCase();
+
+                return matcher
+                        .group(1)
+                        .toUpperCase();
             }
         }
 
-        return generarTemporal();
+        return generar();
     }
 
-    private String generarTemporal() {
+
+    /*
+     * Generación de folios para incidencias
+     * que no provienen de un correo con folio.
+     *
+     * Ejemplo:
+     * SGIO-20260810-A12B34CD
+     */
+    public String generar() {
+
         return "SGIO-"
-                + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)
+                + LocalDate.now()
+                .format(
+                        DateTimeFormatter.BASIC_ISO_DATE
+                )
                 + "-"
-                + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+                + UUID.randomUUID()
+                .toString()
+                .substring(0, 8)
+                .toUpperCase();
     }
 }

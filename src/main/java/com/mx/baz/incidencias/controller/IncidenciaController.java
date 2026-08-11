@@ -13,6 +13,7 @@ import com.mx.baz.incidencias.dto.ResolverIncidenciaRequest;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.service.IncidenciaService;
 import com.mx.baz.incidencias.dto.ReabrirIncidenciaRequest;
+import com.mx.baz.incidencias.dto.CrearIncidenciaManualRequest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -160,6 +161,25 @@ public class IncidenciaController {
                         folio,
                         request
                 )
+        );
+    }
+    
+    @PostMapping("/manual")
+    public ResponseEntity<IncidenciaResponse>
+    crearIncidenciaManual(
+            @Valid
+            @RequestBody
+            CrearIncidenciaManualRequest request
+    ) {
+
+        IncidenciaResponse response =
+                incidenciaService
+                        .crearIncidenciaManual(
+                                request
+                        );
+
+        return ResponseEntity.ok(
+                response
         );
     }
 }

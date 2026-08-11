@@ -30,6 +30,8 @@ import com.mx.baz.incidencias.events.IncidenciaCanceladaEvent;
 import com.mx.baz.incidencias.events.IncidenciaReasignadaEvent;
 import com.mx.baz.incidencias.dto.ReabrirIncidenciaRequest;
 import com.mx.baz.incidencias.events.IncidenciaReabiertaEvent;
+import com.mx.baz.incidencias.dto.CrearIncidenciaManualRequest;
+import com.mx.baz.incidencias.integration.mail.generator.FolioGenerator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,6 +60,7 @@ public class IncidenciaService {
     private final IncidenciaMapper incidenciaMapper;
     private final ApplicationEventPublisher eventPublisher;
     private final HistorialIncidenciaService historialIncidenciaService;
+    private final FolioGenerator folioGenerator;
     
 
     @Transactional
@@ -83,13 +86,36 @@ public class IncidenciaService {
                 .motivo(request.getMotivo())
                 .build();
 
-        Incidencia incidenciaGuardada = incidenciaRepository.save(incidencia);
+        Incidencia incidenciaGuardada =
+                incidenciaRepository.save(incidencia);
 
-        assignmentService.actualizarUltimaAsignacion(empleadoAsignado);
 
-        eventPublisher.publishEvent(new IncidenciaCreadaEvent(incidenciaGuardada));
+        assignmentService.actualizarUltimaAsignacion(
+                empleadoAsignado
+        );
 
-        return incidenciaMapper.toResponse(incidenciaGuardada);
+
+        /*
+         * Registramos el nacimiento de la incidencia
+         * para que el Timeline tenga el ciclo completo.
+         */
+        historialIncidenciaService.registrarCreacion(
+                incidenciaGuardada,
+                "SISTEMA",
+                "Incidencia creada y asignada automáticamente"
+        );
+
+
+        eventPublisher.publishEvent(
+                new IncidenciaCreadaEvent(
+                        incidenciaGuardada
+                )
+        );
+
+
+        return incidenciaMapper.toResponse(
+                incidenciaGuardada
+        );
     }
     
     public IncidenciaResponse resolverIncidencia(
@@ -766,5 +792,133 @@ public class IncidenciaService {
         return incidenciaMapper.toResponse(
                 incidencia
         );
+    }
+    
+    @Transactional
+    public IncidenciaResponse crearIncidenciaManual(
+            CrearIncidenciaManualRequest request
+    ) {
+
+        String folio =
+                folioGenerator.generar();
+
+
+        IncidenciaRequest incidenciaRequest =
+                IncidenciaRequest.builder()
+
+                        /*
+                         * El folio siempre lo genera SGIO.
+                         */
+                        .folio(folio)
+
+                        .asunto(
+                                request
+                                        .getAsunto()
+                                        .trim()
+                        )
+
+                        /*
+                         * Para un alta manual no existe
+                         * realmente un remitente de correo.
+                         */
+                        .remitente(
+                                request.getReportadoPor() == null
+                                        || request
+                                        .getReportadoPor()
+                                        .isBlank()
+
+                                        ? "REGISTRO MANUAL"
+
+                                        : request
+                                        .getReportadoPor()
+                                        .trim()
+                        )
+
+                        /*
+                         * Utilizamos fecha actual como
+                         * fecha de recepción del caso.
+                         */
+                        .fechaCorreo(
+                                LocalDateTime.now()
+                        )
+
+                        /*
+                         * Primera versión:
+                         * utilizamos carpetaOrigen para
+                         * identificar WhatsApp.
+                         */
+                        .carpetaOrigen(
+                                "WHATSAPP"
+                        )
+
+                        .prioridad(
+                                request.getPrioridad()
+                        )
+
+                        .descripcion(
+                                request
+                                        .getDescripcion()
+                                        .trim()
+                        )
+
+                        .sucursal(
+                                normalizarTexto(
+                                        request.getSucursal()
+                                )
+                        )
+
+                        .clienteUnico(
+                                normalizarTexto(
+                                        request.getClienteUnico()
+                                )
+                        )
+
+                        .nombreCliente(
+                                normalizarTexto(
+                                        request.getNombreCliente()
+                                )
+                        )
+
+                        .equipo(
+                                normalizarTexto(
+                                        request.getEquipo()
+                                )
+                        )
+
+                        .motivo(
+                                normalizarTexto(
+                                        request.getMotivo()
+                                )
+                        )
+
+                        .build();
+
+
+        /*
+         * Reutilizamos todo el flujo existente:
+         *
+         * - asignación automática
+         * - PENDIENTE
+         * - historial
+         * - evento
+         * - Telegram
+         */
+        return crearIncidencia(
+                incidenciaRequest
+        );
+    }
+    
+    private String normalizarTexto(
+            String valor
+    ) {
+
+        if (
+                valor == null
+                || valor.isBlank()
+        ) {
+            return null;
+        }
+
+        return valor.trim();
     }
 }

@@ -27,6 +27,16 @@
         <div class="refresh-area">
 
 		    <div class="refresh-actions">
+		    
+		    	<button id="btnNuevaIncidencia"
+				        type="button"
+				        class="new-incident-button">
+				
+				    <i class="bi bi-plus-circle"></i>
+				
+				    Nueva incidencia
+				
+				</button>
 		
 		        <a class="refresh-button"
 		           th:href="@{/dashboard}">
@@ -177,6 +187,267 @@
     </section>
 
 </main>
+
+<!-- =========================================================
+     MODAL - NUEVA INCIDENCIA
+     ========================================================= -->
+
+<div id="modalNuevaIncidencia"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+
+    <div class="sgio-modal-dialog sgio-modal-dialog-large">
+
+        <div class="sgio-modal-header">
+
+            <div>
+                <p class="eyebrow">
+                    Registro manual
+                </p>
+
+                <h3>
+                    Nueva incidencia
+                </h3>
+            </div>
+
+
+            <button id="btnCerrarNuevaIncidencia"
+                    type="button"
+                    class="sgio-modal-close"
+                    aria-label="Cerrar">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div class="manual-origin">
+
+                <i class="bi bi-whatsapp"></i>
+
+                <div>
+                    <strong>
+                        Incidencia recibida por WhatsApp
+                    </strong>
+
+                    <span>
+                        SGIO generará el folio y realizará
+                        la asignación automáticamente.
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div id="nuevaIncidenciaError"
+                 class="modal-error">
+            </div>
+
+
+            <form id="formNuevaIncidencia">
+
+                <div class="manual-form-grid">
+
+                    <!-- ASUNTO -->
+
+                    <div class="manual-field manual-field-full">
+
+                        <label for="manualAsunto">
+                            Asunto *
+                        </label>
+
+                        <input id="manualAsunto"
+                               type="text"
+                               maxlength="255"
+                               placeholder="Ej. Error durante proceso de originación">
+
+                    </div>
+
+
+                    <!-- REPORTADO POR -->
+
+                    <div class="manual-field">
+
+                        <label for="manualReportadoPor">
+                            Reportado por
+                        </label>
+
+                        <input id="manualReportadoPor"
+                               type="text"
+                               placeholder="Nombre de quien reporta">
+
+                    </div>
+
+
+                    <!-- PRIORIDAD -->
+
+                    <div class="manual-field">
+
+                        <label for="manualPrioridad">
+                            Prioridad *
+                        </label>
+
+                        <select id="manualPrioridad">
+
+                            <option value="MEDIA">
+                                Media
+                            </option>
+
+                            <option value="BAJA">
+                                Baja
+                            </option>
+
+                            <option value="ALTA">
+                                Alta
+                            </option>
+
+                            <option value="CRITICA">
+                                Crítica
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SUCURSAL -->
+
+                    <div class="manual-field">
+
+                        <label for="manualSucursal">
+                            Sucursal
+                        </label>
+
+                        <input id="manualSucursal"
+                               type="text"
+                               placeholder="Ej. 9568 Canteras">
+
+                    </div>
+
+
+                    <!-- CLIENTE ÚNICO -->
+
+                    <div class="manual-field">
+
+                        <label for="manualClienteUnico">
+                            Cliente único
+                        </label>
+
+                        <input id="manualClienteUnico"
+                               type="text"
+                               placeholder="CU del cliente">
+
+                    </div>
+
+
+                    <!-- NOMBRE CLIENTE -->
+
+                    <div class="manual-field">
+
+                        <label for="manualNombreCliente">
+                            Nombre del cliente
+                        </label>
+
+                        <input id="manualNombreCliente"
+                               type="text"
+                               placeholder="Nombre completo">
+
+                    </div>
+
+
+                    <!-- EQUIPO -->
+
+                    <div class="manual-field">
+
+                        <label for="manualEquipo">
+                            Equipo
+                        </label>
+
+                        <input id="manualEquipo"
+                               type="text"
+                               placeholder="Ej. WS_VTAS06">
+
+                    </div>
+
+
+                    <!-- MOTIVO -->
+
+                    <div class="manual-field manual-field-full">
+
+                        <label for="manualMotivo">
+                            Motivo
+                        </label>
+
+                        <input id="manualMotivo"
+                               type="text"
+                               placeholder="Motivo identificado">
+
+                    </div>
+
+
+                    <!-- DESCRIPCIÓN -->
+
+                    <div class="manual-field manual-field-full">
+
+                        <label for="manualDescripcion">
+                            Descripción *
+                        </label>
+
+                        <textarea id="manualDescripcion"
+                                  rows="5"
+                                  placeholder="Describe el problema reportado por WhatsApp..."></textarea>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button id="btnCancelarNuevaIncidencia"
+                    type="button"
+                    class="modal-secondary-button">
+
+                Cancelar
+
+            </button>
+
+
+            <button id="btnGuardarNuevaIncidencia"
+                    type="button"
+                    class="modal-primary-button">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Crear incidencia
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     TOASTS SGIO
+     ========================================================= -->
+
+<div id="toastContainer"
+     class="toast-container"
+     aria-live="polite"
+     aria-atomic="true">
+</div>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
@@ -458,6 +729,568 @@
     actualizarDashboard();
     iniciarAutoRefresh();
     actualizarEstadoAutoRefresh();
+    
+ // =========================================================
+ // NUEVA INCIDENCIA
+ // =========================================================
+
+ const btnNuevaIncidencia =
+     document.getElementById(
+         "btnNuevaIncidencia"
+     );
+
+ const modalNuevaIncidencia =
+     document.getElementById(
+         "modalNuevaIncidencia"
+     );
+
+ const btnCerrarNuevaIncidencia =
+     document.getElementById(
+         "btnCerrarNuevaIncidencia"
+     );
+
+ const btnCancelarNuevaIncidencia =
+     document.getElementById(
+         "btnCancelarNuevaIncidencia"
+     );
+
+
+ function abrirModalNuevaIncidencia() {
+
+	    limpiarErrorNuevaIncidencia();
+
+	    modalNuevaIncidencia
+	        ?.classList.add("show");
+
+	    document.body
+	        .classList.add("modal-open");
+
+	    manualAsunto?.focus();
+	}
+
+
+ function cerrarModalNuevaIncidencia() {
+
+	    modalNuevaIncidencia
+	        ?.classList.remove("show");
+
+	    document.body
+	        .classList.remove("modal-open");
+
+	    limpiarErrorNuevaIncidencia();
+	}
+
+
+ btnNuevaIncidencia
+     ?.addEventListener(
+         "click",
+         abrirModalNuevaIncidencia
+     );
+
+
+ btnCerrarNuevaIncidencia
+     ?.addEventListener(
+         "click",
+         cerrarModalNuevaIncidencia
+     );
+
+
+ btnCancelarNuevaIncidencia
+     ?.addEventListener(
+         "click",
+         cerrarModalNuevaIncidencia
+     );
+
+
+ modalNuevaIncidencia
+     ?.querySelector(
+         ".sgio-modal-backdrop"
+     )
+     ?.addEventListener(
+         "click",
+         cerrarModalNuevaIncidencia
+     );
+
+
+ document.addEventListener(
+     "keydown",
+     event => {
+
+         if (
+             event.key === "Escape"
+             && modalNuevaIncidencia
+                 ?.classList.contains("show")
+         ) {
+
+             cerrarModalNuevaIncidencia();
+         }
+     }
+ );
+ 
+ const btnGuardarNuevaIncidencia =
+	    document.getElementById(
+	        "btnGuardarNuevaIncidencia"
+	    );
+
+	const formNuevaIncidencia =
+	    document.getElementById(
+	        "formNuevaIncidencia"
+	    );
+
+	const nuevaIncidenciaError =
+	    document.getElementById(
+	        "nuevaIncidenciaError"
+	    );
+
+	const manualAsunto =
+	    document.getElementById(
+	        "manualAsunto"
+	    );
+
+	const manualReportadoPor =
+	    document.getElementById(
+	        "manualReportadoPor"
+	    );
+
+	const manualPrioridad =
+	    document.getElementById(
+	        "manualPrioridad"
+	    );
+
+	const manualSucursal =
+	    document.getElementById(
+	        "manualSucursal"
+	    );
+
+	const manualClienteUnico =
+	    document.getElementById(
+	        "manualClienteUnico"
+	    );
+
+	const manualNombreCliente =
+	    document.getElementById(
+	        "manualNombreCliente"
+	    );
+
+	const manualEquipo =
+	    document.getElementById(
+	        "manualEquipo"
+	    );
+
+	const manualMotivo =
+	    document.getElementById(
+	        "manualMotivo"
+	    );
+
+	const manualDescripcion =
+	    document.getElementById(
+	        "manualDescripcion"
+	    );
+	function mostrarErrorNuevaIncidencia(
+		    mensaje
+		) {
+
+		    if (!nuevaIncidenciaError) {
+		        return;
+		    }
+
+		    nuevaIncidenciaError.textContent =
+		        mensaje;
+
+		    nuevaIncidenciaError
+		        .classList.add("show");
+		}
+
+
+		function limpiarErrorNuevaIncidencia() {
+
+		    if (!nuevaIncidenciaError) {
+		        return;
+		    }
+
+		    nuevaIncidenciaError.textContent = "";
+
+		    nuevaIncidenciaError
+		        .classList.remove("show");
+		}
+
+
+		function limpiarFormularioNuevaIncidencia() {
+
+		    formNuevaIncidencia?.reset();
+
+		    /*
+		     * Queremos que MEDIA siga siendo
+		     * el valor predeterminado.
+		     */
+		    if (manualPrioridad) {
+		        manualPrioridad.value = "MEDIA";
+		    }
+		}
+		
+		async function crearIncidenciaManual() {
+
+		    limpiarErrorNuevaIncidencia();
+
+
+		    const asunto =
+		        manualAsunto?.value.trim();
+
+		    const reportadoPor =
+		        manualReportadoPor?.value.trim();
+
+		    const prioridad =
+		        manualPrioridad?.value;
+
+		    const sucursal =
+		        manualSucursal?.value.trim();
+
+		    const clienteUnico =
+		        manualClienteUnico?.value.trim();
+
+		    const nombreCliente =
+		        manualNombreCliente?.value.trim();
+
+		    const equipo =
+		        manualEquipo?.value.trim();
+
+		    const motivo =
+		        manualMotivo?.value.trim();
+
+		    const descripcion =
+		        manualDescripcion?.value.trim();
+
+
+		    // =====================================================
+		    // VALIDACIONES
+		    // =====================================================
+
+		    if (!asunto) {
+
+		        mostrarErrorNuevaIncidencia(
+		            "Debes indicar el asunto de la incidencia."
+		        );
+
+		        manualAsunto?.focus();
+
+		        return;
+		    }
+
+
+		    if (!prioridad) {
+
+		        mostrarErrorNuevaIncidencia(
+		            "Debes seleccionar una prioridad."
+		        );
+
+		        manualPrioridad?.focus();
+
+		        return;
+		    }
+
+
+		    if (!descripcion) {
+
+		        mostrarErrorNuevaIncidencia(
+		            "Debes ingresar la descripción de la incidencia."
+		        );
+
+		        manualDescripcion?.focus();
+
+		        return;
+		    }
+
+
+		    // =====================================================
+		    // LOADING
+		    // =====================================================
+
+		    btnGuardarNuevaIncidencia.disabled =
+		        true;
+
+		    btnGuardarNuevaIncidencia.innerHTML = `
+		        <span class="spinner-small"></span>
+		        Creando...
+		    `;
+
+
+		    try {
+
+		        const response =
+		            await fetch(
+		                "/api/incidencias/manual",
+		                {
+		                    method: "POST",
+
+		                    headers: {
+		                        "Content-Type":
+		                            "application/json"
+		                    },
+
+		                    body: JSON.stringify({
+		                        asunto,
+		                        reportadoPor:
+		                            reportadoPor || null,
+
+		                        prioridad,
+
+		                        descripcion,
+
+		                        sucursal:
+		                            sucursal || null,
+
+		                        clienteUnico:
+		                            clienteUnico || null,
+
+		                        nombreCliente:
+		                            nombreCliente || null,
+
+		                        equipo:
+		                            equipo || null,
+
+		                        motivo:
+		                            motivo || null
+		                    })
+		                }
+		            );
+
+
+		        if (!response.ok) {
+
+		            let mensaje =
+		                "No fue posible crear la incidencia.";
+
+		            try {
+
+		                const error =
+		                    await response.json();
+
+		                mensaje =
+		                    error.mensaje
+		                    || error.message
+		                    || error.error
+		                    || mensaje;
+
+		            } catch {
+		                // Dejamos el mensaje genérico.
+		            }
+
+		            throw new Error(mensaje);
+		        }
+
+
+		        const incidencia =
+		            await response.json();
+
+
+		        /*
+		         * Cerramos y limpiamos primero.
+		         */
+		        cerrarModalNuevaIncidencia();
+
+		        limpiarFormularioNuevaIncidencia();
+
+
+		        /*
+		         * Actualizamos Dashboard sin recargar
+		         * toda la pantalla.
+		         */
+		        await actualizarDashboard();
+
+
+		        /*
+		         * Mostramos el Toast.
+		         */
+		        mostrarToast(
+		        	    "success",
+		        	    "Incidencia creada",
+		        	    `Folio ${incidencia.folio} registrado correctamente.`
+		        	);
+		        /*
+		         * Buscamos y resaltamos la incidencia
+		         * recién creada.
+		         */
+		        setTimeout(
+		            () => {
+
+		                resaltarIncidenciaCreada(
+		                    incidencia.folio
+		                );
+
+		            },
+		            150
+		        );
+
+
+		    } catch (error) {
+
+		        const mensaje =
+		            error.message
+		            || "No fue posible crear la incidencia.";
+
+
+		        mostrarErrorNuevaIncidencia(
+		            mensaje
+		        );
+
+
+		        mostrarToast(
+		            "error",
+		            "Error al crear incidencia",
+		            mensaje
+		        );
+
+		    } finally {
+
+		        btnGuardarNuevaIncidencia.disabled =
+		            false;
+
+		        btnGuardarNuevaIncidencia.innerHTML = `
+		            <i class="bi bi-plus-circle"></i>
+		            Crear incidencia
+		        `;
+		    }
+		}
+		btnGuardarNuevaIncidencia
+	    ?.addEventListener(
+	        "click",
+	        crearIncidenciaManual
+	    );
+		
+		formNuevaIncidencia
+	    ?.addEventListener(
+	        "submit",
+	        event => {
+
+	            event.preventDefault();
+
+	            crearIncidenciaManual();
+	        }
+	    );
+		// =========================================================
+		// TOASTS
+		// =========================================================
+
+		const toastContainer =
+		    document.getElementById(
+		        "toastContainer"
+		    );
+
+
+		function mostrarToast(
+		    tipo,
+		    titulo,
+		    mensaje,
+		    duracion = 4500
+		) {
+
+		    if (!toastContainer) {
+		        return;
+		    }
+
+
+		    const iconos = {
+		        success: "bi-check-circle-fill",
+		        error: "bi-x-circle-fill",
+		        warning: "bi-exclamation-triangle-fill",
+		        info: "bi-info-circle-fill"
+		    };
+
+
+		    const toast =
+		        document.createElement("div");
+
+		    toast.className =
+		        `sgio-toast sgio-toast-${tipo}`;
+
+
+		    const icono =
+		        iconos[tipo]
+		        || iconos.info;
+
+
+		    toast.innerHTML = `
+		        <div class="sgio-toast-icon">
+		            <i class="bi ${icono}"></i>
+		        </div>
+
+		        <div class="sgio-toast-content">
+
+		            <strong>
+		                ${escapeHtmlToast(titulo)}
+		            </strong>
+
+		            <span>
+		                ${escapeHtmlToast(mensaje)}
+		            </span>
+
+		        </div>
+
+		        <button type="button"
+		                class="sgio-toast-close"
+		                aria-label="Cerrar">
+
+		            <i class="bi bi-x-lg"></i>
+
+		        </button>
+		    `;
+
+
+		    toastContainer.appendChild(
+		        toast
+		    );
+
+
+		    requestAnimationFrame(() => {
+
+		        toast.classList.add(
+		            "show"
+		        );
+
+		    });
+
+
+		    const cerrar = () => {
+
+		        toast.classList.remove(
+		            "show"
+		        );
+
+		        setTimeout(
+		            () => toast.remove(),
+		            250
+		        );
+		    };
+
+
+		    toast
+		        .querySelector(
+		            ".sgio-toast-close"
+		        )
+		        ?.addEventListener(
+		            "click",
+		            cerrar
+		        );
+
+
+		    setTimeout(
+		        cerrar,
+		        duracion
+		    );
+		}
+
+
+		function escapeHtmlToast(
+		    valor
+		) {
+
+		    return String(valor ?? "")
+		        .replaceAll("&", "&amp;")
+		        .replaceAll("<", "&lt;")
+		        .replaceAll(">", "&gt;")
+		        .replaceAll('"', "&quot;")
+		        .replaceAll("'", "&#039;");
+		}
 </script>
 
 </body>
