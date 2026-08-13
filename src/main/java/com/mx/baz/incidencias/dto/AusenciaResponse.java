@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @Builder
 public class AusenciaResponse {
 
+    private Long id;
+
     private LocalDate fechaInicio;
 
     private LocalDate fechaFin;

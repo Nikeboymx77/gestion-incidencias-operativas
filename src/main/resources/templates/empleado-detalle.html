@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        SGIO | Detalle de Empleado
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/empleado-detalle.css}">
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div>
+
+        <h1>SGIO</h1>
+
+        <p>
+            Sistema de Gestión de Incidencias Operativas
+        </p>
+
+    </div>
+
+
+    <div class="status">
+
+        <span class="status-dot"></span>
+
+        Sistema activo
+
+    </div>
+
+</header>
+
+
+<main class="employee-detail-container">
+
+
+    <div class="employee-detail-navigation">
+
+        <a th:href="@{/empleados}"
+           class="back-employees-button">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Volver a Empleados
+
+        </a>
+
+    </div>
+
+
+    <section class="employee-detail-header">
+
+        <div>
+
+            <p class="eyebrow">
+                Administración
+            </p>
+
+            <h2 id="empleadoNombre">
+                Cargando empleado...
+            </h2>
+
+            <p id="empleadoTelegram">
+                -
+            </p>
+
+        </div>
+
+
+        <span id="empleadoEstado"
+              class="employee-detail-status">
+
+            -
+
+        </span>
+
+    </section>
+
+
+    <div id="empleadoDetalleContenido">
+
+
+        <section class="employee-detail-grid">
+
+
+            <article class="employee-detail-card">
+
+                <div class="employee-card-title">
+
+                    <p class="eyebrow">
+                        Información
+                    </p>
+
+                    <h3>
+                        Datos del empleado
+                    </h3>
+
+                </div>
+
+
+                <div class="employee-data-grid">
+
+                    <div class="employee-data-item">
+
+                        <span>Email</span>
+
+                        <strong id="empleadoEmail">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="employee-data-item">
+
+                        <span>Telegram</span>
+
+                        <strong id="empleadoTelegramDetalle">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="employee-data-item">
+
+                        <span>Última asignación</span>
+
+                        <strong id="empleadoUltimaAsignacion">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="employee-data-item">
+
+                        <span>Incidencias activas</span>
+
+                        <strong id="empleadoTotalActivas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="employee-detail-card">
+
+                <div class="employee-card-title">
+
+                    <p class="eyebrow">
+                        Operación
+                    </p>
+
+                    <h3>
+                        Carga actual
+                    </h3>
+
+                </div>
+
+
+                <div class="employee-workload-grid">
+
+                    <div class="workload-item">
+
+                        <span>Pendientes</span>
+
+                        <strong id="empleadoPendientes">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="workload-item">
+
+                        <span>En proceso</span>
+
+                        <strong id="empleadoEnProceso">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="workload-item">
+
+                        <span>Reabiertas</span>
+
+                        <strong id="empleadoReabiertas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+
+        <section class="employee-detail-card">
+
+            <div class="employee-card-title">
+
+                <p class="eyebrow">
+                    Disponibilidad
+                </p>
+
+                <h3>
+                    Días laborales
+                </h3>
+
+            </div>
+
+
+            <div id="diasLaborales"
+                 class="workdays">
+
+            </div>
+
+        </section>
+
+
+        <section class="employee-detail-card">
+
+            <div class="employee-card-title">
+
+                <p class="eyebrow">
+                    Calendario
+                </p>
+
+                <h3>
+                    Ausencias registradas
+                </h3>
+
+            </div>
+
+
+            <div id="ausenciasEmpleado">
+
+            </div>
+
+        </section>
+
+
+        <section class="employee-actions-card">
+
+            <button type="button"
+                    id="btnEditarEmpleado"
+                    class="employee-action-primary">
+
+                <i class="bi bi-pencil"></i>
+
+                Editar empleado
+
+            </button>
+
+
+            <button type="button"
+                    id="btnCambiarEstadoEmpleado"
+                    class="employee-action-secondary">
+
+                <i class="bi bi-person-dash"></i>
+
+                Desactivar empleado
+
+            </button>
+
+
+            <button type="button"
+                    id="btnRegistrarAusencia"
+                    class="employee-action-warning">
+
+                <i class="bi bi-calendar-x"></i>
+
+                Registrar ausencia
+
+            </button>
+
+        </section>
+
+
+    </div>
+
+
+</main>
+
+
+<footer>
+
+    SGIO · Sistema de Gestión de Incidencias Operativas
+
+</footer>
+
+<!-- =========================================================
+     MODAL EDITAR EMPLEADO
+     ========================================================= -->
+
+<div id="modalEditarEmpleado"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Administración
+                </p>
+
+                <h3>
+                    <i class="bi bi-pencil"></i>
+                    Editar empleado
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarEditarEmpleado"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div id="editarEmpleadoError"
+                 class="employee-modal-error">
+            </div>
+
+
+            <div class="employee-form-field">
+
+                <label for="editarNombre">
+                    Nombre *
+                </label>
+
+                <input type="text"
+                       id="editarNombre">
+
+            </div>
+
+
+            <div class="employee-form-grid">
+
+                <div class="employee-form-field">
+
+                    <label for="editarTelegram">
+                        Usuario Telegram *
+                    </label>
+
+                    <input type="text"
+                           id="editarTelegram"
+                           placeholder="Ej. cchavez">
+
+                </div>
+
+
+                <div class="employee-form-field">
+
+                    <label for="editarEmail">
+                        Correo
+                    </label>
+
+                    <input type="email"
+                           id="editarEmail">
+
+                </div>
+
+            </div>
+
+
+            <div class="employee-form-field">
+
+                <label>
+                    Días laborales
+                </label>
+
+
+                <div class="edit-workdays">
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="MONDAY">
+                        <span>L</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="TUESDAY">
+                        <span>M</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="WEDNESDAY">
+                        <span>X</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="THURSDAY">
+                        <span>J</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="FRIDAY">
+                        <span>V</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="SATURDAY">
+                        <span>S</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="SUNDAY">
+                        <span>D</span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarEditarEmpleado"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnGuardarEditarEmpleado"
+                    class="modal-btn-primary">
+
+                <i class="bi bi-check-circle"></i>
+
+                Guardar cambios
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL CAMBIAR ESTADO EMPLEADO
+     ========================================================= -->
+
+<div id="modalEstadoEmpleado"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Administración
+                </p>
+
+                <h3 id="tituloEstadoEmpleado">
+                    Cambiar estado
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarEstadoEmpleado"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div id="estadoEmpleadoWarning"
+                 class="employee-state-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <div>
+
+                    <strong id="estadoEmpleadoMensajePrincipal">
+                        Confirmar cambio
+                    </strong>
+
+                    <p id="estadoEmpleadoMensajeSecundario">
+                        El estado del empleado será actualizado.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="estadoEmpleadoError"
+                 class="employee-modal-error">
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarEstadoEmpleado"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnConfirmarEstadoEmpleado"
+                    class="employee-state-confirm">
+
+                Confirmar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL REGISTRAR AUSENCIA
+     ========================================================= -->
+
+<div id="modalRegistrarAusencia"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Disponibilidad
+                </p>
+
+                <h3>
+                    <i class="bi bi-calendar-x"></i>
+                    Registrar ausencia
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarRegistrarAusencia"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div id="registrarAusenciaError"
+                 class="employee-modal-error">
+            </div>
+
+
+            <div class="employee-form-grid">
+
+                <div class="employee-form-field">
+
+                    <label for="ausenciaFechaInicio">
+                        Fecha inicio *
+                    </label>
+
+                    <input id="ausenciaFechaInicio"
+                           type="date">
+
+                </div>
+
+
+                <div class="employee-form-field">
+
+                    <label for="ausenciaFechaFin">
+                        Fecha fin *
+                    </label>
+
+                    <input id="ausenciaFechaFin"
+                           type="date">
+
+                </div>
+
+            </div>
+
+
+            <div class="employee-form-field">
+
+                <label for="ausenciaMotivo">
+                    Motivo *
+                </label>
+
+                <select id="ausenciaMotivo">
+
+                    <option value="">
+                        Selecciona un motivo
+                    </option>
+
+                    <option value="VACACIONES">
+                        Vacaciones
+                    </option>
+
+                    <option value="ENFERMEDAD">
+                        Enfermedad
+                    </option>
+
+                    <option value="PERMISO">
+                        Permiso
+                    </option>
+
+                    <option value="OTRO">
+                        Otro
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="employee-form-field">
+
+                <label for="ausenciaObservaciones">
+                    Observaciones
+                </label>
+
+                <textarea id="ausenciaObservaciones"
+                          rows="4"
+                          placeholder="Ej. Vacaciones programadas."></textarea>
+
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarRegistrarAusencia"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnGuardarRegistrarAusencia"
+                    class="modal-btn-primary">
+
+                <i class="bi bi-calendar-check"></i>
+
+                Registrar ausencia
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL ELIMINAR AUSENCIA
+     ========================================================= -->
+
+<div id="modalEliminarAusencia"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Disponibilidad
+                </p>
+
+                <h3>
+                    <i class="bi bi-trash"></i>
+                    Eliminar ausencia
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnCerrarEliminarAusencia"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div class="employee-state-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <div>
+
+                    <strong>
+                        ¿Deseas eliminar esta ausencia?
+                    </strong>
+
+                    <p>
+                        El empleado podrá volver a participar
+                        en asignaciones durante esas fechas si
+                        cumple con sus días laborales y se
+                        encuentra activo.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="eliminarAusenciaError"
+                 class="employee-modal-error">
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarEliminarAusencia"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+
+            <button type="button"
+                    id="btnConfirmarEliminarAusencia"
+                    class="absence-confirm-delete">
+
+                <i class="bi bi-trash"></i>
+
+                Eliminar ausencia
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/empleado-detalle.js}"></script>
+
+</body>
+
+</html>

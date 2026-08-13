@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        SGIO | Administración de Empleados
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/empleados.css}">
+
+</head>
+
+
+<body>
+
+
+<!-- ========================================================= -->
+<!-- HEADER                                                    -->
+<!-- ========================================================= -->
+
+<header class="topbar">
+
+    <div>
+
+        <h1>SGIO</h1>
+
+        <p>
+            Sistema de Gestión de Incidencias Operativas
+        </p>
+
+    </div>
+
+
+    <div class="status">
+
+        <span class="status-dot"></span>
+
+        Sistema activo
+
+    </div>
+
+</header>
+
+
+<!-- ========================================================= -->
+<!-- CONTENIDO                                                 -->
+<!-- ========================================================= -->
+
+<main class="employees-container">
+
+
+    <!-- NAVEGACIÓN -->
+
+    <div class="employees-navigation">
+
+        <a th:href="@{/dashboard}"
+           class="back-dashboard-button">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Volver al Dashboard
+
+        </a>
+
+
+        <button type="button"
+                id="btnNuevoEmpleado"
+                class="new-employee-button">
+
+            <i class="bi bi-person-plus"></i>
+
+            Nuevo empleado
+
+        </button>
+
+    </div>
+
+
+    <!-- CABECERA -->
+
+    <section class="employees-header">
+
+        <div>
+
+            <p class="eyebrow">
+                SGIO V2
+            </p>
+
+            <h2>
+                Administración de Empleados
+            </h2>
+
+            <p>
+                Consulta la disponibilidad y carga operativa
+                del equipo encargado de atender incidencias.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- MÉTRICAS                                              -->
+    <!-- ===================================================== -->
+
+    <section class="employee-metrics">
+
+        <article class="employee-metric">
+
+            <div class="employee-metric-icon">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div>
+                <span>Total</span>
+
+                <strong id="empleadosTotal">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="employee-metric">
+
+            <div class="employee-metric-icon active">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <div>
+                <span>Activos</span>
+
+                <strong id="empleadosActivos">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="employee-metric">
+
+            <div class="employee-metric-icon inactive">
+                <i class="bi bi-person-dash"></i>
+            </div>
+
+            <div>
+                <span>Inactivos</span>
+
+                <strong id="empleadosInactivos">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="employee-metric">
+
+            <div class="employee-metric-icon workload">
+                <i class="bi bi-inboxes"></i>
+            </div>
+
+            <div>
+                <span>Incidencias activas</span>
+
+                <strong id="incidenciasActivasEquipo">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- TABLA                                                 -->
+    <!-- ===================================================== -->
+
+    <section class="employees-card">
+
+        <div class="employees-card-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Equipo operativo
+                </p>
+
+                <h3>
+                    Empleados
+                </h3>
+
+            </div>
+
+
+            <button type="button"
+                    id="btnActualizarEmpleados"
+                    class="employees-refresh-button">
+
+                <i class="bi bi-arrow-clockwise"></i>
+
+                Actualizar
+
+            </button>
+
+        </div>
+
+
+        <div class="employees-table-wrapper">
+
+            <table class="employees-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>Empleado</th>
+
+                    <th>Estado</th>
+
+                    <th>Carga</th>
+
+                    <th>Pendientes</th>
+
+                    <th>En proceso</th>
+
+                    <th>Reabiertas</th>
+
+                    <th>Última asignación</th>
+
+                    <th>Acciones</th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody id="empleadosTableBody">
+
+                <tr>
+
+                    <td colspan="8"
+                        class="employees-loading">
+
+                        <span class="spinner-small"></span>
+
+                        Cargando empleados...
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    SGIO · Sistema de Gestión de Incidencias Operativas
+
+</footer>
+
+<!-- =========================================================
+     MODAL NUEVO EMPLEADO
+     ========================================================= -->
+
+<div id="modalNuevoEmpleado"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Administración
+                </p>
+
+                <h3>
+                    <i class="bi bi-person-plus"></i>
+                    Nuevo empleado
+                </h3>
+
+            </div>
+
+            <button type="button"
+                    id="btnCerrarNuevoEmpleado"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+        <div class="sgio-modal-body">
+
+            <div id="nuevoEmpleadoError"
+                 class="employee-modal-error">
+            </div>
+
+            <div class="employee-form-field">
+
+                <label for="nuevoNombre">
+                    Nombre *
+                </label>
+
+                <input type="text"
+                       id="nuevoNombre"
+                       placeholder="Nombre completo">
+
+            </div>
+
+            <div class="employee-form-grid">
+
+                <div class="employee-form-field">
+
+                    <label for="nuevoTelegram">
+                        Usuario Telegram *
+                    </label>
+
+                    <input type="text"
+                           id="nuevoTelegram"
+                           placeholder="Ej. cchavez">
+
+                </div>
+
+                <div class="employee-form-field">
+
+                    <label for="nuevoEmail">
+                        Correo
+                    </label>
+
+                    <input type="email"
+                           id="nuevoEmail"
+                           placeholder="correo@dominio.com">
+
+                </div>
+
+            </div>
+
+            <div class="employee-form-field">
+
+                <label>
+                    Días laborales *
+                </label>
+
+                <div class="edit-workdays">
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="MONDAY">
+                        <span>L</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="TUESDAY">
+                        <span>M</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="WEDNESDAY">
+                        <span>X</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="THURSDAY">
+                        <span>J</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="FRIDAY">
+                        <span>V</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="SATURDAY">
+                        <span>S</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox"
+                               value="SUNDAY">
+                        <span>D</span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarNuevoEmpleado"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+            <button type="button"
+                    id="btnGuardarNuevoEmpleado"
+                    class="modal-btn-primary">
+
+                <i class="bi bi-person-plus"></i>
+
+                Crear empleado
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     TOASTS SGIO
+     ========================================================= -->
+
+<div id="toastContainer"
+     class="toast-container"
+     aria-live="polite"
+     aria-atomic="true">
+</div>
+
+
+<script th:src="@{/js/empleados.js}"></script>
+
+</body>
+
+</html>
