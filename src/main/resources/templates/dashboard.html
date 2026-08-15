@@ -160,6 +160,83 @@
 			    </select>
 			
 			</div>
+			
+			<div class="filter-field">
+
+			    <label for="prioridad">
+			        Prioridad
+			    </label>
+			
+			    <select id="prioridad"
+			            name="prioridad">
+			
+			        <option value="">
+			            Todas las prioridades
+			        </option>
+			
+			        <option
+			                th:each="prioridad : ${prioridades}"
+			                th:value="${prioridad}"
+			                th:text="${prioridad}"
+			                th:selected="${prioridad == prioridadSeleccionada}">
+			            MEDIA
+			        </option>
+			
+			    </select>
+			
+			</div>
+			
+			<div class="filter-field">
+
+			    <label for="carpetaOrigen">
+			        Origen
+			    </label>
+			
+			    <select id="carpetaOrigen"
+			            name="carpetaOrigen">
+			
+			        <option value="">
+			            Todos los orígenes
+			        </option>
+			
+			        <option
+			                th:each="origen : ${origenes}"
+			                th:value="${origen}"
+			                th:text="${origen}"
+			                th:selected="${origen == origenSeleccionado}">
+			            Origen
+			        </option>
+			
+			    </select>
+			
+			</div>
+			
+			<div class="filter-field">
+
+			    <label for="fechaDesde">
+			        Fecha desde
+			    </label>
+			
+			    <input id="fechaDesde"
+			           name="fechaDesde"
+			           type="date"
+			           th:value="${fechaDesde}">
+			
+			</div>
+			
+			
+			<div class="filter-field">
+			
+			    <label for="fechaHasta">
+			        Fecha hasta
+			    </label>
+			
+			    <input id="fechaHasta"
+			           name="fechaHasta"
+			           type="date"
+			           th:value="${fechaHasta}">
+			
+			</div>
 	
 	        <div class="filter-actions">
 	

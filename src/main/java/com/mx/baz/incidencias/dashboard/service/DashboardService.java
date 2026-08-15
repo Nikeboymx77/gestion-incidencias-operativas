@@ -16,6 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import com.mx.baz.incidencias.repository.projection.DashboardMetricasProjection;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.mx.baz.incidencias.enums.PrioridadIncidencia;
 
 import java.util.List;
 
@@ -65,6 +69,10 @@ public class DashboardService {
             String texto,
             EstadoIncidencia estado,
             Long empleadoId,
+            PrioridadIncidencia prioridad,
+            String carpetaOrigen,
+            LocalDate fechaDesde,
+            LocalDate fechaHasta,
             int page,
             int size
     ) {
@@ -81,14 +89,39 @@ public class DashboardService {
                         Sort.Direction.DESC,
                         "createdAt"
                 )
+          
         );
+        
+        LocalDateTime fechaDesdeInicio =
+                fechaDesde != null
+                        ? fechaDesde.atStartOfDay()
+                        : null;
 
-        return incidenciaRepository.buscarParaDashboard(
-                textoNormalizado,
-                estado,
-                empleadoId,
-                pageable
-        );
+
+        LocalDateTime fechaHastaExclusiva =
+                fechaHasta != null
+                        ? fechaHasta
+                            .plusDays(1)
+                            .atStartOfDay()
+                        : null;
+        
+        String origenNormalizado =
+                carpetaOrigen == null
+                || carpetaOrigen.isBlank()
+                        ? null
+                        : carpetaOrigen.trim();
+
+        return incidenciaRepository
+                .buscarParaDashboard(
+                        textoNormalizado,
+                        estado,
+                        empleadoId,
+                        prioridad,
+                        origenNormalizado,
+                        fechaDesdeInicio,
+                        fechaHastaExclusiva,
+                        pageable
+                );
     }
     
     @Transactional(readOnly = true)
@@ -112,6 +145,62 @@ public class DashboardService {
         return incidenciaRepository.countByEstado(
                 EstadoIncidencia.CANCELADA
         );
+    }
+    
+    @Transactional(readOnly = true)
+    public DashboardMetricasProjection obtenerMetricas(
+            String texto,
+            EstadoIncidencia estado,
+            Long empleadoId,
+            PrioridadIncidencia prioridad,
+            String carpetaOrigen,
+            LocalDate fechaDesde,
+            LocalDate fechaHasta
+    ) {
+
+        String textoNormalizado =
+                texto == null || texto.isBlank()
+                        ? null
+                        : texto.trim();
+
+
+        LocalDateTime fechaDesdeInicio =
+                fechaDesde != null
+                        ? fechaDesde.atStartOfDay()
+                        : null;
+
+
+        LocalDateTime fechaHastaExclusiva =
+                fechaHasta != null
+                        ? fechaHasta
+                            .plusDays(1)
+                            .atStartOfDay()
+                        : null;
+        
+        String origenNormalizado =
+                carpetaOrigen == null
+                || carpetaOrigen.isBlank()
+                        ? null
+                        : carpetaOrigen.trim();
+
+
+        return incidenciaRepository
+                .obtenerMetricasDashboard(
+                        textoNormalizado,
+                        estado,
+                        empleadoId,
+                        prioridad,
+                        origenNormalizado,
+                        fechaDesdeInicio,
+                        fechaHastaExclusiva
+                );
+    }
+    
+    @Transactional(readOnly = true)
+    public List<String> obtenerOrigenesDisponibles() {
+
+        return incidenciaRepository
+                .obtenerOrigenesDisponibles();
     }
     
 }

@@ -264,9 +264,33 @@ footer {
 
 .filters-form {
     display: grid;
-    grid-template-columns: minmax(260px, 2fr) minmax(170px, 1fr) minmax(230px, 1fr)  auto;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
     align-items: end;
+
     gap: 18px;
+}
+
+
+/* La búsqueda ocupa dos columnas */
+
+.filters-form
+.filter-field:first-child {
+    grid-column: span 2;
+}
+
+
+.filter-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
 }
 
 .filter-field {

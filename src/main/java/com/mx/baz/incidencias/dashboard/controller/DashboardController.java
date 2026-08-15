@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.mx.baz.incidencias.enums.PrioridadIncidencia;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,16 +27,33 @@ public class DashboardController {
             @RequestParam(required = false) String texto,
             @RequestParam(required = false) EstadoIncidencia estado,
             @RequestParam(required = false) Long empleadoId,
-            Model model) {
+            @RequestParam(required = false)
+            PrioridadIncidencia prioridad,
+            @RequestParam(required = false)
+            String carpetaOrigen,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaDesde,
 
-        cargarDashboard(
-                model,
-                texto,
-                estado,
-                empleadoId,
-                page,
-                size
-        );
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaHasta,
+
+            Model model
+    ) {
+
+    	cargarDashboard(
+    	        model,
+    	        texto,
+    	        estado,
+    	        empleadoId,
+    	        prioridad,
+    	        carpetaOrigen,
+    	        fechaDesde,
+    	        fechaHasta,
+    	        page,
+    	        size
+    	);
 
         return "dashboard";
     }
@@ -58,16 +78,33 @@ public class DashboardController {
             @RequestParam(required = false) String texto,
             @RequestParam(required = false) EstadoIncidencia estado,
             @RequestParam(required = false) Long empleadoId,
-            Model model) {
+            @RequestParam(required = false)
+            PrioridadIncidencia prioridad,
+            @RequestParam(required = false)
+            String carpetaOrigen,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaDesde,
 
-        cargarDashboard(
-                model,
-                texto,
-                estado,
-                empleadoId,
-                page,
-                size
-        );
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaHasta,
+
+            Model model
+    ) {
+
+    	cargarDashboard(
+    	        model,
+    	        texto,
+    	        estado,
+    	        empleadoId,
+    	        prioridad,
+    	        carpetaOrigen,
+    	        fechaDesde,
+    	        fechaHasta,
+    	        page,
+    	        size
+    	);
 
         return "fragments/incidencias-table :: tablaIncidencias";
     }
@@ -79,16 +116,33 @@ public class DashboardController {
             @RequestParam(required = false) String texto,
             @RequestParam(required = false) EstadoIncidencia estado,
             @RequestParam(required = false) Long empleadoId,
-            Model model) {
+            @RequestParam(required = false)
+            PrioridadIncidencia prioridad,
+            @RequestParam(required = false)
+            String carpetaOrigen,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaDesde,
 
-        cargarDashboard(
-                model,
-                texto,
-                estado,
-                empleadoId,
-                page,
-                size
-        );
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaHasta,
+
+            Model model
+    ) {
+
+    	cargarDashboard(
+    	        model,
+    	        texto,
+    	        estado,
+    	        empleadoId,
+    	        prioridad,
+    	        carpetaOrigen,
+    	        fechaDesde,
+    	        fechaHasta,
+    	        page,
+    	        size
+    	);
 
         return "fragments/dashboard-cards :: dashboardCards";
     }
@@ -98,17 +152,26 @@ public class DashboardController {
             String texto,
             EstadoIncidencia estado,
             Long empleadoId,
+            PrioridadIncidencia prioridad,
+            String carpetaOrigen,
+            LocalDate fechaDesde,
+            LocalDate fechaHasta,
             int page,
-            int size) {
+            int size
+    ) {
 
-        Page<Incidencia> paginaIncidencias =
-                dashboardService.buscarIncidencias(
-                        texto,
-                        estado,
-                        empleadoId,
-                        page,
-                        size
-                );
+    	Page<Incidencia> paginaIncidencias =
+    			dashboardService.buscarIncidencias(
+    			        texto,
+    			        estado,
+    			        empleadoId,
+    			        prioridad,
+    			        carpetaOrigen,
+    			        fechaDesde,
+    			        fechaHasta,
+    			        page,
+    			        size
+    			);
 
         model.addAttribute(
                 "incidencias",
@@ -133,6 +196,16 @@ public class DashboardController {
         model.addAttribute("texto", texto);
         model.addAttribute("estadoSeleccionado", estado);
         model.addAttribute("empleadoSeleccionado", empleadoId);
+        
+        model.addAttribute(
+                "fechaDesde",
+                fechaDesde
+        );
+
+        model.addAttribute(
+                "fechaHasta",
+                fechaHasta
+        );
 
         model.addAttribute(
                 "estados",
@@ -144,34 +217,67 @@ public class DashboardController {
                 dashboardService.obtenerEmpleadosActivos()
         );
 
+        var metricas =
+        		dashboardService.obtenerMetricas(
+        		        texto,
+        		        estado,
+        		        empleadoId,
+        		        prioridad,
+        		        carpetaOrigen,
+        		        fechaDesde,
+        		        fechaHasta
+        		);
+
+
         model.addAttribute(
                 "total",
-                dashboardService.contarTotal()
+                metricas.getTotal()
         );
 
         model.addAttribute(
                 "pendientes",
-                dashboardService.contarPendientes()
+                metricas.getPendientes()
         );
 
         model.addAttribute(
                 "enProceso",
-                dashboardService.contarEnProceso()
+                metricas.getEnProceso()
         );
 
         model.addAttribute(
                 "resueltas",
-                dashboardService.contarResueltas()
+                metricas.getResueltas()
         );
 
         model.addAttribute(
                 "reabiertas",
-                dashboardService.contarReabiertas()
+                metricas.getReabiertas()
+        );
+
+        model.addAttribute(
+                "canceladas",
+                metricas.getCanceladas()
         );
         
         model.addAttribute(
-                "canceladas",
-                dashboardService.contarCanceladas()
+                "prioridadSeleccionada",
+                prioridad
+        );
+
+        model.addAttribute(
+                "prioridades",
+                PrioridadIncidencia.values()
+        );
+        
+        model.addAttribute(
+                "origenSeleccionado",
+                carpetaOrigen
+        );
+
+        model.addAttribute(
+                "origenes",
+                dashboardService
+                        .obtenerOrigenesDisponibles()
         );
     }
 }

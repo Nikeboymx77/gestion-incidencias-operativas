@@ -22,6 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import com.mx.baz.incidencias.enums.PrioridadIncidencia;
+
+import com.mx.baz.incidencias.repository.projection.DashboardMetricasProjection;
 
 public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
 
@@ -38,31 +41,52 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
        
     
     @Query("""
-    	    SELECT i
-    	    FROM Incidencia i
-    	    LEFT JOIN i.empleadoAsignado e
-    	    WHERE (
-    	        :texto IS NULL
-    	        OR LOWER(i.folio) LIKE LOWER(CONCAT('%', :texto, '%'))
-    	        OR LOWER(i.nombreCliente) LIKE LOWER(CONCAT('%', :texto, '%'))
-    	        OR LOWER(i.clienteUnico) LIKE LOWER(CONCAT('%', :texto, '%'))
-    	        OR LOWER(i.sucursal) LIKE LOWER(CONCAT('%', :texto, '%'))
-    	    )
-    	    AND (
-    	        :estado IS NULL
-    	        OR i.estado = :estado
-    	    )
-    	    AND (
-    	        :empleadoId IS NULL
-    	        OR e.id = :empleadoId
-    	    )
-    	""")
-    	Page<Incidencia> buscarParaDashboard(
-    	        @Param("texto") String texto,
-    	        @Param("estado") EstadoIncidencia estado,
-    	        @Param("empleadoId") Long empleadoId,
-    	        Pageable pageable
-    	);
+            SELECT i
+            FROM Incidencia i
+            LEFT JOIN i.empleadoAsignado e
+            WHERE (
+                :texto IS NULL
+                OR LOWER(i.folio) LIKE LOWER(CONCAT('%', :texto, '%'))
+                OR LOWER(i.nombreCliente) LIKE LOWER(CONCAT('%', :texto, '%'))
+                OR LOWER(i.clienteUnico) LIKE LOWER(CONCAT('%', :texto, '%'))
+                OR LOWER(i.sucursal) LIKE LOWER(CONCAT('%', :texto, '%'))
+            )
+            AND (
+                :estado IS NULL
+                OR i.estado = :estado
+            )
+            AND (
+			    :prioridad IS NULL
+			    OR i.prioridad = :prioridad
+			)
+			AND (
+			    :carpetaOrigen IS NULL
+			    OR i.carpetaOrigen = :carpetaOrigen
+			)
+            AND (
+                :empleadoId IS NULL
+                OR e.id = :empleadoId
+            )
+            AND (
+                :fechaDesde IS NULL
+                OR i.createdAt >= :fechaDesde
+            )
+            AND (
+                :fechaHasta IS NULL
+                OR i.createdAt < :fechaHasta
+            )
+            
+            """)
+    Page<Incidencia> buscarParaDashboard(
+            @Param("texto") String texto,
+            @Param("estado") EstadoIncidencia estado,
+            @Param("empleadoId") Long empleadoId,
+            @Param("prioridad") PrioridadIncidencia prioridad,
+            @Param("carpetaOrigen") String carpetaOrigen,
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta,
+            Pageable pageable
+    );
     
     List<Incidencia> findByEmpleadoAsignadoUsernameTelegramAndEstadoInOrderByFechaCorreoAsc(
             String usernameTelegram,
@@ -148,4 +172,131 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
     	    ORDER BY i.fechaInicio ASC
     	    """)
     	List<Incidencia> obtenerIncidenciasAbiertas();
+    
+    @Query("""
+            SELECT
+                COUNT(i.id) AS total,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN i.estado =
+                                com.mx.baz.incidencias.enums.EstadoIncidencia.PENDIENTE
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS pendientes,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN i.estado =
+                                com.mx.baz.incidencias.enums.EstadoIncidencia.EN_PROCESO
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS enProceso,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN i.estado =
+                                com.mx.baz.incidencias.enums.EstadoIncidencia.RESUELTA
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS resueltas,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN i.estado =
+                                com.mx.baz.incidencias.enums.EstadoIncidencia.REABIERTA
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS reabiertas,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN i.estado =
+                                com.mx.baz.incidencias.enums.EstadoIncidencia.CANCELADA
+                            THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS canceladas
+
+            FROM Incidencia i
+
+            LEFT JOIN i.empleadoAsignado e
+
+            WHERE (
+                :texto IS NULL
+                OR LOWER(i.folio)
+                    LIKE LOWER(CONCAT('%', :texto, '%'))
+                OR LOWER(i.nombreCliente)
+                    LIKE LOWER(CONCAT('%', :texto, '%'))
+                OR LOWER(i.clienteUnico)
+                    LIKE LOWER(CONCAT('%', :texto, '%'))
+                OR LOWER(i.sucursal)
+                    LIKE LOWER(CONCAT('%', :texto, '%'))
+            )
+
+            AND (
+                :estado IS NULL
+                OR i.estado = :estado
+            )
+
+            AND (
+                :empleadoId IS NULL
+                OR e.id = :empleadoId
+            )
+
+            AND (
+                :fechaDesde IS NULL
+                OR i.createdAt >= :fechaDesde
+            )
+
+            AND (
+                :fechaHasta IS NULL
+                OR i.createdAt < :fechaHasta
+            )
+            AND (
+			    :prioridad IS NULL
+			    OR i.prioridad = :prioridad
+			)
+			AND (
+			    :carpetaOrigen IS NULL
+			    OR i.carpetaOrigen = :carpetaOrigen
+			)
+            """)
+    DashboardMetricasProjection obtenerMetricasDashboard(
+            @Param("texto") String texto,
+            @Param("estado") EstadoIncidencia estado,
+            @Param("empleadoId") Long empleadoId,
+            @Param("prioridad") PrioridadIncidencia prioridad,
+            @Param("carpetaOrigen") String carpetaOrigen,
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
+    
+    @Query("""
+            SELECT DISTINCT i.carpetaOrigen
+            FROM Incidencia i
+            WHERE i.carpetaOrigen IS NOT NULL
+              AND TRIM(i.carpetaOrigen) <> ''
+            ORDER BY i.carpetaOrigen
+            """)
+    List<String> obtenerOrigenesDisponibles();
 }
