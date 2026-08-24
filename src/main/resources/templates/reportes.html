@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head(
+        'SGIO | Reportes',
+        ~{::link}
+)}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/reportes.css}">
+          
+
+</head>
+
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+
+<main class="reports-container">
+
+    <!-- NAVEGACIÓN -->
+
+    <div class="reports-navigation">
+
+        <a th:href="@{/dashboard}"
+           class="back-dashboard-button">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Volver al Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- CABECERA -->
+
+    <section class="reports-header">
+
+        <div>
+
+            <p class="eyebrow">
+                SGIO V2
+            </p>
+
+            <h2>
+                Reportes de Incidencias
+            </h2>
+
+            <p>
+                Consulta métricas y comportamiento operativo
+                de las incidencias por periodo.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- PERIODO -->
+
+    <section class="reports-filter-card">
+
+        <div class="reports-filter-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Periodo
+                </p>
+
+                <h3>
+                    Selecciona el rango del reporte
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-periods">
+
+            <button type="button"
+                    class="period-button"
+                    data-period="today">
+
+                Hoy
+
+            </button>
+
+            <button type="button"
+                    class="period-button"
+                    data-period="week">
+
+                Esta semana
+
+            </button>
+
+            <button type="button"
+                    class="period-button"
+                    data-period="month">
+
+                Este mes
+
+            </button>
+
+            <button type="button"
+                    class="period-button"
+                    data-period="previous-month">
+
+                Mes anterior
+
+            </button>
+
+        </div>
+
+
+        <div class="reports-date-form">
+
+            <div class="report-field">
+
+                <label for="fechaDesde">
+                    Fecha desde
+                </label>
+
+                <input id="fechaDesde"
+                       type="date">
+
+            </div>
+
+
+            <div class="report-field">
+
+                <label for="fechaHasta">
+                    Fecha hasta
+                </label>
+
+                <input id="fechaHasta"
+                       type="date">
+
+            </div>
+
+
+            <button id="btnConsultarReporte"
+                    type="button"
+                    class="report-search-button">
+
+                <i class="bi bi-search"></i>
+
+                Consultar
+
+            </button>
+            
+            <button id="btnExportarExcel"
+			        type="button"
+			        class="report-export-button">
+			
+			    <i class="bi bi-file-earmark-excel"></i>
+			
+			    Exportar Excel
+			
+			</button>
+
+        </div>
+        
+        <div class="report-period-summary">
+
+		    <i class="bi bi-calendar3"></i>
+		
+		    <span id="periodoAnalizado">
+		        Periodo analizado
+		    </span>
+		
+		</div>
+		
+		<div class="report-kpi">
+
+			    <div class="report-kpi-icon">
+			        <i class="bi bi-graph-up-arrow"></i>
+			    </div>
+			
+			    <div class="report-kpi-content">
+			
+			        <span>
+			            Porcentaje de resolución
+			        </span>
+			
+			        <div class="report-kpi-value">
+			
+			            <strong id="porcentajeResolucion">
+			                0%
+			            </strong>
+			
+			            <div class="report-kpi-bar">
+			
+			                <div id="porcentajeResolucionBar"
+			                     class="report-kpi-bar-value">
+			                </div>
+			
+			            </div>
+			
+			        </div>
+			
+			    </div>
+			    <div class="report-time-kpis">
+
+				    <div class="report-time-kpi">
+				
+				        <div class="report-time-kpi-icon attention">
+				            <i class="bi bi-stopwatch"></i>
+				        </div>
+				
+				        <div class="report-time-kpi-content">
+				
+				            <span>
+				                Tiempo promedio de atención
+				            </span>
+				
+				            <strong id="tiempoPromedioAtencion">
+				                0 min
+				            </strong>
+				
+				            <small>
+				                Desde la creación hasta que se toma
+				            </small>
+				
+				        </div>
+				
+				    </div>
+				
+				
+				    <div class="report-time-kpi">
+				
+				        <div class="report-time-kpi-icon resolution">
+				            <i class="bi bi-check2-circle"></i>
+				        </div>
+				
+				        <div class="report-time-kpi-content">
+				
+				            <span>
+				                Tiempo promedio de resolución
+				            </span>
+				
+				            <strong id="tiempoPromedioResolucion">
+				                0 min
+				            </strong>
+				
+				            <small>
+				                Desde la creación hasta su resolución
+				            </small>
+				
+				        </div>
+				
+				    </div>
+				
+				</div>			
+			</div>
+
+    </section>
+
+
+    <!-- AQUÍ IRÁN LAS MÉTRICAS -->
+
+    <section class="reports-metrics">
+
+        <article class="report-metric">
+
+            <div class="report-metric-icon total">
+                <i class="bi bi-inboxes"></i>
+            </div>
+
+            <div>
+                <span>Total</span>
+                <strong id="reporteTotal">0</strong>
+            </div>
+
+        </article>
+
+
+        <article class="report-metric">
+
+            <div class="report-metric-icon resolved">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+                <span>Resueltas</span>
+                <strong id="reporteResueltas">0</strong>
+            </div>
+
+        </article>
+
+
+        <article class="report-metric">
+
+            <div class="report-metric-icon pending">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div>
+                <span>Pendientes</span>
+                <strong id="reportePendientes">0</strong>
+            </div>
+
+        </article>
+
+
+        <article class="report-metric">
+
+            <div class="report-metric-icon progress">
+                <i class="bi bi-arrow-repeat"></i>
+            </div>
+
+            <div>
+                <span>En proceso</span>
+                <strong id="reporteEnProceso">0</strong>
+            </div>
+
+        </article>
+        
+        <article class="report-metric">
+
+		    <div class="report-metric-icon reopened">
+		        <i class="bi bi-arrow-counterclockwise"></i>
+		    </div>
+		
+		    <div>
+		        <span>Reabiertas</span>
+		        <strong id="reporteReabiertas">0</strong>
+		    </div>
+		
+		</article>
+		
+		
+		<article class="report-metric">
+		
+		    <div class="report-metric-icon cancelled">
+		        <i class="bi bi-x-circle"></i>
+		    </div>
+		
+		    <div>
+		        <span>Canceladas</span>
+		        <strong id="reporteCanceladas">0</strong>
+		    </div>
+		
+		</article>
+
+    </section>
+
+
+    <!-- GRÁFICAS -->
+
+    <section class="reports-grid">
+
+        <article class="report-chart-card report-chart-wide">
+
+            <div class="report-chart-header">
+
+                <div>
+                    <p class="eyebrow">
+                        Tendencia
+                    </p>
+
+                    <h3>
+                        Incidencias por día
+                    </h3>
+                </div>
+
+            </div>
+
+
+           <div class="report-chart-container">
+
+			    <canvas id="chartIncidenciasDia"></canvas>
+			
+			</div>
+
+        </article>
+
+
+        <article class="report-chart-card">
+
+            <div class="report-chart-header">
+
+                <div>
+                    <p class="eyebrow">
+                        Distribución
+                    </p>
+
+                    <h3>
+                        Incidencias por estado
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="report-chart-container">
+
+			    <canvas id="chartIncidenciasEstado"></canvas>
+			
+			</div>
+
+        </article>
+
+
+        <article class="report-chart-card">
+
+            <div class="report-chart-header">
+
+                <div>
+                    <p class="eyebrow">
+                        Equipo
+                    </p>
+
+                    <h3>
+                        Incidencias por empleado
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="report-chart-container">
+
+			    <canvas id="chartIncidenciasEmpleado"></canvas>
+			
+			</div>
+
+        </article>
+
+    </section>
+
+</main>
+
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script th:src="@{/js/reportes.js}"></script>
+
+</body>
+
+</html>

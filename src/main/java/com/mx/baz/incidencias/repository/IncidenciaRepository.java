@@ -4,6 +4,9 @@ import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import com.mx.baz.incidencias.repository.projection.RankingEmpleadoProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteDiaProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteEmpleadoProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteEstadoProjection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -299,4 +302,102 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
             ORDER BY i.carpetaOrigen
             """)
     List<String> obtenerOrigenesDisponibles();
+    
+    @Query("""
+            SELECT
+                FUNCTION('DATE', i.createdAt) AS fecha,
+                COUNT(i.id) AS total
+            FROM Incidencia i
+            WHERE i.createdAt >= :fechaDesde
+              AND i.createdAt < :fechaHasta
+            GROUP BY FUNCTION('DATE', i.createdAt)
+            ORDER BY FUNCTION('DATE', i.createdAt)
+            """)
+    List<ReporteDiaProjection> obtenerIncidenciasPorDia(
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
+    
+    @Query("""
+            SELECT
+                i.estado AS estado,
+                COUNT(i.id) AS total
+            FROM Incidencia i
+            WHERE i.createdAt >= :fechaDesde
+              AND i.createdAt < :fechaHasta
+            GROUP BY i.estado
+            ORDER BY COUNT(i.id) DESC
+            """)
+    List<ReporteEstadoProjection> obtenerIncidenciasPorEstado(
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
+    
+    @Query("""
+            SELECT
+                e.id AS empleadoId,
+                e.nombre AS nombre,
+                COUNT(i.id) AS total
+            FROM Incidencia i
+            JOIN i.empleadoAsignado e
+            WHERE i.createdAt >= :fechaDesde
+              AND i.createdAt < :fechaHasta
+            GROUP BY e.id, e.nombre
+            ORDER BY COUNT(i.id) DESC
+            """)
+    List<ReporteEmpleadoProjection> obtenerIncidenciasPorEmpleado(
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
+    
+    @Query("""
+            SELECT AVG(
+                TIMESTAMPDIFF(
+                    MINUTE,
+                    i.createdAt,
+                    i.fechaInicio
+                )
+            )
+            FROM Incidencia i
+            WHERE i.createdAt >= :fechaDesde
+              AND i.createdAt < :fechaHasta
+              AND i.fechaInicio IS NOT NULL
+            """)
+    Double obtenerTiempoPromedioAtencionMinutos(
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
+    
+    @Query("""
+            SELECT AVG(
+                TIMESTAMPDIFF(
+                    MINUTE,
+                    i.createdAt,
+                    i.fechaResolucion
+                )
+            )
+            FROM Incidencia i
+            WHERE i.createdAt >= :fechaDesde
+              AND i.createdAt < :fechaHasta
+              AND i.estado =
+                  com.mx.baz.incidencias.enums.EstadoIncidencia.RESUELTA
+              AND i.fechaResolucion IS NOT NULL
+            """)
+    Double obtenerTiempoPromedioResolucionMinutos(
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
+    
+    @Query("""
+            SELECT i
+            FROM Incidencia i
+            LEFT JOIN FETCH i.empleadoAsignado e
+            WHERE i.createdAt >= :fechaDesde
+              AND i.createdAt < :fechaHasta
+            ORDER BY i.createdAt DESC
+            """)
+    List<Incidencia> obtenerIncidenciasParaReporte(
+            @Param("fechaDesde") LocalDateTime fechaDesde,
+            @Param("fechaHasta") LocalDateTime fechaHasta
+    );
 }

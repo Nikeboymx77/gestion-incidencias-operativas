@@ -1,0 +1,740 @@
+/* =========================================================
+   SGIO V2 - REPORTES
+   ========================================================= */
+
+.reports-container {
+    width: min(1400px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 28px 0 50px;
+}
+
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+.reports-navigation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+
+.back-dashboard-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    color: #ffffff;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    border-radius: 10px;
+
+    background: #1e3a5f;
+
+    box-shadow:
+        0 4px 12px
+        rgba(30, 58, 95, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.back-dashboard-button:hover {
+    color: #ffffff;
+    background: #172f4f;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CABECERA
+   ========================================================= */
+
+.reports-header {
+    padding: 24px 26px;
+    margin-bottom: 22px;
+
+    border: 1px solid #dbe4ee;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 6px 18px
+        rgba(15, 23, 42, 0.06);
+}
+
+
+.reports-header h2 {
+    margin: 3px 0 7px;
+    color: #1e293b;
+}
+
+
+.reports-header > div > p:last-child {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   FILTRO DE PERIODO
+   ========================================================= */
+
+.reports-filter-card {
+    padding: 22px 24px;
+    margin-bottom: 22px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 6px 18px
+        rgba(15, 23, 42, 0.06);
+}
+
+
+.reports-filter-header h3 {
+    margin: 3px 0 0;
+}
+
+
+.quick-periods {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.period-button {
+    padding: 9px 15px;
+
+    color: #475569;
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+}
+
+
+.period-button:hover,
+.period-button.active {
+    color: #1d4ed8;
+
+    border-color: #93c5fd;
+
+    background: #eff6ff;
+}
+
+
+.reports-date-form {
+    display: grid;
+
+    grid-template-columns:
+        minmax(180px, 240px)
+        minmax(180px, 240px)
+        auto
+        auto;
+
+    align-items: end;
+
+    gap: 14px;
+
+    margin-top: 18px;
+}
+
+
+.report-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.report-field label {
+    color: #64748b;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+.report-field input {
+    min-height: 42px;
+
+    padding: 9px 11px;
+
+    color: #1e293b;
+
+    font: inherit;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #ffffff;
+}
+
+
+.report-field input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.10);
+}
+
+
+.report-search-button {
+    display: inline-flex;
+
+    min-height: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 9px 17px;
+
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 700;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    cursor: pointer;
+}
+
+
+.report-search-button:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================================================
+   MÉTRICAS
+   ========================================================= */
+
+.reports-metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+
+.report-metric {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 19px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 14px
+        rgba(15, 23, 42, 0.05);
+}
+
+
+.report-metric-icon {
+    display: flex;
+
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.25rem;
+
+    border-radius: 12px;
+}
+
+
+.report-metric-icon.total {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+
+.report-metric-icon.resolved {
+    color: #15803d;
+    background: #f0fdf4;
+}
+
+
+.report-metric-icon.pending {
+    color: #b45309;
+    background: #fffbeb;
+}
+
+
+.report-metric-icon.progress {
+    color: #7c3aed;
+    background: #f5f3ff;
+}
+
+
+.report-metric span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #64748b;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+
+.report-metric strong {
+    color: #0f172a;
+
+    font-size: 1.45rem;
+}
+
+
+/* =========================================================
+   GRÁFICAS
+   ========================================================= */
+
+.reports-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+.report-chart-card {
+    overflow: hidden;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 6px 18px
+        rgba(15, 23, 42, 0.06);
+}
+
+
+.report-chart-wide {
+    grid-column: 1 / -1;
+}
+
+
+.report-chart-header {
+    padding: 20px 22px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+.report-chart-header h3 {
+    margin: 2px 0 0;
+}
+
+
+.report-chart-placeholder {
+    display: flex;
+
+    min-height: 260px;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #94a3b8;
+}
+
+
+.report-chart-placeholder i {
+    font-size: 2rem;
+}
+
+
+.report-chart-placeholder span {
+    font-size: 0.86rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .reports-metrics {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .report-chart-wide {
+        grid-column: auto;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .reports-container {
+        width: min(100% - 24px, 1400px);
+    }
+
+
+    .reports-date-form {
+        grid-template-columns: 1fr;
+    }
+
+
+    .reports-metrics {
+        grid-template-columns: 1fr;
+    }
+
+
+    .report-search-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .report-search-button,
+    .report-export-button {
+        width: 100%;
+    }
+
+}
+
+.report-chart-container {
+    position: relative;
+
+    width: 100%;
+    height: 340px;
+
+    padding: 22px;
+}
+
+.report-metric-icon.reopened {
+    color: #7c3aed;
+    background: #f5f3ff;
+}
+
+
+.report-metric-icon.cancelled {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.report-period-summary {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 18px;
+    padding-top: 16px;
+
+    color: #64748b;
+
+    font-size: 0.84rem;
+    font-weight: 600;
+
+    border-top: 1px solid #eef2f7;
+}
+
+
+.report-period-summary i {
+    color: #2563eb;
+}
+
+/* =========================================================
+   KPI - PORCENTAJE DE RESOLUCIÓN
+   ========================================================= */
+
+.report-kpi {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 16px;
+    padding: 16px 18px;
+
+    border: 1px solid #dcfce7;
+    border-radius: 12px;
+
+    background: #f0fdf4;
+}
+
+
+.report-kpi-icon {
+    display: flex;
+
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #15803d;
+
+    font-size: 1.2rem;
+
+    border-radius: 11px;
+
+    background: #dcfce7;
+}
+
+
+.report-kpi-content {
+    width: 100%;
+}
+
+
+.report-kpi-content > span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #64748b;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+
+.report-kpi-value {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+.report-kpi-value strong {
+    min-width: 60px;
+
+    color: #166534;
+
+    font-size: 1.35rem;
+}
+
+
+.report-kpi-bar {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #dcfce7;
+}
+
+
+.report-kpi-bar-value {
+    width: 0;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #16a34a;
+
+    transition: width 0.4s ease;
+}
+
+/* =========================================================
+   KPI - TIEMPOS PROMEDIO
+   ========================================================= */
+
+.report-time-kpis {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-top: 14px;
+}
+
+
+.report-time-kpi {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 17px 18px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+
+.report-time-kpi-icon {
+    display: flex;
+
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.25rem;
+
+    border-radius: 12px;
+}
+
+
+.report-time-kpi-icon.attention {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+
+.report-time-kpi-icon.resolution {
+    color: #15803d;
+    background: #f0fdf4;
+}
+
+
+.report-time-kpi-content span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #64748b;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+
+.report-time-kpi-content strong {
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 1.35rem;
+}
+
+
+.report-time-kpi-content small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 0.72rem;
+}
+
+
+@media (max-width: 650px) {
+
+    .report-time-kpis {
+        grid-template-columns: 1fr;
+    }
+}
+
+.report-export-button {
+    display: inline-flex;
+
+    min-height: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 9px 17px;
+
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 700;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: #15803d;
+
+    cursor: pointer;
+}
+
+
+.report-export-button:hover {
+    background: #166534;
+}

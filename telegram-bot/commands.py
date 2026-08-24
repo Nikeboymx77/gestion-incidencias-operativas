@@ -157,30 +157,76 @@ async def pendientes_command(
         )
 
 
-async def estado_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def estado_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+
     try:
+
         if not context.args:
-            await update.message.reply_text("Uso: /estado INC-1001")
+
+            await update.effective_message.reply_text(
+                "⚠️ Uso correcto:\n\n"
+                "/estado INC-1001"
+            )
+
             return
 
-        folio = context.args[0]
-        inc = obtener_incidencia(folio)
-        empleado = inc.get("empleadoAsignado") or {}
 
-        mensaje = (
-            f"📌 Incidencia {inc.get('folio')}\n"
-            f"📝 Asunto: {inc.get('asunto')}\n"
-            f"⚠ Prioridad: {inc.get('prioridad')}\n"
-            f"📍 Estado: {inc.get('estado')}\n"
-            f"👤 Asignado: {empleado.get('nombre', 'Sin asignar')}\n"
-            f"📂 Carpeta: {inc.get('carpetaOrigen')}\n"
-            f"🧾 Descripción: {inc.get('descripcion')}"
+        folio = (
+            context.args[0]
+            .strip()
+            .upper()
         )
 
-        await update.message.reply_text(mensaje)
 
-    except Exception as e:
-        await update.message.reply_text(f"❌ Error consultando incidencia: {e}")
+        inc = obtener_incidencia(
+            folio
+        )
+
+
+        empleado = (
+            inc.get("empleadoAsignado")
+            or {}
+        )
+
+
+        mensaje = (
+            f"📌 Incidencia "
+            f"{inc.get('folio', folio)}\n\n"
+
+            f"📝 Asunto: "
+            f"{inc.get('asunto') or 'Sin asunto'}\n"
+
+            f"⚠️ Prioridad: "
+            f"{inc.get('prioridad') or 'Sin prioridad'}\n"
+
+            f"📍 Estado: "
+            f"{inc.get('estado') or 'Sin estado'}\n"
+
+            f"👤 Asignado: "
+            f"{empleado.get('nombre', 'Sin asignar')}\n"
+
+            f"📂 Carpeta: "
+            f"{inc.get('carpetaOrigen') or 'Sin carpeta'}\n\n"
+
+            f"🧾 Descripción:\n"
+            f"{inc.get('descripcion') or 'Sin descripción'}"
+        )
+
+
+        await enviar_mensaje_largo(
+            update,
+            mensaje
+        )
+
+
+    except Exception as error:
+
+        await update.effective_message.reply_text(
+            f"❌ Error consultando incidencia: {error}"
+        )
 
 
 async def resuelto_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -550,9 +596,6 @@ async def atrasadas_command(
         parse_mode="Markdown"
     )
     
-LIMITE_MENSAJE_TELEGRAM = 4000
-
-
 async def enviar_mensaje_largo(
         update: Update,
         mensaje: str,
