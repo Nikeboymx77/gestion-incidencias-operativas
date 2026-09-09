@@ -272,10 +272,26 @@
                 <i class="bi bi-inboxes"></i>
             </div>
 
-            <div>
-                <span>Total</span>
-                <strong id="reporteTotal">0</strong>
-            </div>
+            <div class="report-metric-content">
+
+			    <span>Total</span>
+			
+			    <strong id="reporteTotal">
+			        0
+			    </strong>
+			
+			    <div id="comparativoTotal"
+			         class="report-comparison neutral">
+			
+			        <i class="bi bi-dash"></i>
+			
+			        <span>
+			            Sin comparación
+			        </span>
+			
+			    </div>
+			
+			</div>
 
         </article>
 
@@ -289,6 +305,11 @@
             <div>
                 <span>Resueltas</span>
                 <strong id="reporteResueltas">0</strong>
+                <div id="comparativoResueltas"
+				     class="report-comparison neutral">
+				    <i class="bi bi-dash"></i>
+				    <span>Sin comparación</span>
+				</div>
             </div>
 
         </article>
@@ -303,6 +324,11 @@
             <div>
                 <span>Pendientes</span>
                 <strong id="reportePendientes">0</strong>
+                <div id="comparativoPendientes"
+				     class="report-comparison neutral">
+				    <i class="bi bi-dash"></i>
+				    <span>Sin comparación</span>
+				</div>
             </div>
 
         </article>
@@ -317,6 +343,11 @@
             <div>
                 <span>En proceso</span>
                 <strong id="reporteEnProceso">0</strong>
+                <div id="comparativoEnProceso"
+				     class="report-comparison neutral">
+				    <i class="bi bi-dash"></i>
+				    <span>Sin comparación</span>
+				</div>
             </div>
 
         </article>
@@ -330,6 +361,11 @@
 		    <div>
 		        <span>Reabiertas</span>
 		        <strong id="reporteReabiertas">0</strong>
+		        <div id="comparativoReabiertas"
+				     class="report-comparison neutral">
+				    <i class="bi bi-dash"></i>
+				    <span>Sin comparación</span>
+				</div>
 		    </div>
 		
 		</article>
@@ -344,6 +380,11 @@
 		    <div>
 		        <span>Canceladas</span>
 		        <strong id="reporteCanceladas">0</strong>
+		        <div id="comparativoCanceladas"
+				     class="report-comparison neutral">
+				    <i class="bi bi-dash"></i>
+				    <span>Sin comparación</span>
+				</div>
 		    </div>
 		
 		</article>
@@ -431,8 +472,239 @@
 			</div>
 
         </article>
+        
+        <!-- CARGA OPERATIVA -->
+
+		<article class="report-chart-card report-chart-wide">
+		
+		    <div class="report-chart-header">
+		
+		        <div>
+		
+		            <p class="eyebrow">
+		                Carga actual
+		            </p>
+		
+		            <h3>
+		                Carga operativa del equipo
+		            </h3>
+		
+		            <p class="report-chart-description">
+		                Incidencias activas actualmente asignadas
+		                a cada integrante del equipo.
+		            </p>
+		
+		        </div>
+		
+		    </div>
+		
+		
+		    <div class="report-chart-container
+		                report-chart-container-large">
+		
+		        <canvas id="chartCargaOperativa"></canvas>
+		
+		    </div>
+		
+		</article>
+		
+		<!-- EVOLUCIÓN DE TIEMPOS -->
+
+		<article class="report-chart-card report-chart-wide">
+		
+		    <div class="report-chart-header">
+		
+		        <div>
+		
+		            <p class="eyebrow">
+		                Tiempos
+		            </p>
+		
+		            <h3>
+		                Evolución de tiempos operativos
+		            </h3>
+		
+		            <p class="report-chart-description">
+		                Comportamiento diario del tiempo promedio
+		                de atención y resolución.
+		            </p>
+		
+		        </div>
+		
+		    </div>
+		
+		
+		    <div class="report-chart-container
+		                report-chart-container-large">
+		
+		        <canvas id="chartEvolucionTiempos"></canvas>
+		
+		    </div>
+		
+		</article>
+		
+		<!-- INCIDENCIAS CON MAYOR ANTIGÜEDAD -->
+
+		<article class="report-chart-card report-chart-wide">
+		
+		    <div class="report-chart-header">
+		
+		        <div>
+		            <p class="eyebrow">
+		                Atención requerida
+		            </p>
+		
+		            <h3>
+		                Incidencias con mayor antigüedad
+		            </h3>
+		
+		            <p class="report-chart-description">
+		                Las 10 incidencias activas que llevan
+		                más tiempo sin resolverse.
+		            </p>
+		        </div>
+		
+		        <div class="old-incidents-summary">
+		            <i class="bi bi-exclamation-triangle"></i>
+		            <span id="totalIncidenciasActivas">
+		                0 incidencias activas
+		            </span>
+		        </div>
+		
+		    </div>
+		
+		
+		    <div class="old-incidents-table-wrapper">
+		
+		        <table class="old-incidents-table">
+		
+		            <thead>
+		                <tr>
+		                    <th>Folio</th>
+		                    <th>Asunto</th>
+		                    <th>Estado</th>
+		                    <th>Empleado</th>
+		                    <th>Antigüedad</th>
+		                </tr>
+		            </thead>
+		
+		            <tbody id="tablaIncidenciasAntiguas">
+		
+		                <tr>
+		                    <td colspan="5"
+		                        class="performance-empty">
+		                        Consultando incidencias activas...
+		                    </td>
+		                </tr>
+		
+		            </tbody>
+		
+		        </table>
+		
+		    </div>
+		
+		</article>
 
     </section>
+    
+    <!-- DESEMPEÑO POR EMPLEADO -->
+
+	<section class="employee-performance-section">
+	
+	    <div class="employee-performance-header">
+	
+	        <div>
+	
+	            <p class="eyebrow">
+	                Equipo
+	            </p>
+	
+	            <h3>
+	                Desempeño por empleado
+	            </h3>
+	
+	            <p>
+	                Indicadores de resolución y tiempos
+	                durante el periodo seleccionado.
+	            </p>
+	
+	        </div>
+	
+	        <div class="employee-performance-legend">
+	
+	            <i class="bi bi-trophy"></i>
+	
+	            <span>
+	                Ordenado por porcentaje de resolución
+	            </span>
+	
+	        </div>
+	
+	    </div>
+	
+	
+	    <div class="employee-performance-table-wrapper">
+	
+	        <table class="employee-performance-table">
+	
+	            <thead>
+	
+	                <tr>
+	
+	                    <th class="performance-position">
+	                        #
+	                    </th>
+	
+	                    <th>
+	                        Empleado
+	                    </th>
+	
+	                    <th>
+	                        Incidencias
+	                    </th>
+	
+	                    <th>
+	                        Resueltas
+	                    </th>
+	
+	                    <th>
+	                        Resolución
+	                    </th>
+	
+	                    <th>
+	                        Tiempo atención
+	                    </th>
+	
+	                    <th>
+	                        Tiempo resolución
+	                    </th>
+	
+	                </tr>
+	
+	            </thead>
+	
+	
+	            <tbody id="tablaDesempenoEmpleados">
+	
+	                <tr>
+	
+	                    <td colspan="7"
+	                        class="performance-empty">
+	
+	                        Selecciona un periodo para consultar
+	                        el desempeño del equipo.
+	
+	                    </td>
+	
+	                </tr>
+	
+	            </tbody>
+	
+	        </table>
+	
+	    </div>
+	
+	</section>
 
 </main>
 

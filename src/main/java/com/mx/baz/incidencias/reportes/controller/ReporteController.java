@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import com.mx.baz.incidencias.reportes.dto.ReporteTiemposResponse;
 import java.time.LocalDate;
 import java.util.List;
-import com.mx.baz.incidencias.reportes.service.ReporteExcelService;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
+import com.mx.baz.incidencias.reportes.dto.ReporteCargaEmpleadoResponse;
+import com.mx.baz.incidencias.reportes.dto.ReporteComparativoResponse;
+import com.mx.baz.incidencias.reportes.dto.ReporteTendenciaComparativaResponse;
+import com.mx.baz.incidencias.reportes.dto.ReporteDesempenoEmpleadoResponse;
+import com.mx.baz.incidencias.reportes.dto.ReporteEvolucionTiemposResponse;
+import com.mx.baz.incidencias.reportes.dto.ReporteIncidenciaAntiguaResponse;
 
 @RestController
 @RequestMapping("/api/reportes")
@@ -129,6 +135,33 @@ public class ReporteController {
         );
     }
     
+    
+    @GetMapping("/comparativo")
+    public ResponseEntity<ReporteComparativoResponse>
+    obtenerComparativo(
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaDesde,
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaHasta
+    ) {
+
+        return ResponseEntity.ok(
+                reporteService
+                        .obtenerComparativo(
+                                fechaDesde,
+                                fechaHasta
+                        )
+        );
+    }
+    
     @GetMapping("/exportar/excel")
     public ResponseEntity<byte[]> exportarExcel(
 
@@ -176,6 +209,104 @@ public class ReporteController {
                 .body(
                         archivo
                 );
+    }
+    
+    @GetMapping("/tendencia-comparativa")
+    public ResponseEntity<ReporteTendenciaComparativaResponse>
+    obtenerTendenciaComparativa(
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaDesde,
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaHasta
+    ) {
+
+        return ResponseEntity.ok(
+                reporteService
+                        .obtenerTendenciaComparativa(
+                                fechaDesde,
+                                fechaHasta
+                        )
+        );
+    }
+    
+    @GetMapping("/desempeno-por-empleado")
+    public ResponseEntity<List<ReporteDesempenoEmpleadoResponse>>
+    obtenerDesempenoPorEmpleado(
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaDesde,
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaHasta
+    ) {
+
+        return ResponseEntity.ok(
+                reporteService
+                        .obtenerDesempenoPorEmpleado(
+                                fechaDesde,
+                                fechaHasta
+                        )
+        );
+    }
+    
+    @GetMapping("/carga-operativa")
+    public ResponseEntity<List<ReporteCargaEmpleadoResponse>>
+    obtenerCargaOperativaPorEmpleado() {
+
+        return ResponseEntity.ok(
+                reporteService
+                        .obtenerCargaOperativaPorEmpleado()
+        );
+    }
+    
+    @GetMapping("/evolucion-tiempos")
+    public ResponseEntity<List<ReporteEvolucionTiemposResponse>>
+    obtenerEvolucionTiempos(
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaDesde,
+
+            @RequestParam
+            @DateTimeFormat(
+                    iso = DateTimeFormat.ISO.DATE
+            )
+            LocalDate fechaHasta
+    ) {
+
+        return ResponseEntity.ok(
+                reporteService
+                        .obtenerEvolucionTiempos(
+                                fechaDesde,
+                                fechaHasta
+                        )
+        );
+    }
+    
+    @GetMapping("/incidencias-antiguas")
+    public ResponseEntity<List<ReporteIncidenciaAntiguaResponse>>
+    obtenerIncidenciasActivasMasAntiguas() {
+
+        return ResponseEntity.ok(
+                reporteService
+                        .obtenerIncidenciasActivasMasAntiguas()
+        );
     }
     
 }

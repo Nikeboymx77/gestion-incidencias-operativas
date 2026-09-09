@@ -3,19 +3,10 @@
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org">
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        SGIO | Detalle de Empleado
-    </title>
-
-    <link rel="stylesheet"
-          th:href="@{/css/dashboard.css}">
+<head th:replace="~{fragments/head :: head(
+        'SGIO | Detalle de Empleado',
+        ~{::link}
+)}">
 
     <link rel="stylesheet"
           th:href="@{/css/empleado-detalle.css}">
@@ -26,28 +17,7 @@
 <body>
 
 
-<header class="topbar">
-
-    <div>
-
-        <h1>SGIO</h1>
-
-        <p>
-            Sistema de Gestión de Incidencias Operativas
-        </p>
-
-    </div>
-
-
-    <div class="status">
-
-        <span class="status-dot"></span>
-
-        Sistema activo
-
-    </div>
-
-</header>
+<header th:replace="~{fragments/header :: header}"></header>
 
 
 <main class="employee-detail-container">

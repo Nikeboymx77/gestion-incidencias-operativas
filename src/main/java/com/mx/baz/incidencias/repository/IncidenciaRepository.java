@@ -4,9 +4,13 @@ import com.mx.baz.incidencias.entity.Empleado;
 import com.mx.baz.incidencias.entity.Incidencia;
 import com.mx.baz.incidencias.enums.EstadoIncidencia;
 import com.mx.baz.incidencias.repository.projection.RankingEmpleadoProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteCargaEmpleadoProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteDesempenoEmpleadoProjection;
 import com.mx.baz.incidencias.repository.projection.ReporteDiaProjection;
 import com.mx.baz.incidencias.repository.projection.ReporteEmpleadoProjection;
 import com.mx.baz.incidencias.repository.projection.ReporteEstadoProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteEvolucionTiemposProjection;
+import com.mx.baz.incidencias.repository.projection.ReporteIncidenciaAntiguaProjection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -400,4 +404,206 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
             @Param("fechaDesde") LocalDateTime fechaDesde,
             @Param("fechaHasta") LocalDateTime fechaHasta
     );
+    
+    @Query(value = """
+            SELECT
+                e.id AS empleadoId,
+                e.nombre AS nombre,
+
+                COUNT(i.id) AS totalIncidencias,
+
+                SUM(
+                    CASE
+                        WHEN i.estado = 'RESUELTA'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS resueltas,
+
+                AVG(
+                    CASE
+                        WHEN i.fecha_inicio IS NOT NULL
+                        THEN TIMESTAMPDIFF(
+                            MINUTE,
+                            i.created_at,
+                            i.fecha_inicio
+                        )
+                        ELSE NULL
+                    END
+                ) AS tiempoPromedioAtencionMinutos,
+
+                AVG(
+                    CASE
+                        WHEN i.estado = 'RESUELTA'
+                             AND i.fecha_resolucion IS NOT NULL
+                        THEN TIMESTAMPDIFF(
+                            MINUTE,
+                            i.created_at,
+                            i.fecha_resolucion
+                        )
+                        ELSE NULL
+                    END
+                ) AS tiempoPromedioResolucionMinutos
+
+            FROM incidencias i
+
+            INNER JOIN empleados e
+                ON e.id = i.empleado_asignado_id
+
+            WHERE i.created_at >= :fechaDesde
+              AND i.created_at < :fechaHasta
+
+            GROUP BY
+                e.id,
+                e.nombre
+
+            ORDER BY
+                COUNT(i.id) DESC
+            """,
+            nativeQuery = true)
+    List<ReporteDesempenoEmpleadoProjection>
+    obtenerDesempenoPorEmpleado(
+            @Param("fechaDesde")
+            LocalDateTime fechaDesde,
+
+            @Param("fechaHasta")
+            LocalDateTime fechaHasta
+    );
+    
+    @Query(value = """
+            SELECT
+                e.id AS empleadoId,
+                e.nombre AS nombre,
+
+                COUNT(i.id) AS totalActivas,
+
+                SUM(
+                    CASE
+                        WHEN i.estado = 'PENDIENTE'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS pendientes,
+
+                SUM(
+                    CASE
+                        WHEN i.estado = 'EN_PROCESO'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS enProceso,
+
+                SUM(
+                    CASE
+                        WHEN i.estado = 'REABIERTA'
+                        THEN 1
+                        ELSE 0
+                    END
+                ) AS reabiertas
+
+            FROM incidencias i
+
+            INNER JOIN empleados e
+                ON e.id = i.empleado_asignado_id
+
+            WHERE i.estado IN (
+                'PENDIENTE',
+                'EN_PROCESO',
+                'REABIERTA'
+            )
+
+            GROUP BY
+                e.id,
+                e.nombre
+
+            ORDER BY
+                COUNT(i.id) DESC
+            """,
+            nativeQuery = true)
+    List<ReporteCargaEmpleadoProjection>
+    obtenerCargaOperativaPorEmpleado();
+    
+    @Query(value = """
+            SELECT
+                DATE(i.created_at) AS fecha,
+
+                AVG(
+                    CASE
+                        WHEN i.fecha_inicio IS NOT NULL
+                        THEN TIMESTAMPDIFF(
+                            MINUTE,
+                            i.created_at,
+                            i.fecha_inicio
+                        )
+                        ELSE NULL
+                    END
+                ) AS tiempoPromedioAtencionMinutos,
+
+                AVG(
+                    CASE
+                        WHEN i.estado = 'RESUELTA'
+                             AND i.fecha_resolucion IS NOT NULL
+                        THEN TIMESTAMPDIFF(
+                            MINUTE,
+                            i.created_at,
+                            i.fecha_resolucion
+                        )
+                        ELSE NULL
+                    END
+                ) AS tiempoPromedioResolucionMinutos
+
+            FROM incidencias i
+
+            WHERE i.created_at >= :fechaDesde
+              AND i.created_at < :fechaHasta
+
+            GROUP BY
+                DATE(i.created_at)
+
+            ORDER BY
+                DATE(i.created_at)
+            """,
+            nativeQuery = true)
+    List<ReporteEvolucionTiemposProjection>
+    obtenerEvolucionTiempos(
+            @Param("fechaDesde")
+            LocalDateTime fechaDesde,
+
+            @Param("fechaHasta")
+            LocalDateTime fechaHasta
+    );
+    
+    @Query(value = """
+            SELECT
+                i.id AS incidenciaId,
+                i.folio AS folio,
+                i.asunto AS asunto,
+                i.estado AS estado,
+                i.prioridad AS prioridad,
+                e.id AS empleadoId,
+                e.nombre AS empleado,
+                i.created_at AS fechaCreacion,
+                TIMESTAMPDIFF(
+                    MINUTE,
+                    i.created_at,
+                    NOW()
+                ) AS antiguedadMinutos
+
+            FROM incidencias i
+
+            LEFT JOIN empleados e
+                ON e.id = i.empleado_asignado_id
+
+            WHERE i.estado IN (
+                'PENDIENTE',
+                'EN_PROCESO',
+                'REABIERTA'
+            )
+
+            ORDER BY
+                i.created_at ASC
+            """,
+            nativeQuery = true)
+    List<ReporteIncidenciaAntiguaProjection>
+    obtenerIncidenciasActivasMasAntiguas();
 }

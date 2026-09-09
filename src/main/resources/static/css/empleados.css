@@ -111,28 +111,26 @@
 
     margin-bottom: 22px;
 
-    border: 1px solid #dbe4ee;
+    border: 1px solid var(--border);
     border-radius: 16px;
 
-    background: #ffffff;
+    background: var(--surface);
 
-    box-shadow:
-        0 6px 18px
-        rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 
 .employees-header h2 {
     margin: 3px 0 7px;
 
-    color: #1e293b;
+    color: var(--text-strong);
 }
 
 
 .employees-header > div > p:last-child {
     margin: 0;
 
-    color: #64748b;
+    color: var(--muted);
 
     font-size: 0.9rem;
 }
@@ -163,14 +161,12 @@
 
     padding: 19px;
 
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border);
     border-radius: 14px;
 
-    background: #ffffff;
+    background: var(--surface);
 
-    box-shadow:
-        0 4px 14px
-        rgba(15, 23, 42, 0.05);
+    box-shadow: var(--shadow);
 }
 
 
@@ -221,7 +217,7 @@
 
     margin-bottom: 3px;
 
-    color: #64748b;
+    color: var(--muted);
 
     font-size: 0.78rem;
     font-weight: 600;
@@ -229,7 +225,7 @@
 
 
 .employee-metric strong {
-    color: #0f172a;
+    color: var(--text-strong);
 
     font-size: 1.45rem;
 }
@@ -242,14 +238,12 @@
 .employees-card {
     overflow: hidden;
 
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border);
     border-radius: 16px;
 
-    background: #ffffff;
+    background: var(--surface);
 
-    box-shadow:
-        0 6px 18px
-        rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow);
 }
 
 
@@ -263,14 +257,14 @@
 
     padding: 20px 22px;
 
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
 }
 
 
 .employees-card-header h3 {
     margin: 2px 0 0;
 
-    color: #1e293b;
+     color: var(--text-strong);
 }
 
 
@@ -284,25 +278,24 @@
 
     padding: 9px 14px;
 
-    color: #475569;
+    color: var(--text);
 
     font: inherit;
     font-size: 0.82rem;
     font-weight: 600;
 
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--border);
     border-radius: 9px;
 
-    background: #ffffff;
+    background: var(--input-background);
 
     cursor: pointer;
 }
 
-
 .employees-refresh-button:hover {
-    color: #1e293b;
+    color: var(--text-strong);
 
-    background: #f8fafc;
+    background: var(--surface-hover);
 }
 
 
@@ -321,7 +314,7 @@
 .employees-table th {
     padding: 13px 16px;
 
-    color: #64748b;
+    color: var(--muted);
 
     font-size: 0.72rem;
     font-weight: 700;
@@ -331,18 +324,27 @@
 
     letter-spacing: 0.4px;
 
-    background: #f8fafc;
+    background: var(--surface-secondary);
 }
 
 
 .employees-table td {
     padding: 15px 16px;
 
-    color: #475569;
+    color: var(--text);
 
     font-size: 0.84rem;
 
-    border-top: 1px solid #eef2f7;
+    border-top: 1px solid var(--border);
+}
+
+.employees-table tbody tr {
+    transition:
+        background-color 0.18s ease;
+}
+
+.employees-table tbody tr:hover {
+    background: var(--surface-hover);
 }
 
 
@@ -369,12 +371,11 @@
 
 
 .employee-name strong {
-    color: #1e293b;
+    color: var(--text-strong);
 }
 
-
 .employee-name span {
-    color: #94a3b8;
+    color: var(--muted);
 
     font-size: 0.75rem;
 }
@@ -557,13 +558,14 @@
 
     overflow: hidden;
 
+    border: 1px solid var(--border);
     border-radius: 16px;
 
-    background: #ffffff;
+    color: var(--text);
 
-    box-shadow:
-        0 25px 60px
-        rgba(15, 23, 42, 0.25);
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
 }
 
 .sgio-modal-header {
@@ -576,11 +578,13 @@
 
     padding: 22px 24px;
 
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border);
 }
 
 .sgio-modal-header h3 {
     margin: 3px 0 0;
+
+    color: var(--text-strong);
 }
 
 .sgio-modal-close {
@@ -592,7 +596,7 @@
     width: 36px;
     height: 36px;
 
-    color: #64748b;
+    color: var(--muted);
 
     border: 0;
     border-radius: 9px;
@@ -603,10 +607,11 @@
 }
 
 .sgio-modal-close:hover {
-    color: #1e293b;
+    color: var(--text-strong);
 
-    background: #f1f5f9;
+    background: var(--surface-hover);
 }
+
 
 .sgio-modal-body {
     padding: 24px;
@@ -621,9 +626,9 @@
 
     padding: 18px 24px;
 
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--border);
 
-    background: #f8fafc;
+    background: var(--surface-secondary);
 }
 
 
@@ -642,7 +647,7 @@
 }
 
 .employee-form-field label {
-    color: #334155;
+    color: var(--text);
 
     font-size: 0.8rem;
     font-weight: 700;
@@ -653,16 +658,16 @@
 
     padding: 10px 12px;
 
-    color: #1e293b;
+    color: var(--text-strong);
 
     font: inherit;
 
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--border);
     border-radius: 9px;
 
     outline: none;
 
-    background: #ffffff;
+    background: var(--input-background);
 }
 
 .employee-form-field input:focus {
@@ -710,15 +715,15 @@
     width: 40px;
     height: 40px;
 
-    color: #64748b;
+    color: var(--muted);
 
     font-size: 0.78rem;
     font-weight: 700;
 
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--border);
     border-radius: 9px;
 
-    background: #ffffff;
+    background: var(--input-background);
 
     cursor: pointer;
 
@@ -805,15 +810,17 @@
 }
 
 .modal-btn-secondary {
-    color: #475569;
+    color: var(--text);
 
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--border);
 
-    background: #ffffff;
+    background: var(--input-background);
 }
 
 .modal-btn-secondary:hover {
-    background: #f8fafc;
+    color: var(--text-strong);
+
+    background: var(--surface-hover);
 }
 
 
@@ -1061,4 +1068,13 @@ body.modal-open {
 
         width: auto;
     }
+}
+
+/* =========================================================
+   DARK THEME - TABLA EMPLEADOS
+   ========================================================= */
+
+.employees-table tbody tr:hover > * {
+    background-color: var(--surface-hover) !important;
+    color: var(--text);
 }

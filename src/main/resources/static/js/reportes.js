@@ -14,6 +14,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	const reporteTotal =
 	    document.getElementById("reporteTotal");
+		
+	const comparativoTotal =
+		    document.getElementById(
+		        "comparativoTotal"
+		    );
+	
+	const comparativoResueltas =
+	    document.getElementById(
+	        "comparativoResueltas"
+	    );
+
+	const comparativoPendientes =
+	    document.getElementById(
+	        "comparativoPendientes"
+	    );
+
+	const comparativoEnProceso =
+	    document.getElementById(
+	        "comparativoEnProceso"
+	    );
+
+	const comparativoReabiertas =
+	    document.getElementById(
+	        "comparativoReabiertas"
+	    );
+
+	const comparativoCanceladas =
+	    document.getElementById(
+	        "comparativoCanceladas"
+	    );
 
 	const reporteResueltas =
 	    document.getElementById("reporteResueltas");
@@ -79,7 +109,30 @@ document.addEventListener("DOMContentLoaded", () => {
 	    document.getElementById(
 	        "btnExportarExcel"
 	    );
+	
+	let chartCargaOperativa;
+	
+	let chartEvolucionTiempos;
+	
+	const chartEvolucionTiemposCanvas =
+	    document.getElementById("chartEvolucionTiempos");
+	
+	const chartCargaOperativaCanvas =
+	    document.getElementById(
+	        "chartCargaOperativa"
+	    );
+		
+	const tablaIncidenciasAntiguas =
+	    document.getElementById("tablaIncidenciasAntiguas");
 
+	const totalIncidenciasActivas =
+	    document.getElementById("totalIncidenciasActivas");
+		
+		
+	const colores =
+			    obtenerColoresTemaGraficas();
+		
+	
 
     function formatearFecha(fecha) {
 
@@ -297,6 +350,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	        actualizarMetricas(datos);
 			
+			await cargarComparativo();
+			
 			actualizarGraficaPorEstado(
 						    datos
 						);
@@ -305,7 +360,15 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			await cargarIncidenciasPorEmpleado();
 			
-			await cargarTiemposPromedio();		
+			await cargarTiemposPromedio();
+			
+			await cargarDesempenoPorEmpleado();
+			
+			await cargarCargaOperativa();
+			
+			await cargarEvolucionTiempos();
+			
+			await cargarIncidenciasAntiguas();
 
 	    } catch (error) {
 
@@ -440,7 +503,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 	    const url =
-	        `/api/reportes/incidencias-por-dia`
+	        `/api/reportes/tendencia-comparativa`
 	        + `?fechaDesde=${encodeURIComponent(desde)}`
 	        + `&fechaHasta=${encodeURIComponent(hasta)}`;
 
@@ -467,20 +530,32 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	
 	function actualizarGraficaPorDia(datos) {
+		
+		const colores =
+		    obtenerColoresTemaGraficas();
+
+	    const actual =
+	        datos.periodoActual || [];
+
+	    const anterior =
+	        datos.periodoAnterior || [];
+
 
 	    const etiquetas =
-	        datos.map(item => {
-
-	            const partes =
-	                item.fecha.split("-");
-
-	            return `${partes[2]}/${partes[1]}`;
-
-	        });
+	        actual.map(
+	            item => `Día ${item.dia}`
+	        );
 
 
-	    const valores =
-	        datos.map(
+	    const valoresActuales =
+	        actual.map(
+	            item =>
+	                Number(item.total || 0)
+	        );
+
+
+	    const valoresAnteriores =
+	        anterior.map(
 	            item =>
 	                Number(item.total || 0)
 	        );
@@ -497,28 +572,65 @@ document.addEventListener("DOMContentLoaded", () => {
 	        new Chart(
 	            chartIncidenciasDiaCanvas,
 	            {
-	                type: "bar",
+	                type: "line",
 
 	                data: {
 
 	                    labels: etiquetas,
 
 	                    datasets: [
+
 	                        {
-	                            label: "Incidencias",
+	                            label:
+	                                "Periodo actual",
 
-	                            data: valores,
-
-	                            backgroundColor:
-	                                "rgba(37, 99, 235, 0.75)",
+	                            data:
+	                                valoresActuales,
 
 	                            borderColor:
 	                                "#2563eb",
 
-	                            borderWidth: 1,
+	                            backgroundColor:
+	                                "rgba(37, 99, 235, 0.08)",
 
-	                            borderRadius: 6
+	                            borderWidth: 3,
+
+	                            tension: 0.3,
+
+	                            pointRadius: 3,
+
+	                            pointHoverRadius: 6,
+
+	                            fill: false
+	                        },
+
+	                        {
+	                            label:
+	                                "Periodo anterior",
+
+	                            data:
+	                                valoresAnteriores,
+
+	                            borderColor:
+	                                "#94a3b8",
+
+	                            backgroundColor:
+	                                "rgba(148, 163, 184, 0.08)",
+
+	                            borderWidth: 2,
+
+	                            borderDash:
+	                                [6, 6],
+
+	                            tension: 0.3,
+
+	                            pointRadius: 2,
+
+	                            pointHoverRadius: 5,
+
+	                            fill: false
 	                        }
+
 	                    ]
 	                },
 
@@ -528,43 +640,105 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	                    maintainAspectRatio: false,
 
-	                    plugins: {
+	                    interaction: {
+	                        mode: "index",
+	                        intersect: false
+	                    },
 
-	                        legend: {
-	                            display: false
+						plugins: {
+
+						    legend: {
+						        display: true,
+						        position: "top",
+
+						        labels: {
+						            color: colores.texto
+						        }
+						    },
+
+	                        tooltip: {
+
+	                            callbacks: {
+
+	                                title: function(context) {
+
+	                                    if (
+	                                        !context
+	                                        || context.length === 0
+	                                    ) {
+	                                        return "";
+	                                    }
+
+
+	                                    const index =
+	                                        context[0].dataIndex;
+
+	                                    const fechaActual =
+	                                        actual[index]?.fecha;
+
+	                                    const fechaAnterior =
+	                                        anterior[index]?.fecha;
+
+
+	                                    return [
+	                                        `Día ${index + 1}`,
+	                                        `${formatearFechaGrafica(fechaActual)} vs. ${formatearFechaGrafica(fechaAnterior)}`
+	                                    ];
+	                                }
+	                            }
 	                        }
-
 	                    },
 
 	                    scales: {
 
-	                        y: {
+							y: {
 
-	                            beginAtZero: true,
+							    beginAtZero: true,
 
-	                            ticks: {
-	                                precision: 0
-	                            },
+							    ticks: {
+							        precision: 0,
+							        color: colores.texto
+							    },
 
-	                            grid: {
-	                                color:
-	                                    "rgba(148, 163, 184, 0.15)"
-	                            }
-	                        },
+							    grid: {
+							        color: colores.grid
+							    }
+							},
 
-	                        x: {
+							x: {
 
-	                            grid: {
-	                                display: false
-	                            }
-	                        }
+							    ticks: {
+							        color: colores.texto
+							    },
+
+							    grid: {
+							        display: false
+							    }
+							}
 	                    }
 	                }
 	            }
 	        );
 	}
 	
+	function formatearFechaGrafica(fecha) {
+
+	    if (!fecha) {
+	        return "";
+	    }
+
+
+	    const partes =
+	        fecha.split("-");
+
+
+	    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+	}
+	
 	function actualizarGraficaPorEstado(datos) {
+		
+		const colores =
+		    obtenerColoresTemaGraficas();
 
 	    const etiquetas =
 	        datos.map(
@@ -612,10 +786,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	                                "#0ea5e9"
 	                            ],
 
-	                            borderWidth: 2,
+								borderWidth: 2,
 
-	                            borderColor:
-	                                "#ffffff"
+								borderColor:
+								    colores.bordeGrafica
 	                        }
 	                    ]
 	                },
@@ -630,17 +804,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	                    plugins: {
 
-	                        legend: {
+							legend: {
 
-	                            position: "bottom",
+							    position: "bottom",
 
-	                            labels: {
+							    labels: {
 
-	                                usePointStyle: true,
+							        usePointStyle: true,
 
-	                                padding: 18
-	                            }
-	                        }
+							        padding: 18,
+
+							        color: colores.texto
+							    }
+							}
 	                    }
 	                }
 	            }
@@ -684,6 +860,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	
 	function actualizarGraficaPorEmpleado(datos) {
+		
+		const colores =
+		    obtenerColoresTemaGraficas();
 
 	    const etiquetas =
 	        datos.map(
@@ -756,27 +935,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	                    scales: {
 
-	                        x: {
+							x: {
 
-	                            beginAtZero: true,
+							    beginAtZero: true,
 
-	                            ticks: {
-	                                precision: 0
-	                            },
+							    ticks: {
+							        precision: 0,
+							        color: colores.texto
+							    },
 
-	                            grid: {
-	                                color:
-	                                    "rgba(148, 163, 184, 0.15)"
-	                            }
-	                        },
+							    grid: {
+							        color: colores.grid
+							    }
+							},
 
 
-	                        y: {
+							y: {
 
-	                            grid: {
-	                                display: false
-	                            }
-	                        }
+							    ticks: {
+							        color: colores.texto
+							    },
+
+							    grid: {
+							        display: false
+							    }
+							}
 	                    }
 	                }
 	            }
@@ -933,6 +1116,218 @@ document.addEventListener("DOMContentLoaded", () => {
 		    return `${dias} d ${horasRestantes} h`;
 		}
 		
+		async function cargarComparativo() {
+
+		    const desde =
+		        fechaDesde.value;
+
+		    const hasta =
+		        fechaHasta.value;
+
+
+		    const url =
+		        `/api/reportes/comparativo`
+		        + `?fechaDesde=${encodeURIComponent(desde)}`
+		        + `&fechaHasta=${encodeURIComponent(hasta)}`;
+
+
+		    const response =
+		        await fetch(url);
+
+
+		    if (!response.ok) {
+
+		        throw new Error(
+		            `Error HTTP ${response.status}`
+		        );
+		    }
+
+
+		    const datos =
+		        await response.json();
+
+
+				const actual =
+				    datos.periodoActual;
+
+				const anterior =
+				    datos.periodoAnterior;
+
+
+				actualizarComparativo(
+				    comparativoTotal,
+				    actual.total,
+				    anterior.total,
+				    "neutral"
+				);
+
+				actualizarComparativo(
+				    comparativoResueltas,
+				    actual.resueltas,
+				    anterior.resueltas,
+				    "higher-is-better"
+				);
+
+				actualizarComparativo(
+				    comparativoPendientes,
+				    actual.pendientes,
+				    anterior.pendientes,
+				    "lower-is-better"
+				);
+
+				actualizarComparativo(
+				    comparativoEnProceso,
+				    actual.enProceso,
+				    anterior.enProceso,
+				    "neutral"
+				);
+
+				actualizarComparativo(
+				    comparativoReabiertas,
+				    actual.reabiertas,
+				    anterior.reabiertas,
+				    "lower-is-better"
+				);
+
+				actualizarComparativo(
+				    comparativoCanceladas,
+				    actual.canceladas,
+				    anterior.canceladas,
+				    "lower-is-better"
+				);
+		}
+		
+		function actualizarComparativo(
+		    elemento,
+		    actual,
+		    anterior,
+		    tipo = "neutral"
+		) {
+
+		    actual = Number(actual || 0);
+		    anterior = Number(anterior || 0);
+
+
+		    elemento.classList.remove(
+		        "positive",
+		        "negative",
+		        "neutral"
+		    );
+
+
+		    if (anterior === 0) {
+
+		        if (actual === 0) {
+
+		            elemento.classList.add("neutral");
+
+		            elemento.innerHTML = `
+		                <i class="bi bi-dash"></i>
+		                <span>
+		                    Sin variación vs. periodo anterior
+		                </span>
+		            `;
+
+		        } else {
+
+		            const clase =
+		                obtenerClaseComparativo(
+		                    1,
+		                    tipo
+		                );
+
+		            elemento.classList.add(clase);
+
+		            elemento.innerHTML = `
+		                <i class="bi bi-arrow-up"></i>
+		                <span>
+		                    Nuevo vs. periodo anterior
+		                </span>
+		            `;
+		        }
+
+		        return;
+		    }
+
+
+		    const variacion =
+		        ((actual - anterior) / anterior)
+		        * 100;
+
+
+		    if (variacion === 0) {
+
+		        elemento.classList.add("neutral");
+
+		        elemento.innerHTML = `
+		            <i class="bi bi-dash"></i>
+		            <span>
+		                Sin variación vs. periodo anterior
+		            </span>
+		        `;
+
+		        return;
+		    }
+
+
+		    const direccion =
+		        variacion > 0 ? 1 : -1;
+
+
+		    const clase =
+		        obtenerClaseComparativo(
+		            direccion,
+		            tipo
+		        );
+
+
+		    elemento.classList.add(clase);
+
+
+		    const icono =
+		        variacion > 0
+		            ? "bi-arrow-up"
+		            : "bi-arrow-down";
+
+
+		    elemento.innerHTML = `
+		        <i class="bi ${icono}"></i>
+		        <span>
+		            ${Math.abs(variacion).toFixed(1)}%
+		            vs. periodo anterior
+		        </span>
+		    `;
+		}
+		
+		function obtenerClaseComparativo(
+		    direccion,
+		    tipo
+		) {
+
+		    if (tipo === "neutral") {
+		        return "neutral";
+		    }
+
+
+		    if (tipo === "higher-is-better") {
+
+		        return direccion > 0
+		            ? "positive"
+		            : "negative";
+		    }
+
+
+		    if (tipo === "lower-is-better") {
+
+		        return direccion < 0
+		            ? "positive"
+		            : "negative";
+		    }
+
+
+		    return "neutral";
+		}
+		
 		function exportarExcel() {
 
 		    const desde =
@@ -977,4 +1372,849 @@ document.addEventListener("DOMContentLoaded", () => {
 		        "click",
 		        exportarExcel
 		    );
+			
+			async function cargarDesempenoPorEmpleado() {
+
+			    const desde =
+			        fechaDesde.value;
+
+			    const hasta =
+			        fechaHasta.value;
+
+			    const url =
+			        `/api/reportes/desempeno-por-empleado`
+			        + `?fechaDesde=${encodeURIComponent(desde)}`
+			        + `&fechaHasta=${encodeURIComponent(hasta)}`;
+
+			    const response =
+			        await fetch(url);
+
+			    if (!response.ok) {
+			        throw new Error(
+			            `Error HTTP ${response.status}`
+			        );
+			    }
+
+			    const datos =
+			        await response.json();
+
+			    actualizarTablaDesempeno(
+			        datos
+			    );
+			}
+			function actualizarTablaDesempeno(datos) {
+
+			    const tbody =
+			        document.getElementById(
+			            "tablaDesempenoEmpleados"
+			        );
+
+			    if (!tbody) {
+			        return;
+			    }
+
+
+			    if (!datos || datos.length === 0) {
+
+			        tbody.innerHTML = `
+			            <tr>
+			                <td colspan="7"
+			                    class="performance-empty">
+			                    No hay información de empleados
+			                    para el periodo seleccionado.
+			                </td>
+			            </tr>
+			        `;
+
+			        return;
+			    }
+
+
+			    tbody.innerHTML =
+			        datos.map(
+			            (empleado, index) => {
+
+			                const porcentaje =
+			                    Number(
+			                        empleado.porcentajeResolucion || 0
+			                    );
+
+			                return `
+			                    <tr>
+
+									<td class="performance-position">
+									    <span class="performance-rank rank-${index + 1}">
+									        ${index + 1}
+									    </span>
+									</td>
+
+			                        <td>
+			                            <strong>
+			                                ${empleado.nombre}
+			                            </strong>
+			                        </td>
+
+			                        <td>
+			                            ${empleado.totalIncidencias}
+			                        </td>
+
+			                        <td>
+			                            ${empleado.resueltas}
+			                        </td>
+
+									<td>
+
+									    <div class="performance-resolution">
+
+									        <div class="performance-resolution-header">
+
+									            <strong>
+									                ${porcentaje.toFixed(1)}%
+									            </strong>
+
+									        </div>
+
+									        <div class="performance-resolution-bar">
+
+									            <div class="performance-resolution-value"
+									                 style="width: ${Math.min(porcentaje, 100)}%">
+									            </div>
+
+									        </div>
+
+									    </div>
+
+									</td>
+
+			                        <td>
+			                            ${formatearTiempo(
+			                                empleado.tiempoPromedioAtencionMinutos
+			                            )}
+			                        </td>
+
+			                        <td>
+			                            ${formatearTiempo(
+			                                empleado.tiempoPromedioResolucionMinutos
+			                            )}
+			                        </td>
+
+			                    </tr>
+			                `;
+			            }
+			        ).join("");
+			}
+			
+			function formatearTiempo(minutos) {
+
+			    if (
+			        minutos === null
+			        || minutos === undefined
+			    ) {
+			        return "—";
+			    }
+
+
+			    const totalMinutos =
+			        Math.round(
+			            Number(minutos)
+			        );
+
+
+			    if (totalMinutos < 60) {
+			        return `${totalMinutos} min`;
+			    }
+
+
+			    const horas =
+			        Math.floor(
+			            totalMinutos / 60
+			        );
+
+			    const minutosRestantes =
+			        totalMinutos % 60;
+
+
+			    return `${horas} h ${minutosRestantes} min`;
+			}
+			
+			async function cargarCargaOperativa() {
+
+			    const response =
+			        await fetch(
+			            "/api/reportes/carga-operativa"
+			        );
+
+			    if (!response.ok) {
+			        throw new Error(
+			            `Error HTTP ${response.status}`
+			        );
+			    }
+
+			    const datos =
+			        await response.json();
+
+			    actualizarGraficaCargaOperativa(
+			        datos
+			    );
+			}
+			
+			function actualizarGraficaCargaOperativa(datos) {
+				
+				const colores =
+				    obtenerColoresTemaGraficas();
+
+			    if (!chartCargaOperativaCanvas) {
+			        return;
+			    }
+
+
+			    const etiquetas =
+			        datos.map(
+			            item => item.nombre
+			        );
+
+			    const pendientes =
+			        datos.map(
+			            item =>
+			                Number(item.pendientes || 0)
+			        );
+
+			    const enProceso =
+			        datos.map(
+			            item =>
+			                Number(item.enProceso || 0)
+			        );
+
+			    const reabiertas =
+			        datos.map(
+			            item =>
+			                Number(item.reabiertas || 0)
+			        );
+
+
+			    if (chartCargaOperativa) {
+			        chartCargaOperativa.destroy();
+			    }
+
+
+			    chartCargaOperativa =
+			        new Chart(
+			            chartCargaOperativaCanvas,
+			            {
+			                type: "bar",
+
+			                data: {
+
+			                    labels: etiquetas,
+
+			                    datasets: [
+			                        {
+			                            label: "Pendientes",
+			                            data: pendientes,
+			                            backgroundColor: "#f59e0b",
+			                            borderRadius: 4
+			                        },
+			                        {
+			                            label: "En proceso",
+			                            data: enProceso,
+			                            backgroundColor: "#8b5cf6",
+			                            borderRadius: 4
+			                        },
+			                        {
+			                            label: "Reabiertas",
+			                            data: reabiertas,
+			                            backgroundColor: "#ef4444",
+			                            borderRadius: 4
+			                        }
+			                    ]
+			                },
+
+			                options: {
+
+			                    indexAxis: "y",
+
+			                    responsive: true,
+
+			                    maintainAspectRatio: false,
+
+			                    interaction: {
+			                        mode: "index",
+			                        intersect: false
+			                    },
+
+			                    plugins: {
+
+									legend: {
+									    display: true,
+									    position: "top",
+
+									    labels: {
+									        color: colores.texto
+									    }
+									},
+
+			                        tooltip: {
+
+			                            callbacks: {
+
+			                                footer: function(context) {
+
+			                                    const total =
+			                                        context.reduce(
+			                                            (suma, item) =>
+			                                                suma
+			                                                + Number(
+			                                                    item.raw || 0
+			                                                ),
+			                                            0
+			                                        );
+
+			                                    return `Total activas: ${total}`;
+			                                }
+			                            }
+			                        }
+			                    },
+
+			                    scales: {
+
+									x: {
+									    stacked: true,
+
+									    beginAtZero: true,
+
+									    ticks: {
+									        precision: 0,
+									        color: colores.texto
+									    },
+
+									    grid: {
+									        color: colores.grid
+									    }
+									},
+
+									y: {
+									    stacked: true,
+
+									    ticks: {
+									        color: colores.texto
+									    },
+
+									    grid: {
+									        display: false
+									    }
+									}
+			                    }
+			                }
+			            }
+			        );
+			}
+			
+			async function cargarEvolucionTiempos() {
+
+			    const desde =
+			        fechaDesde.value;
+
+			    const hasta =
+			        fechaHasta.value;
+
+			    const response =
+			        await fetch(
+			            `/api/reportes/evolucion-tiempos`
+			            + `?fechaDesde=${encodeURIComponent(desde)}`
+			            + `&fechaHasta=${encodeURIComponent(hasta)}`
+			        );
+
+			    if (!response.ok) {
+
+			        throw new Error(
+			            `Error HTTP ${response.status}`
+			        );
+			    }
+
+			    const datos =
+			        await response.json();
+
+			    actualizarGraficaEvolucionTiempos(
+			        datos
+			    );
+			}
+			
+			function actualizarGraficaEvolucionTiempos(datos) {
+				
+				const colores =
+				    obtenerColoresTemaGraficas();
+
+			    if (!chartEvolucionTiemposCanvas) {
+			        return;
+			    }
+
+			    if (chartEvolucionTiempos) {
+			        chartEvolucionTiempos.destroy();
+			    }
+
+
+			    const labels = datos.map(item =>
+			        formatearFechaGrafica(item.fecha)
+			    );
+
+
+			    const tiemposAtencion = datos.map(item => {
+
+			        if (item.tiempoPromedioAtencionMinutos == null) {
+			            return null;
+			        }
+
+			        return item.tiempoPromedioAtencionMinutos / 60;
+			    });
+
+
+			    const tiemposResolucion = datos.map(item => {
+
+			        if (item.tiempoPromedioResolucionMinutos == null) {
+			            return null;
+			        }
+
+			        return item.tiempoPromedioResolucionMinutos / 60;
+			    });
+
+
+			    chartEvolucionTiempos = new Chart(
+			        chartEvolucionTiemposCanvas,
+			        {
+			            type: "line",
+
+			            data: {
+			                labels: labels,
+
+			                datasets: [
+			                    {
+			                        label: "Tiempo promedio de atención",
+			                        data: tiemposAtencion,
+			                        borderColor: "#2563eb",
+			                        backgroundColor: "#2563eb",
+			                        borderWidth: 2,
+			                        tension: 0.3,
+			                        pointRadius: 3,
+			                        pointHoverRadius: 5,
+			                        spanGaps: true
+			                    },
+			                    {
+			                        label: "Tiempo promedio de resolución",
+			                        data: tiemposResolucion,
+			                        borderColor: "#16a34a",
+			                        backgroundColor: "#16a34a",
+			                        borderWidth: 2,
+			                        tension: 0.3,
+			                        pointRadius: 3,
+			                        pointHoverRadius: 5,
+			                        spanGaps: true
+			                    }
+			                ]
+			            },
+
+			            options: {
+			                responsive: true,
+			                maintainAspectRatio: false,
+
+			                interaction: {
+			                    mode: "index",
+			                    intersect: false
+			                },
+
+			                plugins: {
+								legend: {
+								    position: "top",
+
+								    labels: {
+								        color: colores.texto
+								    }
+								},
+
+			                    tooltip: {
+			                        callbacks: {
+			                            label: function(context) {
+
+			                                const horas = context.raw;
+
+			                                if (horas == null) {
+			                                    return `${context.dataset.label}: Sin datos`;
+			                                }
+
+			                                const minutosTotales =
+			                                    Math.round(horas * 60);
+
+			                                return `${context.dataset.label}: ${formatearTiempo(minutosTotales)}`;
+			                            }
+			                        }
+			                    }
+			                },
+
+			                scales: {
+								y: {
+								    beginAtZero: true,
+
+								    title: {
+								        display: true,
+								        text: "Horas",
+								        color: colores.texto
+								    },
+
+								    ticks: {
+								        color: colores.texto,
+
+								        callback: function(value) {
+								            return `${value} h`;
+								        }
+								    },
+
+								    grid: {
+								        color: colores.grid
+								    }
+								},
+
+								x: {
+								    ticks: {
+								        maxRotation: 45,
+								        minRotation: 0,
+								        color: colores.texto
+								    },
+
+								    grid: {
+								        color: colores.grid
+								    }
+								}
+			                }
+			            }
+			        }
+			    );
+			}
+			
+			async function cargarIncidenciasAntiguas() {
+
+			    const response =
+			        await fetch("/api/reportes/incidencias-antiguas");
+
+			    if (!response.ok) {
+			        throw new Error(
+			            `Error HTTP ${response.status}`
+			        );
+			    }
+
+			    const datos =
+			        await response.json();
+
+			    actualizarTablaIncidenciasAntiguas(datos);
+			}
+			
+			function actualizarTablaIncidenciasAntiguas(datos) {
+
+			    if (!tablaIncidenciasAntiguas) {
+			        return;
+			    }
+
+			    const total =
+			        Array.isArray(datos)
+			            ? datos.length
+			            : 0;
+
+
+			    if (totalIncidenciasActivas) {
+
+			        totalIncidenciasActivas.textContent =
+			            `${total} ${
+			                total === 1
+			                    ? "incidencia activa"
+			                    : "incidencias activas"
+			            }`;
+			    }
+
+
+			    if (total === 0) {
+
+			        tablaIncidenciasAntiguas.innerHTML = `
+			            <tr>
+			                <td colspan="5"
+			                    class="performance-empty">
+			                    No existen incidencias activas.
+			                </td>
+			            </tr>
+			        `;
+
+			        return;
+			    }
+
+
+			    const incidencias =
+			        datos.slice(0, 10);
+
+
+			    tablaIncidenciasAntiguas.innerHTML =
+			        incidencias
+			            .map(incidencia => {
+
+			                const empleado =
+			                    incidencia.empleado
+			                        ?? "Sin asignar";
+
+			                return `
+			                    <tr>
+
+			                        <td>
+			                            <span class="old-incident-folio">
+			                                ${incidencia.folio ?? "—"}
+			                            </span>
+			                        </td>
+
+			                        <td>
+			                            <div
+			                                class="old-incident-subject"
+			                                title="${incidencia.asunto ?? ""}"
+			                            >
+			                                ${incidencia.asunto ?? "—"}
+			                            </div>
+			                        </td>
+
+			                        <td>
+			                            ${formatearEstadoIncidencia(
+			                                incidencia.estado
+			                            )}
+			                        </td>
+
+			                        <td>
+			                            <span class="old-incident-employee">
+			                                ${empleado}
+			                            </span>
+			                        </td>
+
+			                        <td>
+			                            <span class="old-incident-age">
+
+			                                <i class="bi bi-clock-history"></i>
+
+			                                ${formatearAntiguedad(
+			                                    incidencia.antiguedadMinutos
+			                                )}
+
+			                            </span>
+			                        </td>
+
+			                    </tr>
+			                `;
+			            })
+			            .join("");
+			}
+			
+			function formatearAntiguedad(minutos) {
+
+			    if (minutos == null) {
+			        return "—";
+			    }
+
+			    const totalMinutos =
+			        Math.max(
+			            0,
+			            Math.floor(minutos)
+			        );
+
+			    const dias =
+			        Math.floor(
+			            totalMinutos / 1440
+			        );
+
+			    const horas =
+			        Math.floor(
+			            (totalMinutos % 1440) / 60
+			        );
+
+			    const minutosRestantes =
+			        totalMinutos % 60;
+
+
+			    if (dias > 0) {
+			        return `${dias} d ${horas} h`;
+			    }
+
+			    if (horas > 0) {
+			        return `${horas} h ${minutosRestantes} min`;
+			    }
+
+			    return `${minutosRestantes} min`;
+			}
+			
+			function formatearEstadoIncidencia(estado) {
+
+			    if (!estado) {
+			        return "—";
+			    }
+
+			    switch (estado) {
+
+			        case "PENDIENTE":
+			            return `
+			                <span class="old-incident-status status-pendiente">
+			                    Pendiente
+			                </span>
+			            `;
+
+			        case "EN_PROCESO":
+			            return `
+			                <span class="old-incident-status status-en-proceso">
+			                    En proceso
+			                </span>
+			            `;
+
+			        case "REABIERTA":
+			            return `
+			                <span class="old-incident-status status-reabierta">
+			                    Reabierta
+			                </span>
+			            `;
+
+			        default:
+			            return estado;
+			    }
+			}
+			
+			function obtenerColoresTemaGraficas() {
+
+			    const tema =
+			        document.documentElement.dataset.theme;
+
+			    const oscuro =
+			        tema === "dark";
+
+			    return {
+			        texto: oscuro
+			            ? "#cbd5e1"
+			            : "#334155",
+
+			        textoFuerte: oscuro
+			            ? "#f1f5f9"
+			            : "#1e293b",
+
+			        grid: oscuro
+			            ? "rgba(148, 163, 184, 0.16)"
+			            : "rgba(148, 163, 184, 0.15)",
+
+			        bordeGrafica: oscuro
+			            ? "#1e293b"
+			            : "#ffffff"
+			    };
+			}
+			
+			window.addEventListener(
+			    "sgio-theme-changed",
+			    () => {
+
+			        const colores =
+			            obtenerColoresTemaGraficas();
+
+			        if (chartIncidenciasDia) {
+
+			            chartIncidenciasDia.options.plugins
+			                .legend.labels.color =
+			                    colores.texto;
+
+			            chartIncidenciasDia.options.scales
+			                .x.ticks.color =
+			                    colores.texto;
+
+			            chartIncidenciasDia.options.scales
+			                .y.ticks.color =
+			                    colores.texto;
+
+			            chartIncidenciasDia.options.scales
+			                .y.grid.color =
+			                    colores.grid;
+
+			            chartIncidenciasDia.update();
+			        }
+
+
+			        if (chartIncidenciasEstado) {
+
+			            chartIncidenciasEstado.options.plugins
+			                .legend.labels.color =
+			                    colores.texto;
+
+			            chartIncidenciasEstado.data.datasets
+			                .forEach(dataset => {
+
+			                    dataset.borderColor =
+			                        colores.bordeGrafica;
+			                });
+
+			            chartIncidenciasEstado.update();
+			        }
+
+
+			        if (chartIncidenciasEmpleado) {
+
+			            chartIncidenciasEmpleado.options.scales
+			                .x.ticks.color =
+			                    colores.texto;
+
+			            chartIncidenciasEmpleado.options.scales
+			                .x.grid.color =
+			                    colores.grid;
+
+			            chartIncidenciasEmpleado.options.scales
+			                .y.ticks.color =
+			                    colores.texto;
+
+			            chartIncidenciasEmpleado.update();
+			        }
+
+
+			        if (chartCargaOperativa) {
+
+			            chartCargaOperativa.options.plugins
+			                .legend.labels.color =
+			                    colores.texto;
+
+			            chartCargaOperativa.options.scales
+			                .x.ticks.color =
+			                    colores.texto;
+
+			            chartCargaOperativa.options.scales
+			                .x.grid.color =
+			                    colores.grid;
+
+			            chartCargaOperativa.options.scales
+			                .y.ticks.color =
+			                    colores.texto;
+
+			            chartCargaOperativa.update();
+			        }
+					
+					if (chartEvolucionTiempos) {
+
+					    chartEvolucionTiempos.options.plugins
+					        .legend.labels.color =
+					            colores.texto;
+
+					    chartEvolucionTiempos.options.scales
+					        .x.ticks.color =
+					            colores.texto;
+
+					    chartEvolucionTiempos.options.scales
+					        .x.grid.color =
+					            colores.grid;
+
+					    chartEvolucionTiempos.options.scales
+					        .y.ticks.color =
+					            colores.texto;
+
+					    chartEvolucionTiempos.options.scales
+					        .y.title.color =
+					            colores.texto;
+
+					    chartEvolucionTiempos.options.scales
+					        .y.grid.color =
+					            colores.grid;
+
+					    chartEvolucionTiempos.update();
+					}
+			    }
+			);
 });
