@@ -163,10 +163,14 @@
 	            <a class="page-link"
 	               th:href="@{/dashboard(
 	                    page=${paginaActual - 1},
-	                    size=10,
-	                    texto=${texto},
-	                    estado=${estadoSeleccionado},
-	                    empleadoId=${empleadoSeleccionado}
+				        size=10,
+				        texto=${texto},
+				        estado=${estadoSeleccionado},
+				        empleadoId=${empleadoSeleccionado},
+				        prioridad=${prioridadSeleccionada},
+				        carpetaOrigen=${origenSeleccionado},
+				        fechaDesde=${fechaDesde},
+				        fechaHasta=${fechaHasta}
 	               )}">
 	                <i class="bi bi-chevron-left"></i>
 	                Anterior
@@ -182,9 +186,13 @@
 	               th:href="@{/dashboard(
 	                    page=0,
 	                    size=10,
-	                    texto=${texto},
-	                    estado=${estadoSeleccionado},
-	                    empleadoId=${empleadoSeleccionado}
+				        texto=${texto},
+				        estado=${estadoSeleccionado},
+				        empleadoId=${empleadoSeleccionado},
+				        prioridad=${prioridadSeleccionada},
+				        carpetaOrigen=${origenSeleccionado},
+				        fechaDesde=${fechaDesde},
+				        fechaHasta=${fechaHasta}
 	               )}">
 	                1
 	            </a>
@@ -215,9 +223,13 @@
 	                   th:href="@{/dashboard(
 	                        page=${numero},
 	                        size=10,
-	                        texto=${texto},
-	                        estado=${estadoSeleccionado},
-	                        empleadoId=${empleadoSeleccionado}
+					        texto=${texto},
+					        estado=${estadoSeleccionado},
+					        empleadoId=${empleadoSeleccionado},
+					        prioridad=${prioridadSeleccionada},
+					        carpetaOrigen=${origenSeleccionado},
+					        fechaDesde=${fechaDesde},
+					        fechaHasta=${fechaHasta}
 	                   )}"
 	                   th:text="${numero + 1}">
 	                    2
@@ -245,9 +257,13 @@
 	               th:href="@{/dashboard(
 	                    page=${totalPaginas - 1},
 	                    size=10,
-	                    texto=${texto},
-	                    estado=${estadoSeleccionado},
-	                    empleadoId=${empleadoSeleccionado}
+				        texto=${texto},
+				        estado=${estadoSeleccionado},
+				        empleadoId=${empleadoSeleccionado},
+				        prioridad=${prioridadSeleccionada},
+				        carpetaOrigen=${origenSeleccionado},
+				        fechaDesde=${fechaDesde},
+				        fechaHasta=${fechaHasta}
 	               )}"
 	               th:text="${totalPaginas}">
 	                11
@@ -263,9 +279,13 @@
 	               th:href="@{/dashboard(
 	                    page=${paginaActual + 1},
 	                    size=10,
-	                    texto=${texto},
-	                    estado=${estadoSeleccionado},
-	                    empleadoId=${empleadoSeleccionado}
+				        texto=${texto},
+				        estado=${estadoSeleccionado},
+				        empleadoId=${empleadoSeleccionado},
+				        prioridad=${prioridadSeleccionada},
+				        carpetaOrigen=${origenSeleccionado},
+				        fechaDesde=${fechaDesde},
+				        fechaHasta=${fechaHasta}
 	               )}">
 	                Siguiente
 	                <i class="bi bi-chevron-right"></i>
