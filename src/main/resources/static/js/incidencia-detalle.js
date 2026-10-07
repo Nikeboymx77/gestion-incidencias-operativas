@@ -6,6 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const folio =
         window.SGIO?.folio;
+		
+	// =========================================================
+	// SEGURIDAD - CSRF
+	// =========================================================
+
+	const csrfToken = document
+	    .querySelector('meta[name="_csrf"]')
+	    ?.getAttribute("content");
+		
+	const csrfHeader = document
+	    .querySelector('meta[name="_csrf_header"]')
+	    ?.getAttribute("content");
 
 
     // =========================================================
@@ -152,7 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	                    headers: {
 	                        "Content-Type":
-	                            "application/json"
+	                            "application/json",
+							    [csrfHeader]: csrfToken
 	                    },
 
 	                    body:

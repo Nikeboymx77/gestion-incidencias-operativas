@@ -1,0 +1,891 @@
+/* =========================================================
+   SGIO V2 - ADMINISTRACIÓN DE USUARIOS
+   ========================================================= */
+
+.users-container {
+    width: min(1400px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 28px 0 50px;
+}
+
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+.users-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.back-dashboard-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    padding: 10px 16px;
+
+    color: #ffffff;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    border-radius: 10px;
+
+    background: #1e3a5f;
+
+    box-shadow:
+        0 4px 12px
+        rgba(30, 58, 95, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.back-dashboard-button:hover {
+    color: #ffffff;
+    background: #172f4f;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CABECERA
+   ========================================================= */
+
+.users-header {
+    padding: 24px 26px;
+    margin-bottom: 22px;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+}
+
+.users-header h2 {
+    margin: 3px 0 7px;
+    color: var(--text-strong);
+}
+
+.users-header > div > p:last-child {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   MÉTRICAS
+   ========================================================= */
+
+.user-metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+.user-metric {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 19px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+}
+
+.user-metric-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    color: #2563eb;
+
+    font-size: 1.25rem;
+
+    border-radius: 12px;
+
+    background: #eff6ff;
+}
+
+.user-metric-icon.active {
+    color: #15803d;
+    background: #f0fdf4;
+}
+
+.user-metric-icon.admin {
+    color: #7c3aed;
+    background: #f5f3ff;
+}
+
+.user-metric-icon.operator {
+    color: #b45309;
+    background: #fffbeb;
+}
+
+.user-metric span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: var(--muted);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.user-metric strong {
+    color: var(--text-strong);
+
+    font-size: 1.45rem;
+}
+
+
+/* =========================================================
+   CARD / TABLA
+   ========================================================= */
+
+.users-card {
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+}
+
+.users-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px 22px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.users-card-header h3 {
+    margin: 2px 0 0;
+
+    color: var(--text-strong);
+}
+
+.users-table-wrapper {
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.users-table th {
+    padding: 13px 16px;
+
+    color: var(--muted);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    text-align: left;
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+
+    background: var(--surface-secondary);
+}
+
+.users-table td {
+    padding: 15px 16px;
+
+    color: var(--text);
+
+    font-size: 0.84rem;
+
+    border-top: 1px solid var(--border);
+}
+
+.users-table tbody tr {
+    transition:
+        background-color 0.18s ease;
+}
+
+.users-table tbody tr:hover > * {
+    background-color:
+        var(--surface-hover) !important;
+
+    color: var(--text);
+}
+
+
+/* =========================================================
+   USUARIO
+   ========================================================= */
+
+.user-name {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.user-name strong {
+    color: var(--text-strong);
+}
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    color: #1d4ed8;
+
+    font-size: 1rem;
+
+    border-radius: 50%;
+
+    background: #dbeafe;
+}
+
+.username {
+    color: var(--text-strong);
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ROLES
+   ========================================================= */
+
+.user-role {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 5px 9px;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    border-radius: 999px;
+}
+
+.user-role.admin {
+    color: #6d28d9;
+    background: #ede9fe;
+}
+
+.user-role.operator {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+.user-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 5px 9px;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    border-radius: 999px;
+}
+
+.user-status.active {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.user-status.inactive {
+    color: #475569;
+    background: #e2e8f0;
+}
+
+.user-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* =========================================================
+   SIN RESULTADOS
+   ========================================================= */
+
+.users-empty {
+    padding: 35px !important;
+
+    color: var(--muted) !important;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .user-metrics {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+
+    .users-container {
+        width: min(
+            100% - 24px,
+            1400px
+        );
+    }
+
+    .users-navigation {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .back-dashboard-button {
+        width: 100%;
+    }
+
+    .user-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   BOTÓN NUEVO USUARIO
+   ========================================================= */
+
+.new-user-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 17px;
+
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 700;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #15803d;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.new-user-button:hover {
+    background: #166534;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.sgio-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 3000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.sgio-modal.show {
+    display: flex;
+}
+
+.sgio-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(15, 23, 42, 0.58);
+
+    backdrop-filter: blur(2px);
+}
+
+.sgio-modal-dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(620px, 100%);
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    color: var(--text);
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+}
+
+.sgio-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.sgio-modal-header h3 {
+    margin: 3px 0 0;
+
+    color: var(--text-strong);
+}
+
+.sgio-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    color: var(--muted);
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.sgio-modal-close:hover {
+    color: var(--text-strong);
+
+    background: var(--surface-hover);
+}
+
+.sgio-modal-body {
+    padding: 24px;
+}
+
+.sgio-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 18px 24px;
+
+    border-top: 1px solid var(--border);
+
+    background: var(--surface-secondary);
+}
+
+
+/* =========================================================
+   FORMULARIO
+   ========================================================= */
+
+.user-form-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 18px;
+}
+
+.user-form-field label {
+    color: var(--text);
+
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.user-form-field input,
+.user-form-field select {
+    width: 100%;
+
+    padding: 10px 12px;
+
+    color: var(--text-strong);
+
+    font: inherit;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    outline: none;
+
+    background: var(--input-background);
+}
+
+.user-form-field input:focus,
+.user-form-field select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.10);
+}
+
+.user-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* ERROR */
+
+.user-modal-error {
+    display: none;
+
+    margin-bottom: 18px;
+
+    padding: 11px 13px;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+    border-radius: 9px;
+
+    background: #fef2f2;
+
+    font-size: 0.84rem;
+}
+
+.user-modal-error.show {
+    display: block;
+}
+
+
+/* BOTONES */
+
+.modal-btn-primary,
+.modal-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 10px 16px;
+
+    font: inherit;
+    font-weight: 700;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+}
+
+.modal-btn-primary {
+    color: #ffffff;
+
+    border: 0;
+
+    background: #2563eb;
+}
+
+.modal-btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.modal-btn-secondary {
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    background: var(--input-background);
+}
+
+.modal-btn-secondary:hover {
+    color: var(--text-strong);
+
+    background: var(--surface-hover);
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+@media (max-width: 650px) {
+
+    .user-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sgio-modal {
+        padding: 12px;
+    }
+
+    .sgio-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .modal-btn-primary,
+    .modal-btn-secondary {
+        width: 100%;
+    }
+
+    .new-user-button {
+        width: 100%;
+    }
+}
+
+.spinner-small {
+    width: 14px;
+    height: 14px;
+
+    display: inline-block;
+
+    border:
+        2px solid rgba(255, 255, 255, 0.45);
+
+    border-top-color: #ffffff;
+
+    border-radius: 50%;
+
+    animation:
+        usuarios-spin 0.7s linear infinite;
+}
+
+@keyframes usuarios-spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.modal-btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   ACCIONES DE USUARIO
+   ========================================================= */
+
+.user-edit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 7px 11px;
+
+    color: #1d4ed8;
+
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.user-edit-button:hover {
+    border-color: #93c5fd;
+
+    background: #dbeafe;
+
+    transform: translateY(-1px);
+}
+
+.form-help {
+    color: var(--muted);
+
+    font-size: 0.74rem;
+    line-height: 1.4;
+}
+
+.user-status-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+
+    border-radius: 8px;
+    padding: 0.45rem 0.7rem;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.user-status-deactivate {
+    border: 1px solid #dc3545;
+    background: transparent;
+    color: #dc3545;
+}
+
+
+.user-status-deactivate:hover {
+    background: rgba(220, 53, 69, 0.10);
+    transform: translateY(-1px);
+}
+
+
+.user-status-activate {
+    border: 1px solid #198754;
+    background: transparent;
+    color: #198754;
+}
+
+
+.user-status-activate:hover {
+    background: rgba(25, 135, 84, 0.10);
+    transform: translateY(-1px);
+}
+
+.user-password-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+
+    border: 1px solid #6f42c1;
+    background: transparent;
+    color: #6f42c1;
+
+    border-radius: 8px;
+    padding: 0.45rem 0.7rem;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-password-button:hover {
+    background: rgba(111, 66, 193, 0.10);
+    transform: translateY(-1px);
+}
+
+.user-password-target {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    padding: 0.85rem 1rem;
+    margin-bottom: 1rem;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--surface-hover);
+}
+
+.user-password-target span {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.user-password-target strong {
+    color: var(--text-strong);
+    font-size: 0.95rem;
+}
+
+.user-password-target small {
+    color: var(--muted);
+    font-size: 0.78rem;
+}

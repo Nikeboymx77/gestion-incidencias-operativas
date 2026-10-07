@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{fragments/head :: head(
+        'SGIO | Administración de Usuarios',
+        ~{::link}
+)}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/usuarios.css}">
+
+</head>
+
+<body>
+
+
+<!-- ========================================================= -->
+<!-- HEADER                                                    -->
+<!-- ========================================================= -->
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+
+<!-- ========================================================= -->
+<!-- CONTENIDO                                                 -->
+<!-- ========================================================= -->
+
+<main class="users-container">
+
+
+    <!-- NAVEGACIÓN -->
+
+   <div class="users-navigation">
+
+	    <a th:href="@{/dashboard}"
+	       class="back-dashboard-button">
+	
+	        <i class="bi bi-arrow-left"></i>
+	        Volver al Dashboard
+	
+	    </a>
+	
+	    <button type="button"
+	            id="btnNuevoUsuario"
+	            class="new-user-button">
+	
+	        <i class="bi bi-person-plus"></i>
+	        Nuevo usuario
+	
+	    </button>
+	
+	</div>
+
+
+    <!-- CABECERA -->
+
+    <section class="users-header">
+
+        <div>
+
+            <p class="eyebrow">
+                SGIO V2
+            </p>
+
+            <h2>
+                Administración de Usuarios
+            </h2>
+
+            <p>
+                Consulta las cuentas con acceso al sistema,
+                sus roles y estado actual.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- MÉTRICAS                                              -->
+    <!-- ===================================================== -->
+
+    <section class="user-metrics">
+
+        <article class="user-metric">
+
+            <div class="user-metric-icon">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div>
+                <span>Total usuarios</span>
+
+                <strong th:text="${#lists.size(usuarios)}">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="user-metric">
+
+            <div class="user-metric-icon active">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <div>
+                <span>Activos</span>
+
+                <strong th:text="${
+                    #lists.size(
+                        usuarios.?[activo == true]
+                    )
+                }">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="user-metric">
+
+            <div class="user-metric-icon admin">
+                <i class="bi bi-shield-lock"></i>
+            </div>
+
+            <div>
+                <span>Administradores</span>
+
+                <strong th:text="${
+                    #lists.size(
+                        usuarios.?[rol.name() == 'ADMIN']
+                    )
+                }">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+
+        <article class="user-metric">
+
+            <div class="user-metric-icon operator">
+                <i class="bi bi-person-workspace"></i>
+            </div>
+
+            <div>
+                <span>Operadores</span>
+
+                <strong th:text="${
+                    #lists.size(
+                        usuarios.?[rol.name() == 'OPERADOR']
+                    )
+                }">
+                    0
+                </strong>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- TABLA                                                 -->
+    <!-- ===================================================== -->
+
+    <section class="users-card">
+
+        <div class="users-card-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Seguridad
+                </p>
+
+                <h3>
+                    Usuarios del sistema
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="users-table-wrapper">
+
+            <table class="users-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>Nombre</th>
+
+                    <th>Usuario</th>
+
+                    <th>Rol</th>
+
+                    <th>Estado</th>
+                    
+                    <th>Acciones</th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                <tr th:each="usuario : ${usuarios}">
+
+                    <td>
+
+                        <div class="user-name">
+
+                            <div class="user-avatar">
+
+                                <i class="bi bi-person"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong th:text="${usuario.nombre}">
+                                    Nombre
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="username"
+                              th:text="${usuario.username}">
+                            usuario
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="user-role"
+                              th:classappend="${
+                                  usuario.rol.name() == 'ADMIN'
+                                  ? ' admin'
+                                  : ' operator'
+                              }">
+
+                            <i th:class="${
+                                usuario.rol.name() == 'ADMIN'
+                                ? 'bi bi-shield-lock'
+                                : 'bi bi-person-workspace'
+                            }"></i>
+
+                            <span th:text="${usuario.rol}">
+                                ADMIN
+                            </span>
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="user-status active"
+                              th:if="${usuario.activo}">
+
+                            <span class="user-status-dot"></span>
+
+                            Activo
+
+                        </span>
+
+
+                        <span class="user-status inactive"
+                              th:unless="${usuario.activo}">
+
+                            <span class="user-status-dot"></span>
+
+                            Inactivo
+
+                        </span>
+
+                    </td>
+                    
+                    <td>
+
+					    <button type="button"
+					            class="user-edit-button"
+					            th:data-id="${usuario.id}"
+					            th:data-nombre="${usuario.nombre}"
+					            th:data-username="${usuario.username}"
+					            th:data-rol="${usuario.rol}">
+					
+					        <i class="bi bi-pencil-square"></i>
+					
+					        Editar
+					
+					    </button>
+					    
+					    <button type="button"
+						        class="user-status-button"
+						        th:classappend="${usuario.activo}
+						            ? ' user-status-deactivate'
+						            : ' user-status-activate'"
+						        th:data-id="${usuario.id}"
+						        th:data-nombre="${usuario.nombre}"
+						        th:data-activo="${usuario.activo}">
+						
+						    <i th:class="${usuario.activo}
+						        ? 'bi bi-person-x'
+						        : 'bi bi-person-check'">
+						    </i>
+						
+						    <span th:text="${usuario.activo}
+						        ? 'Desactivar'
+						        : 'Activar'">
+						    </span>
+						</button>
+						
+						<button type="button"
+						        class="user-password-button"
+						        th:data-id="${usuario.id}"
+						        th:data-nombre="${usuario.nombre}"
+						        th:data-username="${usuario.username}">
+						
+						    <i class="bi bi-key"></i>
+						
+						    Restablecer contraseña
+						</button>
+					
+					</td>
+
+                </tr>
+
+
+                <tr th:if="${#lists.isEmpty(usuarios)}">
+
+                    <td colspan="5"
+                        class="users-empty">
+
+                        No hay usuarios registrados.
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    SGIO · Sistema de Gestión de Incidencias Operativas
+
+</footer>
+
+<!-- =========================================================
+     MODAL NUEVO USUARIO
+     ========================================================= -->
+
+<div id="modalNuevoUsuario"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Seguridad
+                </p>
+
+                <h3>
+                    <i class="bi bi-person-plus"></i>
+                    Nuevo usuario
+                </h3>
+
+            </div>
+
+            <button type="button"
+                    id="btnCerrarNuevoUsuario"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div id="nuevoUsuarioError"
+                 class="user-modal-error">
+            </div>
+
+
+            <div class="user-form-field">
+
+                <label for="nuevoNombre">
+                    Nombre completo *
+                </label>
+
+                <input type="text"
+                       id="nuevoNombre"
+                       maxlength="100"
+                       autocomplete="name"
+                       placeholder="Ej. César Chávez">
+
+            </div>
+
+
+            <div class="user-form-field">
+
+                <label for="nuevoUsername">
+                    Usuario *
+                </label>
+
+                <input type="text"
+                       id="nuevoUsername"
+                       maxlength="50"
+                       autocomplete="off"
+                       placeholder="Ej. cchavez">
+
+            </div>
+
+
+            <div class="user-form-grid">
+
+                <div class="user-form-field">
+
+                    <label for="nuevoPassword">
+                        Contraseña *
+                    </label>
+
+                    <input type="password"
+                           id="nuevoPassword"
+                           minlength="8"
+                           autocomplete="new-password"
+                           placeholder="Mínimo 8 caracteres">
+
+                </div>
+
+
+                <div class="user-form-field">
+
+                    <label for="confirmarPassword">
+                        Confirmar contraseña *
+                    </label>
+
+                    <input type="password"
+                           id="confirmarPassword"
+                           minlength="8"
+                           autocomplete="new-password"
+                           placeholder="Repite la contraseña">
+
+                </div>
+
+            </div>
+
+
+            <div class="user-form-field">
+
+                <label for="nuevoRol">
+                    Rol *
+                </label>
+
+                <select id="nuevoRol">
+
+                    <option value="">
+                        Selecciona un rol
+                    </option>
+
+                    <option value="OPERADOR">
+                        OPERADOR
+                    </option>
+
+                    <option value="ADMIN">
+                        ADMIN
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarNuevoUsuario"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+            <button type="button"
+                    id="btnGuardarNuevoUsuario"
+                    class="modal-btn-primary">
+
+                <i class="bi bi-person-plus"></i>
+                Crear usuario
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL EDITAR USUARIO
+     ========================================================= -->
+
+<div id="modalEditarUsuario"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    Seguridad
+                </p>
+
+                <h3>
+                    <i class="bi bi-pencil-square"></i>
+                    Editar usuario
+                </h3>
+
+            </div>
+
+            <button type="button"
+                    id="btnCerrarEditarUsuario"
+                    class="sgio-modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="sgio-modal-body">
+
+            <div id="editarUsuarioError"
+                 class="user-modal-error">
+            </div>
+
+
+            <!-- ID INTERNO -->
+
+            <input type="hidden"
+                   id="editarUsuarioId">
+
+
+            <!-- NOMBRE -->
+
+            <div class="user-form-field">
+
+                <label for="editarNombre">
+                    Nombre completo *
+                </label>
+
+                <input type="text"
+                       id="editarNombre"
+                       maxlength="100"
+                       autocomplete="name">
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="user-form-field">
+
+                <label for="editarUsername">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       id="editarUsername"
+                       disabled>
+
+                <small class="form-help">
+                    El nombre de usuario no puede modificarse.
+                </small>
+
+            </div>
+
+
+            <!-- ROL -->
+
+            <div class="user-form-field">
+
+                <label for="editarRol">
+                    Rol *
+                </label>
+
+                <select id="editarRol">
+
+                    <option value="OPERADOR">
+                        OPERADOR
+                    </option>
+
+                    <option value="ADMIN">
+                        ADMIN
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarEditarUsuario"
+                    class="modal-btn-secondary">
+
+                Cancelar
+
+            </button>
+
+            <button type="button"
+                    id="btnGuardarEditarUsuario"
+                    class="modal-btn-primary">
+
+                <i class="bi bi-check-lg"></i>
+
+                Guardar cambios
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL RESTABLECER CONTRASEÑA
+     ========================================================= -->
+
+<div id="modalPasswordUsuario"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+            <div>
+                <p class="eyebrow">Seguridad</p>
+
+                <h3>
+                    <i class="bi bi-key"></i>
+                    Restablecer contraseña
+                </h3>
+            </div>
+
+            <button type="button"
+                    id="btnCerrarPasswordUsuario"
+                    class="sgio-modal-close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="sgio-modal-body">
+
+            <div id="passwordUsuarioError"
+                 class="user-modal-error">
+            </div>
+
+            <input type="hidden"
+                   id="passwordUsuarioId">
+
+            <div class="user-password-target">
+                <span>Usuario</span>
+
+                <strong id="passwordUsuarioNombre">
+                </strong>
+
+                <small id="passwordUsuarioUsername">
+                </small>
+            </div>
+
+            <div class="user-form-field">
+                <label for="nuevaPassword">
+                    Nueva contraseña *
+                </label>
+
+                <input type="password"
+                       id="nuevaPassword"
+                       minlength="8"
+                       autocomplete="new-password">
+
+                <small class="form-help">
+                    Debe contener al menos 8 caracteres.
+                </small>
+            </div>
+
+            <div class="user-form-field">
+                <label for="confirmarNuevaPassword">
+                    Confirmar nueva contraseña *
+                </label>
+
+                <input type="password"
+                       id="confirmarNuevaPassword"
+                       minlength="8"
+                       autocomplete="new-password">
+            </div>
+
+        </div>
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarPasswordUsuario"
+                    class="modal-btn-secondary">
+                Cancelar
+            </button>
+
+            <button type="button"
+                    id="btnGuardarPasswordUsuario"
+                    class="modal-btn-primary">
+
+                <i class="bi bi-key"></i>
+                Restablecer contraseña
+
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<script th:src="@{/js/usuarios.js}"></script>
+
+</body>
+
+</html>

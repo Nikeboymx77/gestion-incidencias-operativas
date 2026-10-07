@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+	
+	// =========================================================
+	// SEGURIDAD - CSRF
+	// =========================================================
+
+	const csrfToken = document
+	    .querySelector('meta[name="_csrf"]')
+	    ?.getAttribute("content");
+
+	const csrfHeader = document
+	    .querySelector('meta[name="_csrf_header"]')
+	    ?.getAttribute("content");
 
     // =========================================================
     // ESTADO GENERAL
@@ -391,7 +403,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+			            [csrfHeader]: csrfToken
                     },
                     body: JSON.stringify({
                         nombre,
@@ -487,12 +500,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const nuevoEstado = !empleadoActual.activo;
 
         activarLoading(btnConfirmarEstadoEmpleado, "Procesando...");
+		
 
         try {
             const response = await fetch(
                 `/api/empleados/${encodeURIComponent(empleadoId)}/estado?activo=${nuevoEstado}`,
                 {
-                    method: "PATCH"
+                    method: "PATCH",
+					
+					headers: {
+					            [csrfHeader]: csrfToken
+					        }
                 }
             );
 
@@ -610,7 +628,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+						
+						[csrfHeader]: csrfToken
                     },
                     body: JSON.stringify({
                         fechaInicio,
@@ -698,7 +718,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(
                 `/api/empleados/${encodeURIComponent(empleadoId)}/ausencias/${encodeURIComponent(ausenciaSeleccionadaId)}`,
                 {
-                    method: "DELETE"
+                    method: "DELETE",
+										
+					headers: {
+					     [csrfHeader]: csrfToken
+					}
                 }
             );
 

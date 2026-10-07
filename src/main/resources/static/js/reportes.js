@@ -778,9 +778,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	                            data: valores,
 
 	                            backgroundColor: [
-	                                "#f59e0b",
-	                                "#2563eb",
 	                                "#16a34a",
+	                                "#2563eb",
+	                                "#f59e0b",
 	                                "#7c3aed",
 	                                "#64748b",
 	                                "#0ea5e9"
