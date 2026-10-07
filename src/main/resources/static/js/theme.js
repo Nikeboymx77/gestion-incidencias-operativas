@@ -45,6 +45,13 @@
 	            "data-theme",
 	            temaReal
 	        );
+			
+		// Sincronizar tema con Bootstrap 5.3
+		document.documentElement
+		    .setAttribute(
+		        "data-bs-theme",
+		        temaReal
+		    );
 
 	    document.documentElement
 	        .setAttribute(
