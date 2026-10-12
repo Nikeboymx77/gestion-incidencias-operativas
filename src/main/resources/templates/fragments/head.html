@@ -8,6 +8,9 @@
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
+    <link rel="icon"
+      type="image/x-icon"
+      th:href="@{/favicon.ico}">
           
     <!-- Spring Security - CSRF -->
 	<meta name="_csrf"
@@ -37,9 +40,11 @@
           th:href="@{/css/dashboard.css}">
           
     <script th:src="@{/js/theme.js}"></script>
+    <script th:src="@{/js/session-handler.js}"></script>
 
     <!-- Estilos adicionales de cada vista -->
     <th:block th:replace="${estilosAdicionales}"></th:block>
+    
 
 </head>
 
