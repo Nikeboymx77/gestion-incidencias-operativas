@@ -2,17 +2,19 @@ import requests
 
 from telegram import Update
 from telegram.ext import ContextTypes
-from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia, 
-                 obtener_pendientes_empleado,obtener_pendientes_por_empleado,obtener_resumen_empleados,
-                 obtener_detalle_empleado,obtener_estadisticas,obtener_ranking,obtener_incidencias_atrasadas,cancelar_incidencia,reasignar_incidencia)
-
+from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia,
+                 obtener_pendientes_empleado, obtener_pendientes_por_empleado, obtener_resumen_empleados,
+                 obtener_detalle_empleado, obtener_estadisticas, obtener_ranking, obtener_incidencias_atrasadas,
+                 cancelar_incidencia, reasignar_incidencia)
+import os
+from telegram.constants import ChatType
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 async def help_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-
     mensaje = (
         "🤖 Bot de Gestión de Incidencias\n\n"
         "Comandos disponibles:\n\n"
@@ -47,11 +49,203 @@ async def help_command(
 LIMITE_MENSAJE_TELEGRAM = 4000
 
 
+def es_administrador_privado(update: Update) -> bool:
+    usuario = update.effective_user
+    chat = update.effective_chat
+
+    if usuario is None or chat is None:
+        return False
+
+    admin_id = os.getenv("SGIO_TELEGRAM_ADMIN_ID", "").strip()
+
+    if not admin_id.isdigit():
+        return False
+
+    return (
+            usuario.id == int(admin_id)
+            and chat.type == ChatType.PRIVATE
+    )
+
+
+async def admin_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    if not es_administrador_privado(update):
+        return
+
+    teclado = [
+        [
+            InlineKeyboardButton(
+                "👥 Consultar empleados",
+                callback_data="admin_empleados"
+            )
+        ]
+    ]
+
+    await update.effective_message.reply_text(
+        "🔐 ADMINISTRACIÓN SGIO\n\n"
+        "Selecciona una opción:",
+        reply_markup=InlineKeyboardMarkup(teclado)
+    )
+
+
+async def admin_callback(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    if not es_administrador_privado(update):
+        return
+
+    query = update.callback_query
+
+    if query is None:
+        return
+
+    await query.answer()
+
+    if query.data == "admin_empleados":
+
+        try:
+            lista_empleados = obtener_resumen_empleados()
+
+            if not lista_empleados:
+                await query.message.reply_text(
+                    "📭 No hay empleados registrados en SGIO."
+                )
+                return
+
+            teclado = []
+
+            for empleado in lista_empleados:
+
+                nombre = empleado.get("nombre", "Sin nombre")
+                username = (empleado.get("usernameTelegram") or "").strip()
+                activo = empleado.get("activo", False)
+
+                if not username:
+                    continue
+
+                estado = "🟢" if activo else "⚪"
+
+                teclado.append([
+                    InlineKeyboardButton(
+                        f"{estado} {nombre}",
+                        callback_data=f"admin_empleado:{username}"
+                    )
+                ])
+
+            if not teclado:
+                await query.message.reply_text(
+                    "⚠️ No hay empleados con usuario de Telegram configurado."
+                )
+                return
+
+            await query.message.reply_text(
+                "👥 EMPLEADOS DE SGIO\n\n"
+                "Selecciona un empleado para consultar su información:",
+                reply_markup=InlineKeyboardMarkup(teclado)
+            )
+
+        except Exception as error:
+            print(f"ERROR consultando empleados: {error}")
+            await query.message.reply_text(
+                "❌ No fue posible consultar los empleados."
+            )
+
+    if query.data.startswith("admin_empleado:"):
+
+        try:
+            username = query.data.split(":", 1)[1]
+
+            empleado = obtener_detalle_empleado(username)
+
+            estado = (
+                "🟢 Activo"
+                if empleado.get("activo", False)
+                else "⚪ Inactivo"
+            )
+
+            dias = empleado.get("diasLaborales") or []
+            ausencias = empleado.get("ausencias") or []
+
+            mensaje = (
+                f"👤 {empleado.get('nombre', 'Sin nombre')}\n\n"
+                f"📱 @{empleado.get('usernameTelegram', username)}\n"
+                f"📍 Estado: {estado}\n\n"
+                "📅 DÍAS LABORALES\n"
+            )
+
+            if dias:
+                mensaje += "\n".join(f"• {dia}" for dia in dias)
+            else:
+                mensaje += "Sin días configurados"
+
+            mensaje += "\n\n🏖 AUSENCIAS\n"
+
+            if ausencias:
+                for ausencia in ausencias:
+                    mensaje += (
+                        f"\n• {ausencia.get('motivo', 'Sin motivo')}\n"
+                        f"  {ausencia.get('fechaInicio', '?')} "
+                        f"al {ausencia.get('fechaFin', '?')}\n"
+                    )
+            else:
+                mensaje += "Sin ausencias registradas"
+
+            id_empleado = empleado.get("id")
+            activo = empleado.get("activo", False)
+            teclado = []
+
+            if id_empleado is not None:
+                texto_boton = (
+                    "🔴 Desactivar empleado"
+                    if activo
+                    else "🟢 Activar empleado"
+                )
+                teclado.append([
+                    InlineKeyboardButton(
+                        texto_boton,
+                        callback_data=f"admin_estado:{id_empleado}"
+                    )
+                ])
+
+            await query.message.reply_text(
+                mensaje,
+                reply_markup=InlineKeyboardMarkup(teclado) if teclado else None
+            )
+
+        except Exception as error:
+            print(f"ERROR consultando detalle del empleado: {error}")
+            await query.message.reply_text(
+                "❌ No fue posible consultar el detalle del empleado."
+            )
+    if query.data.startswith("admin_estado:"):
+
+        id_empleado = query.data.split(":", 1)[1]
+
+        await query.message.reply_text(
+            f"⚠️ ¿Confirmas que deseas cambiar el estado "
+            f"del empleado con ID {id_empleado}?\n\n"
+            "Esta operación todavía no modificará la base de datos.",
+            reply_markup=InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton(
+                        "✅ Confirmar",
+                        callback_data=f"admin_confirmar:{id_empleado}"
+                    ),
+                    InlineKeyboardButton(
+                        "❌ Cancelar",
+                        callback_data="admin_cancelar"
+                    )
+                ]
+            ])
+        )
+
 async def pendientes_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-
     try:
         if context.args:
             nombre_empleado = " ".join(context.args).strip()
@@ -115,9 +309,9 @@ async def pendientes_command(
             bloque_completo = bloque + "\n\n"
 
             if (
-                len(mensaje_actual)
-                + len(bloque_completo)
-                <= LIMITE_MENSAJE_TELEGRAM
+                    len(mensaje_actual)
+                    + len(bloque_completo)
+                    <= LIMITE_MENSAJE_TELEGRAM
             ):
                 mensaje_actual += bloque_completo
                 continue
@@ -161,11 +355,9 @@ async def estado_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-
     try:
 
         if not context.args:
-
             await update.effective_message.reply_text(
                 "⚠️ Uso correcto:\n\n"
                 "/estado INC-1001"
@@ -173,24 +365,20 @@ async def estado_command(
 
             return
 
-
         folio = (
             context.args[0]
             .strip()
             .upper()
         )
 
-
         inc = obtener_incidencia(
             folio
         )
 
-
         empleado = (
-            inc.get("empleadoAsignado")
-            or {}
+                inc.get("empleadoAsignado")
+                or {}
         )
-
 
         mensaje = (
             f"📌 Incidencia "
@@ -214,7 +402,6 @@ async def estado_command(
             f"🧾 Descripción:\n"
             f"{inc.get('descripcion') or 'Sin descripción'}"
         )
-
 
         await enviar_mensaje_largo(
             update,
@@ -252,7 +439,8 @@ async def resuelto_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     except Exception as e:
         await update.message.reply_text(f"❌ Error resolviendo incidencia: {e}")
-        
+
+
 async def chatid_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     chat_title = update.effective_chat.title or "Chat privado"
@@ -261,6 +449,7 @@ async def chatid_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🆔 Chat ID: {chat_id}\n"
         f"💬 Chat: {chat_title}"
     )
+
 
 async def tomar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
@@ -282,12 +471,12 @@ async def tomar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     except Exception as e:
         await update.message.reply_text(f"❌ Error tomando incidencia: {e}")
-        
+
+
 async def mis_pendientes_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-
     try:
         usuario = update.effective_user
 
@@ -317,7 +506,6 @@ async def mis_pendientes_command(
         mensajes = []
 
         for incidencia in incidencias:
-
             mensajes.append(
                 f"🔹 {incidencia.get('folio', 'Sin folio')}\n"
                 f"📍 Estado: {incidencia.get('estado', 'Sin estado')}\n"
@@ -339,12 +527,12 @@ async def mis_pendientes_command(
         await update.effective_message.reply_text(
             f"❌ Error consultando tus incidencias: {error}"
         )
-        
-async def empleados(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+
+async def empleados(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         empleados = obtener_resumen_empleados()
-        
+
         empleados.sort(
             key=lambda empleado: empleado.get("totalActivas", 0),
             reverse=True
@@ -392,9 +580,9 @@ async def empleados(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             f"❌ Ocurrió un error inesperado.\n{error}"
         )
-        
-async def empleado_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+
+async def empleado_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
 
         if len(context.args) != 1:
@@ -426,7 +614,6 @@ async def empleado_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if empleado["ausencias"]:
 
             for ausencia in empleado["ausencias"]:
-
                 mensaje += (
                     f"\n{ausencia['motivo']}\n"
                     f"{ausencia['fechaInicio']} - {ausencia['fechaFin']}\n"
@@ -458,11 +645,11 @@ async def empleado_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"❌ Error:\n{error}"
         )
 
+
 async def estadisticas_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ):
-
     estadisticas = obtener_estadisticas()
 
     if not estadisticas:
@@ -485,11 +672,11 @@ async def estadisticas_command(
         parse_mode="Markdown"
     )
 
+
 async def ranking_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ):
-
     ranking = obtener_ranking()
 
     if ranking is None:
@@ -509,7 +696,6 @@ async def ranking_command(
     mensaje = "🏆 *Ranking SGIO*\n\n"
 
     for posicion, empleado in enumerate(ranking, start=1):
-
         indicador = (
             medallas[posicion - 1]
             if posicion <= 3
@@ -529,12 +715,12 @@ async def ranking_command(
         mensaje,
         parse_mode="Markdown"
     )
-    
+
+
 async def atrasadas_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ):
-
     dias = 3
 
     if context.args:
@@ -595,13 +781,13 @@ async def atrasadas_command(
         mensaje,
         parse_mode="Markdown"
     )
-    
+
+
 async def enviar_mensaje_largo(
         update: Update,
         mensaje: str,
         parse_mode: str | None = None
 ) -> None:
-
     if not mensaje:
         return
 
@@ -639,7 +825,6 @@ async def enviar_mensaje_largo(
     total_partes = len(partes)
 
     for indice, parte in enumerate(partes, start=1):
-
         encabezado = (
             f"📄 Parte {indice}/{total_partes}\n\n"
             if total_partes > 1
@@ -650,12 +835,12 @@ async def enviar_mensaje_largo(
             encabezado + parte,
             parse_mode=parse_mode
         )
-        
+
+
 async def cancelar_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-
     try:
         if len(context.args) < 2:
             await update.effective_message.reply_text(
@@ -682,9 +867,9 @@ async def cancelar_command(
             return
 
         usuario = (
-            usuario_telegram.username
-            or usuario_telegram.full_name
-            or usuario_telegram.first_name
+                usuario_telegram.username
+                or usuario_telegram.full_name
+                or usuario_telegram.first_name
         )
 
         incidencia = cancelar_incidencia(
@@ -707,12 +892,12 @@ async def cancelar_command(
         await update.effective_message.reply_text(
             f"❌ Error cancelando incidencia: {error}"
         )
-        
+
+
 async def reasignar_command(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-
     try:
         if len(context.args) < 3:
             await update.effective_message.reply_text(
@@ -745,9 +930,9 @@ async def reasignar_command(
             return
 
         usuario = (
-            usuario_telegram.username
-            or usuario_telegram.full_name
-            or usuario_telegram.first_name
+                usuario_telegram.username
+                or usuario_telegram.full_name
+                or usuario_telegram.first_name
         )
 
         incidencia = reasignar_incidencia(
@@ -758,8 +943,8 @@ async def reasignar_command(
         )
 
         empleado = (
-            incidencia.get("empleadoAsignado")
-            or {}
+                incidencia.get("empleadoAsignado")
+                or {}
         )
 
         await update.effective_message.reply_text(
@@ -779,4 +964,3 @@ async def reasignar_command(
         await update.effective_message.reply_text(
             f"❌ Error reasignando incidencia: {error}"
         )
-        

@@ -1,9 +1,10 @@
-from telegram.ext import Application, CommandHandler
+from telegram import Update
+from telegram.ext import Application, CommandHandler,CallbackQueryHandler
 
 from config import TELEGRAM_BOT_TOKEN
 from commands import (help_command, pendientes_command, estado_command, resuelto_command, chatid_command, tomar_command,mis_pendientes_command,
-                      empleados,empleado_command,estadisticas_command,ranking_command,atrasadas_command,cancelar_command,reasignar_command)
-
+                      empleados,empleado_command,estadisticas_command,ranking_command,atrasadas_command,cancelar_command,reasignar_command,admin_command,admin_callback)
+                      
 
 def main():
     if not TELEGRAM_BOT_TOKEN:
@@ -26,9 +27,18 @@ def main():
     app.add_handler(CommandHandler("atrasadas", atrasadas_command))
     app.add_handler(CommandHandler("cancelar",cancelar_command))
     app.add_handler(CommandHandler("reasignar",reasignar_command))
+    app.add_handler(CommandHandler("admin", admin_command))
+    app.add_handler(
+        CallbackQueryHandler(
+            admin_callback,
+            pattern=r"^(admin_empleados|admin_empleado:[A-Za-z0-9_]{5,32}|admin_estado:[0-9]+)$"
+        )
+    )
 
     print("🤖 Bot de incidencias iniciado...")
-    app.run_polling()
+    app.run_polling(
+    allowed_updates=Update.ALL_TYPES
+    )
 
 
 if __name__ == "__main__":
