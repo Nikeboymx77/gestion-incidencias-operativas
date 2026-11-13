@@ -27,6 +27,12 @@ public class BotApiKeyFilter
     @Value("${sgio.bot.api-key}")
     private String apiKey;
     
+    @Value("${sgio.bot.admin.api-key}")
+    private String adminApiKey;
+
+    private static final String ADMIN_API_KEY_HEADER =
+            "X-SGIO-ADMIN-API-KEY";
+    
     
     @Override
     protected boolean shouldNotFilter(
@@ -66,6 +72,32 @@ public class BotApiKeyFilter
             );
 
             return;
+        }
+        
+     // Validación adicional para operaciones administrativas
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/api/bot/admin/")) {
+
+            String adminApiKeyRecibida =
+                    request.getHeader(ADMIN_API_KEY_HEADER);
+
+            if (adminApiKeyRecibida == null
+                    || !adminApiKey.equals(adminApiKeyRecibida)) {
+
+                response.setStatus(
+                        HttpServletResponse.SC_FORBIDDEN
+                );
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write(
+                        "{\"mensaje\":\"Credencial administrativa inválida\"}"
+                );
+
+                return;
+            }
         }
         
         UsernamePasswordAuthenticationToken authentication =

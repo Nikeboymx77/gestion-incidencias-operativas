@@ -5,7 +5,7 @@ from telegram.ext import ContextTypes
 from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia,
                  obtener_pendientes_empleado, obtener_pendientes_por_empleado, obtener_resumen_empleados,
                  obtener_detalle_empleado, obtener_estadisticas, obtener_ranking, obtener_incidencias_atrasadas,
-                 cancelar_incidencia, reasignar_incidencia)
+                 cancelar_incidencia, reasignar_incidencia, cambiar_estado_empleado_admin)
 import os
 from telegram.constants import ChatType
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -221,26 +221,69 @@ async def admin_callback(
                 "❌ No fue posible consultar el detalle del empleado."
             )
     if query.data.startswith("admin_estado:"):
+        id_empleado = int(query.data.split(":", 1)[1])
+        try:
+            # Reconsultamos el estado actual; no confiamos en un botón antiguo.
+            empleados = obtener_resumen_empleados()
+            empleado = next((e for e in empleados if e.get("id") == id_empleado), None)
+            if empleado is None:
+                await query.message.reply_text("❌ Empleado no encontrado.")
+                return
 
-        id_empleado = query.data.split(":", 1)[1]
+            nuevo_estado = not bool(empleado.get("activo", False))
+            accion = "activar" if nuevo_estado else "desactivar"
+            context.user_data["sgio_admin_pendiente"] = {
+                "id": id_empleado,
+                "activo": nuevo_estado,
+            }
+            await query.message.reply_text(
+                f"⚠️ ¿Confirmas {accion} a {empleado.get('nombre', 'este empleado')} "
+                f"(ID {id_empleado})?",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("✅ Confirmar", callback_data=f"admin_confirmar:{id_empleado}"),
+                    InlineKeyboardButton("❌ Cancelar", callback_data="admin_cancelar"),
+                ]]),
+            )
+        except Exception as error:
+            print(f"ERROR preparando cambio de estado: {error}")
+            await query.message.reply_text("❌ No fue posible preparar el cambio de estado.")
+        return
 
-        await query.message.reply_text(
-            f"⚠️ ¿Confirmas que deseas cambiar el estado "
-            f"del empleado con ID {id_empleado}?\n\n"
-            "Esta operación todavía no modificará la base de datos.",
-            reply_markup=InlineKeyboardMarkup([
-                [
-                    InlineKeyboardButton(
-                        "✅ Confirmar",
-                        callback_data=f"admin_confirmar:{id_empleado}"
-                    ),
-                    InlineKeyboardButton(
-                        "❌ Cancelar",
-                        callback_data="admin_cancelar"
-                    )
-                ]
-            ])
-        )
+    if query.data == "admin_cancelar":
+        context.user_data.pop("sgio_admin_pendiente", None)
+        await query.edit_message_reply_markup(reply_markup=None)
+        await query.message.reply_text("❌ Operación cancelada. No se realizó ningún cambio.")
+        return
+
+    if query.data.startswith("admin_confirmar:"):
+        id_empleado = int(query.data.split(":", 1)[1])
+        pendiente = context.user_data.get("sgio_admin_pendiente")
+        if not pendiente or pendiente["id"] != id_empleado:
+            await query.message.reply_text("⚠️ Confirmación vencida. Inicia nuevamente desde /admin.")
+            return
+
+        # Se consume la confirmación para impedir ejecuciones repetidas.
+        context.user_data.pop("sgio_admin_pendiente", None)
+        await query.edit_message_reply_markup(reply_markup=None)
+        try:
+            resultado = cambiar_estado_empleado_admin(
+                id_empleado=id_empleado,
+                activo=pendiente["activo"],
+                telegram_user_id=update.effective_user.id,
+            )
+            estado = "🟢 Activo" if resultado.get("activo") else "⚪ Inactivo"
+            await query.message.reply_text(
+                f"✅ Estado actualizado correctamente.\n"
+                f"👤 {resultado.get('nombre', 'Empleado')}\n"
+                f"📍 Nuevo estado: {estado}"
+            )
+        except Exception as error:
+            print(f"ERROR cambiando estado del empleado: {error}")
+            await query.message.reply_text(
+                "❌ No se pudo confirmar el resultado del cambio. "
+                "Consulta el estado actual desde /admin antes de volver a intentar."
+            )
+        return
 
 async def pendientes_command(
         update: Update,

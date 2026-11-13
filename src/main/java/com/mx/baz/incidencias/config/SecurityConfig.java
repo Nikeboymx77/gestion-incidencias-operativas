@@ -71,6 +71,27 @@ public class SecurityConfig {
 
     			        .requestMatchers(HttpMethod.PUT, "/api/incidencias/**")
     			            .hasAnyRole("ADMIN", "OPERADOR")
+    			            
+			         // Pruebas del clasificador de incidencias
+			            .requestMatchers(
+			                HttpMethod.GET,
+			                "/api/clasificacion/pruebas/**"
+			            )
+			            .hasRole("ADMIN")
+			            
+			            // Guardar clasificación de prueba
+			            .requestMatchers(
+			                HttpMethod.POST,
+			                "/api/clasificacion/pruebas/*/guardar"
+			            )
+			            .hasRole("ADMIN")
+			            
+			            .requestMatchers(
+		            	    HttpMethod.GET,
+		            	    "/api/seguridad/csrf"
+			            )
+			            .hasRole("ADMIN")
+			            .requestMatchers("/api/reportes/**").hasRole("ADMIN")
 
         			    // Todo lo demás requiere autenticación
         			    .anyRequest()

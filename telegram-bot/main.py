@@ -31,7 +31,13 @@ def main():
     app.add_handler(
         CallbackQueryHandler(
             admin_callback,
-            pattern=r"^(admin_empleados|admin_empleado:[A-Za-z0-9_]{5,32}|admin_estado:[0-9]+)$"
+            pattern=(
+                r"^(admin_empleados|"
+                r"admin_empleado:[A-Za-z0-9_]{5,32}|"
+                r"admin_estado:[0-9]+|"
+                r"admin_confirmar:[0-9]+|"
+                r"admin_cancelar)$"
+            )
         )
     )
 

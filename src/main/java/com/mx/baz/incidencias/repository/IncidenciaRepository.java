@@ -606,4 +606,30 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
             nativeQuery = true)
     List<ReporteIncidenciaAntiguaProjection>
     obtenerIncidenciasActivasMasAntiguas();
+    
+    
+    @Query("""
+    	    SELECT i
+    	    FROM Incidencia i
+    	    WHERE NOT EXISTS (
+    	        SELECT ic.id
+    	        FROM IncidenciaClasificacion ic
+    	        WHERE ic.incidencia = i
+    	    )
+    	    ORDER BY i.fechaCorreo DESC, i.id DESC
+    	    """)
+    	List<Incidencia> buscarPendientesClasificacion(
+    	        Pageable pageable);
+    
+    @Query("""
+    	    SELECT i
+    	    FROM Incidencia i
+    	    WHERE i.fechaCorreo >= :desde
+    	      AND i.fechaCorreo < :hasta
+    	    ORDER BY i.fechaCorreo DESC, i.id DESC
+    	    """)
+    	List<Incidencia> buscarParaReporte(
+    	        @Param("desde") LocalDateTime desde,
+    	        @Param("hasta") LocalDateTime hasta
+    	);
 }

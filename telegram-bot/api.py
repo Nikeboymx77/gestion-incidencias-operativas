@@ -1,5 +1,5 @@
 import requests
-from config import API_BASE_URL, BOT_API_KEY
+from config import API_BASE_URL, BOT_API_KEY, BOT_ADMIN_API_KEY
 from urllib.parse import quote
 
 def manejar_error_response(response):
@@ -258,4 +258,20 @@ def reasignar_incidencia(
     if not response.ok:
         manejar_error_response(response)
 
+    return response.json()
+
+def cambiar_estado_empleado_admin(id_empleado: int, activo: bool, telegram_user_id: int) -> dict:
+    """Solicita el cambio de estado a la API administrativa de SGIO."""
+    response = requests.patch(
+        f"{API_BASE_URL}/bot/admin/empleados/{id_empleado}/estado",
+        params={"activo": str(activo).lower()},
+        headers={
+            "X-SGIO-API-KEY": BOT_API_KEY,
+            "X-SGIO-ADMIN-API-KEY": BOT_ADMIN_API_KEY,
+            "X-SGIO-TELEGRAM-USER-ID": str(telegram_user_id)
+        },
+        timeout=15,
+    )
+    if not response.ok:
+        manejar_error_response(response)
     return response.json()

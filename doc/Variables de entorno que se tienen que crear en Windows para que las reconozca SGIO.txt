@@ -1,0 +1,8 @@
+
+Variables de entorno que se tienen que crear en Windows para que las reconozca SGIO
+
+SGIO_BOT_API_KEY:SGIO-BOT-2026-96250165-9x7K4m2P
+
+SGIO_TELEGRAM_ADMIN_ID: 1378763438
+
+SGIO_BOT_ADMIN_API_KEY: 8TJ8xgS5s-qn2I31VZRLuyfInGgCkGbu0IHAUBiV9HMRDiaEj8HsRmZqE3oTDEE1
