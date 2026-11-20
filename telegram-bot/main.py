@@ -3,7 +3,8 @@ from telegram.ext import Application, CommandHandler,CallbackQueryHandler
 
 from config import TELEGRAM_BOT_TOKEN
 from commands import (help_command, pendientes_command, estado_command, resuelto_command, chatid_command, tomar_command,mis_pendientes_command,
-                      empleados,empleado_command,estadisticas_command,ranking_command,atrasadas_command,cancelar_command,reasignar_command,admin_command,admin_callback)
+                      empleados,empleado_command,estadisticas_command,ranking_command,atrasadas_command,cancelar_command,reasignar_command,admin_command,admin_callback,
+                      reasignadas_command,misreasignadas_command,reabiertas_command,misreabiertas_command)
                       
 
 def main():
@@ -39,6 +40,21 @@ def main():
                 r"admin_cancelar)$"
             )
         )
+    )
+    app.add_handler(
+        CommandHandler("reasignadas", reasignadas_command)
+    )
+
+    app.add_handler(
+        CommandHandler("mis_reasignadas", misreasignadas_command)
+    )
+
+    app.add_handler(
+        CommandHandler("reabiertas", reabiertas_command)
+    )
+
+    app.add_handler(
+        CommandHandler("mis_reabiertas", misreabiertas_command)
     )
 
     print("🤖 Bot de incidencias iniciado...")

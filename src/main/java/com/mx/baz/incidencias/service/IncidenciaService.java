@@ -393,6 +393,18 @@ public class IncidenciaService {
                 .map(incidenciaMapper::toResponse)
                 .toList();
     }
+    
+
+	@Transactional(readOnly = true)
+	public List<IncidenciaResponse> obtenerReasignadas() {
+	
+	    return incidenciaRepository
+	            .findByEstado(EstadoIncidencia.REASIGNADA)
+	            .stream()
+	            .map(incidenciaMapper::toResponse)
+	            .toList();
+	}
+
 
     public IncidenciaResponse obtenerPorFolio(String folio) {
         return incidenciaRepository.findByFolio(folio)
@@ -498,6 +510,34 @@ public class IncidenciaService {
                 .map(incidenciaMapper::toResponse)
                 .toList();
     }
+    
+
+	@Transactional(readOnly = true)
+	public List<IncidenciaResponse> obtenerReasignadasPorEmpleado(
+	        String usernameTelegram) {
+	
+	    if (usernameTelegram == null
+	            || usernameTelegram.isBlank()) {
+	
+	        throw new BusinessException(
+	                ErrorCodes.USUARIO_TELEGRAM_INVALIDO,
+	                "No se recibió un usuario de Telegram válido."
+	        );
+	    }
+	
+	    String usernameNormalizado =
+	            normalizarUsername(usernameTelegram);
+	
+	    return incidenciaRepository
+	            .findByEmpleadoAsignadoUsernameTelegramAndEstadoInOrderByFechaCorreoAsc(
+	                    usernameNormalizado,
+	                    List.of(EstadoIncidencia.REASIGNADA)
+	            )
+	            .stream()
+	            .map(incidenciaMapper::toResponse)
+	            .toList();
+	}
+
 
     private String normalizarUsername(String username) {
 
@@ -528,6 +568,29 @@ public class IncidenciaService {
                 .map(incidenciaMapper::toResponse)
                 .toList();
     }
+    
+
+	@Transactional(readOnly = true)
+	public List<IncidenciaResponse> obtenerReasignadasPorNombreEmpleado(
+	        String nombreEmpleado) {
+	
+	    if (nombreEmpleado == null || nombreEmpleado.isBlank()) {
+	        throw new BusinessException(
+	                ErrorCodes.EMPLEADO_NO_DISPONIBLE,
+	                "Debe proporcionar el nombre del empleado."
+	        );
+	    }
+	
+	    return incidenciaRepository
+	            .findByEmpleadoAsignadoNombreContainingIgnoreCaseAndEstadoOrderByFechaCorreoAsc(
+	                    nombreEmpleado.trim(),
+	                    EstadoIncidencia.REASIGNADA
+	            )
+	            .stream()
+	            .map(incidenciaMapper::toResponse)
+	            .toList();
+	}
+
     
     @Transactional(readOnly = true)
     public List<EmpleadoResumenOperativoResponse> obtenerResumenOperativo() {
@@ -921,4 +984,66 @@ public class IncidenciaService {
 
         return valor.trim();
     }
+    
+
+	@Transactional(readOnly = true)
+	public List<IncidenciaResponse> obtenerReabiertas() {
+	
+	    return incidenciaRepository
+	            .findByEstado(EstadoIncidencia.REABIERTA)
+	            .stream()
+	            .map(incidenciaMapper::toResponse)
+	            .toList();
+	}
+	
+
+	@Transactional(readOnly = true)
+	public List<IncidenciaResponse> obtenerReabiertasPorNombreEmpleado(
+	        String nombreEmpleado) {
+	
+	    if (nombreEmpleado == null || nombreEmpleado.isBlank()) {
+	        throw new BusinessException(
+	                ErrorCodes.EMPLEADO_NO_DISPONIBLE,
+	                "Debe proporcionar el nombre del empleado."
+	        );
+	    }
+	
+	    return incidenciaRepository
+	            .findByEmpleadoAsignadoNombreContainingIgnoreCaseAndEstadoOrderByFechaCorreoAsc(
+	                    nombreEmpleado.trim(),
+	                    EstadoIncidencia.REABIERTA
+	            )
+	            .stream()
+	            .map(incidenciaMapper::toResponse)
+	            .toList();
+	}
+	
+
+	@Transactional(readOnly = true)
+	public List<IncidenciaResponse> obtenerReabiertasPorEmpleado(
+	        String usernameTelegram) {
+	
+	    if (usernameTelegram == null
+	            || usernameTelegram.isBlank()) {
+	
+	        throw new BusinessException(
+	                ErrorCodes.USUARIO_TELEGRAM_INVALIDO,
+	                "No se recibió un usuario de Telegram válido."
+	        );
+	    }
+	
+	    String usernameNormalizado =
+	            normalizarUsername(usernameTelegram);
+	
+	    return incidenciaRepository
+	            .findByEmpleadoAsignadoUsernameTelegramAndEstadoInOrderByFechaCorreoAsc(
+	                    usernameNormalizado,
+	                    List.of(EstadoIncidencia.REABIERTA)
+	            )
+	            .stream()
+	            .map(incidenciaMapper::toResponse)
+	            .toList();
+	}
+
+
 }

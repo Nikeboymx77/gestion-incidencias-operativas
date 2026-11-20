@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.mx.baz.incidencias</groupId>
 	<artifactId>gestion-incidencias-operativas</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>gestion-incidencias-operativas</name>
 	<description>gestion-incidencias-operativas</description>
 	<url/>

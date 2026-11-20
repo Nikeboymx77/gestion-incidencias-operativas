@@ -189,42 +189,143 @@
             </button>
 
         </div>
-
+        
+        
+		<!-- ==========================================
+		     SGIO-002 - FILTROS Y ORDENAMIENTO
+		     ========================================== -->
+		
+		<div class="employees-filters">
+		
+		    <div class="employees-filter-field">
+		        <label for="filtroEstadoEmpleados">
+		            Estado
+		        </label>
+		
+		        <select id="filtroEstadoEmpleados">
+		            <option value="TODOS">Todos</option>
+		            <option value="ACTIVOS">Activos</option>
+		            <option value="INACTIVOS">Inactivos</option>
+		        </select>
+		    </div>
+		
+		    <div class="employees-filter-field">
+		        <label for="ordenEmpleados">
+		            Ordenar por
+		        </label>
+		
+		        <select id="ordenEmpleados">
+		            <option value="NOMBRE">
+		                Nombre (A-Z)
+		            </option>
+		
+		            <option value="DIAS_ASC">
+		                Menos días laborales
+		            </option>
+		
+		            <option value="DIAS_DESC">
+		                Más días laborales
+		            </option>
+		
+		            <option value="ACTIVOS_PRIMERO">
+		                Activos primero
+		            </option>
+		
+		            <option value="INACTIVOS_PRIMERO">
+		                Inactivos primero
+		            </option>
+		        </select>
+		    </div>
+		
+		    <div class="employees-filter-field">
+		        <label>Resultados</label>
+		
+		        <span id="contadorResultadosEmpleados"
+		              class="employees-results-count">
+		            0 empleados
+		        </span>
+		    </div>
+		
+		</div>	
+        
+		<!-- SGIO-002: Acciones masivas de empleados -->
+		<div id="barraAccionesMasivas"
+		     class="employees-bulk-actions"
+		     hidden>
+		
+		    <div class="employees-bulk-info">
+		        <i class="bi bi-people-fill"></i>
+		
+		        <span id="totalSeleccionadosMasivo">
+		            0 empleados seleccionados
+		        </span>
+		    </div>
+		
+		    <div class="employees-bulk-buttons">
+		
+		        <button type="button"
+		                id="btnActivarSeleccionados"
+		                class="bulk-btn bulk-btn-activate">
+		            <i class="bi bi-person-check"></i>
+		            Activar
+		        </button>
+		
+		        <button type="button"
+		                id="btnDesactivarSeleccionados"
+		                class="bulk-btn bulk-btn-deactivate">
+		            <i class="bi bi-person-dash"></i>
+		            Desactivar
+		        </button>
+		
+		        <button type="button"
+		                id="btnEditarDiasSeleccionados"
+		                class="bulk-btn bulk-btn-days">
+		            <i class="bi bi-calendar-week"></i>
+		            Editar días
+		        </button>
+		
+		        <button type="button"
+		                id="btnLimpiarSeleccion"
+		                class="bulk-btn bulk-btn-clear">
+		            <i class="bi bi-x-circle"></i>
+		            Limpiar
+		        </button>
+		
+		    </div>
+		
+		</div>
+        
 
         <div class="employees-table-wrapper">
 
             <table class="employees-table">
 
-                <thead>
-
-                <tr>
-
-                    <th>Empleado</th>
-
-                    <th>Estado</th>
-
-                    <th>Carga</th>
-
-                    <th>Pendientes</th>
-
-                    <th>En proceso</th>
-
-                    <th>Reabiertas</th>
-
-                    <th>Última asignación</th>
-
-                    <th>Acciones</th>
-
-                </tr>
-
-                </thead>
-
+                
+				<thead>
+				    <tr>
+				        <th>
+				            <input type="checkbox"
+				                   id="seleccionarTodosEmpleados"
+				                   aria-label="Seleccionar todos los empleados">
+				        </th>
+				
+				        <th>Empleado</th>
+				        <th>Estado</th>
+				        <th>Días laborales</th>
+				        <th>Carga</th>
+				        <th>Pendientes</th>
+				        <th>En proceso</th>
+				        <th>Reabiertas</th>
+				        <th>Última asignación</th>
+				        <th>Acciones</th>
+				    </tr>
+				</thead>
 
                 <tbody id="empleadosTableBody">
 
                 <tr>
 
-                    <td colspan="8"
+                    <td colspan="10"
                         class="employees-loading">
 
                         <span class="spinner-small"></span>
@@ -416,6 +517,226 @@
     </div>
 
 </div>
+
+
+<!-- ==========================================
+     SGIO-002 - MODAL CAMBIO MASIVO DE ESTADO
+     ========================================== -->
+
+<div id="modalEstadoMasivo"
+     class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+            <div>
+                <p class="eyebrow">
+                    Administración de empleados
+                </p>
+
+                <h3 id="tituloEstadoMasivo">
+                    Cambiar estado de empleados
+                </h3>
+            </div>
+
+            <button type="button"
+                    id="btnCerrarEstadoMasivo"
+                    class="sgio-modal-close"
+                    aria-label="Cerrar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="sgio-modal-body">
+
+            <div class="employee-state-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <div>
+                    <strong id="mensajeEstadoMasivo">
+                        ¿Confirmas el cambio de estado?
+                    </strong>
+
+                    <p>
+                        Esta operación modificará el estado
+                        de todos los empleados seleccionados.
+                    </p>
+                </div>
+            </div>
+
+            <div id="errorEstadoMasivo"
+                 class="employee-modal-error">
+            </div>
+
+        </div>
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarEstadoMasivo"
+                    class="modal-btn-secondary">
+                Cancelar
+            </button>
+
+            <button type="button"
+                    id="btnConfirmarEstadoMasivo"
+                    class="modal-btn-primary">
+                Confirmar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     SGIO-002 - MODAL EDITAR DÍAS LABORALES
+     ========================================== -->
+
+<div id="modalDiasMasivos" class="sgio-modal">
+
+    <div class="sgio-modal-backdrop"></div>
+
+    <div class="sgio-modal-dialog">
+
+        <div class="sgio-modal-header">
+
+            <div>
+                <p class="eyebrow">
+                    Administración de empleados
+                </p>
+
+                <h3>
+                    <i class="bi bi-calendar-week"></i>
+                    Editar días laborales
+                </h3>
+            </div>
+
+            <button type="button"
+                    id="btnCerrarDiasMasivos"
+                    class="sgio-modal-close"
+                    aria-label="Cerrar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+        </div>
+
+        <div class="sgio-modal-body">
+
+            <p id="mensajeDiasMasivos">
+                Modificar días laborales de los empleados seleccionados.
+            </p>
+
+            <div class="employee-form-field">
+
+                <label for="operacionDiasMasivos">
+                    Tipo de operación
+                </label>
+
+                <select id="operacionDiasMasivos">
+
+                    <option value="REEMPLAZAR">
+                        Reemplazar días actuales
+                    </option>
+
+                    <option value="AGREGAR">
+                        Agregar días
+                    </option>
+
+                    <option value="QUITAR">
+                        Quitar días
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="employee-form-field">
+
+                <label>
+                    Selecciona los días laborales
+                </label>
+
+                <div id="diasMasivosCheckboxes"
+                     class="edit-workdays">
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="MONDAY">
+                        <span>L</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="TUESDAY">
+                        <span>M</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="WEDNESDAY">
+                        <span>X</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="THURSDAY">
+                        <span>J</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="FRIDAY">
+                        <span>V</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="SATURDAY">
+                        <span>S</span>
+                    </label>
+
+                    <label class="workday-checkbox">
+                        <input type="checkbox" value="SUNDAY">
+                        <span>D</span>
+                    </label>
+
+                </div>
+
+            </div>
+
+            <p id="descripcionOperacionDias"
+               class="bulk-days-description">
+                Los días seleccionados reemplazarán
+                los días actuales.
+            </p>
+
+            <div id="errorDiasMasivos"
+                 class="employee-modal-error">
+            </div>
+
+        </div>
+
+        <div class="sgio-modal-footer">
+
+            <button type="button"
+                    id="btnCancelarDiasMasivos"
+                    class="modal-btn-secondary">
+                Cancelar
+            </button>
+
+            <button type="button"
+                    id="btnConfirmarDiasMasivos"
+                    class="modal-btn-primary">
+                Aplicar cambios
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <!-- =========================================================
      TOASTS SGIO

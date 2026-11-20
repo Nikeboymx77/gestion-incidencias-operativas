@@ -1078,3 +1078,521 @@ body.modal-open {
     background-color: var(--surface-hover) !important;
     color: var(--text);
 }
+
+
+/* ==========================================
+   SGIO-002 - DÍAS LABORALES
+   ========================================== */
+
+.employee-workdays-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    min-width: 130px;
+}
+
+.employee-workday-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
+
+    border-radius: 7px;
+
+    background: #e8f1ff;
+    color: #1d4ed8;
+
+    border: 1px solid #bfdbfe;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* ==========================================
+   SGIO-002 - SELECCIÓN DE EMPLEADOS
+   ========================================== */
+
+.empleado-checkbox,
+#seleccionarTodosEmpleados {
+    width: 17px;
+    height: 17px;
+
+    cursor: pointer;
+    accent-color: #2563eb;
+}
+
+.employees-table th:first-child,
+.employees-table td:first-child {
+    width: 45px;
+    text-align: center;
+}
+
+.employees-table tbody tr:has(
+    .empleado-checkbox:checked
+) {
+    background-color: #eff6ff;
+}
+
+/* ==========================================
+   SGIO-002 - AJUSTES RESPONSIVOS
+   ========================================== */
+
+@media (max-width: 768px) {
+
+    .employee-workdays-list {
+        min-width: 110px;
+    }
+
+    .employee-workday-badge {
+        width: 25px;
+        height: 25px;
+        font-size: 11px;
+    }
+}
+
+
+/* ==========================================
+   SGIO-002 - ACCIONES MASIVAS
+   ========================================== */
+
+.employees-bulk-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+
+    padding: 15px 18px;
+    margin: 0 0 18px;
+
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+}
+
+.employees-bulk-actions[hidden] {
+    display: none;
+}
+
+.employees-bulk-info {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: #1e40af;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.employees-bulk-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bulk-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 9px 13px;
+    border: none;
+    border-radius: 8px;
+
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.bulk-btn:hover {
+    opacity: 0.85;
+}
+
+.bulk-btn-activate {
+    background: #15803d;
+}
+
+.bulk-btn-deactivate {
+    background: #b91c1c;
+}
+
+.bulk-btn-days {
+    background: #2563eb;
+}
+
+.bulk-btn-clear {
+    background: #64748b;
+}
+
+@media (max-width: 768px) {
+    .employees-bulk-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .employees-bulk-buttons {
+        width: 100%;
+    }
+}
+
+
+/* ==========================================
+   SGIO-002 - MODAL ESTADO MASIVO
+   ========================================== */
+
+#modalEstadoMasivo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalEstadoMasivo.active {
+    display: flex;
+}
+
+#modalEstadoMasivo .sgio-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+}
+
+#modalEstadoMasivo .sgio-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(500px, calc(100% - 32px));
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+#modalEstadoMasivo .sgio-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#modalEstadoMasivo .sgio-modal-body {
+    padding: 20px;
+}
+
+#modalEstadoMasivo .sgio-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+#modalEstadoMasivo .employee-state-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    color: #9a3412;
+}
+
+#modalEstadoMasivo .employee-modal-error {
+    color: #b91c1c;
+    margin-top: 10px;
+}
+
+
+/* ==========================================
+   SGIO-002 - MODAL DÍAS LABORALES
+   ========================================== */
+
+#modalDiasMasivos {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalDiasMasivos.active {
+    display: flex;
+}
+
+#modalDiasMasivos .sgio-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+}
+
+#modalDiasMasivos .sgio-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(520px, calc(100% - 32px));
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+#modalDiasMasivos .sgio-modal-header,
+#modalDiasMasivos .sgio-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px;
+}
+
+#modalDiasMasivos .sgio-modal-body {
+    padding: 20px;
+}
+
+#modalDiasMasivos .employee-form-field {
+    margin-top: 18px;
+}
+
+#operacionDiasMasivos {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+#diasMasivosCheckboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#diasMasivosCheckboxes .workday-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.bulk-days-description {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #475569;
+}
+
+
+/* ==========================================
+   SGIO-002 - MENSAJES DE ERROR DÍAS MASIVOS
+   ========================================== */
+
+#modalDiasMasivos #errorDiasMasivos {
+    display: block;
+    margin-top: 16px;
+    padding: 0;
+    color: #b91c1c;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+#modalDiasMasivos #errorDiasMasivos:not(:empty) {
+    padding: 12px 14px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+}
+
+#modalDiasMasivos #errorDiasMasivos:empty {
+    display: none;
+}
+
+
+/* ==========================================
+   SGIO-002 - MODALES MODO CLARO Y OSCURO
+   ========================================== */
+
+/* Valores predeterminados: modo claro */
+#modalEstadoMasivo,
+#modalDiasMasivos {
+    --bulk-modal-bg: #ffffff;
+    --bulk-modal-text: #1e293b;
+    --bulk-modal-border: #e2e8f0;
+    --bulk-modal-input: #ffffff;
+    --bulk-modal-muted: #475569;
+}
+
+/* Estructura general */
+#modalEstadoMasivo .sgio-modal-dialog,
+#modalDiasMasivos .sgio-modal-dialog {
+    background: var(--bulk-modal-bg);
+    color: var(--bulk-modal-text);
+}
+
+#modalEstadoMasivo .sgio-modal-header,
+#modalEstadoMasivo .sgio-modal-footer,
+#modalDiasMasivos .sgio-modal-header,
+#modalDiasMasivos .sgio-modal-footer {
+    border-color: var(--bulk-modal-border);
+}
+
+/* Textos */
+#modalEstadoMasivo h3,
+#modalDiasMasivos h3,
+#modalDiasMasivos label {
+    color: var(--bulk-modal-text);
+}
+
+#modalDiasMasivos .bulk-days-description {
+    color: var(--bulk-modal-muted);
+}
+
+/* Selector de operación */
+#modalDiasMasivos #operacionDiasMasivos {
+    background: var(--bulk-modal-input);
+    color: var(--bulk-modal-text);
+    border-color: var(--bulk-modal-border);
+}
+
+/* Modo oscuro: admite varias convenciones comunes */
+:is(
+    html.dark,
+    body.dark,
+    html[data-theme="dark"],
+    body[data-theme="dark"],
+    html[data-bs-theme="dark"],
+    body[data-bs-theme="dark"]
+) #modalEstadoMasivo,
+:is(
+    html.dark,
+    body.dark,
+    html[data-theme="dark"],
+    body[data-theme="dark"],
+    html[data-bs-theme="dark"],
+    body[data-bs-theme="dark"]
+) #modalDiasMasivos {
+    --bulk-modal-bg: #1e293b;
+    --bulk-modal-text: #f1f5f9;
+    --bulk-modal-border: #334155;
+    --bulk-modal-input: #0f172a;
+    --bulk-modal-muted: #cbd5e1;
+}
+
+
+/* ==========================================
+   SGIO-002 - FILTROS Y ORDENAMIENTO
+   ========================================== */
+
+.employees-filters {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color, #d1d5db);
+}
+
+.employees-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.employees-filter-field label {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.employees-filter-field select {
+    min-width: 190px;
+    padding: 9px 12px;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 8px;
+    background: var(--card-bg, #ffffff);
+    color: inherit;
+    font-size: 13px;
+}
+
+.employees-results-count {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .employees-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .employees-filter-field select {
+        width: 100%;
+    }
+}
+
+
+
+/* ==========================================
+   SGIO-002 - FILTROS MODO CLARO / OSCURO
+   ========================================== */
+
+/* Modo claro */
+.employees-filters {
+    --filter-bg: #ffffff;
+    --filter-text: #1e293b;
+    --filter-border: #cbd5e1;
+}
+
+.employees-filter-field select {
+    background-color: var(--filter-bg);
+    color: var(--filter-text);
+    border: 1px solid var(--filter-border);
+    color-scheme: light;
+}
+
+.employees-filter-field select option {
+    background-color: var(--filter-bg);
+    color: var(--filter-text);
+}
+
+/* Modo oscuro */
+:is(
+    html.dark,
+    body.dark,
+    html[data-theme="dark"],
+    body[data-theme="dark"],
+    html[data-bs-theme="dark"],
+    body[data-bs-theme="dark"]
+) .employees-filters {
+    --filter-bg: #0f172a;
+    --filter-text: #f1f5f9;
+    --filter-border: #475569;
+}
+
+:is(
+    html.dark,
+    body.dark,
+    html[data-theme="dark"],
+    body[data-theme="dark"],
+    html[data-bs-theme="dark"],
+    body[data-bs-theme="dark"]
+) .employees-filter-field select {
+    color-scheme: dark;
+}
+

@@ -35,7 +35,7 @@ public class TelegramClient {
             restTemplate.postForObject(url, body, String.class);
             log.info("Mensaje enviado a Telegram correctamente");
         } catch (Exception e) {
-            log.error("Error enviando mensaje a Telegram: {}", e.getMessage());
+        	log.error("Error enviando mensaje a Telegram", e);
         }
     }
     

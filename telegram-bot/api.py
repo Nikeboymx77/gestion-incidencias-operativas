@@ -275,3 +275,149 @@ def cambiar_estado_empleado_admin(id_empleado: int, activo: bool, telegram_user_
     if not response.ok:
         manejar_error_response(response)
     return response.json()
+
+
+def obtener_reasignadas():
+    url = f"{API_BASE_URL}/bot/incidencias/reasignadas"
+
+    headers = {
+        "X-SGIO-API-KEY": BOT_API_KEY
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+
+
+def obtener_reasignadas_por_nombre(nombre_empleado):
+    from urllib.parse import quote
+
+    nombre_codificado = quote(nombre_empleado.strip(), safe="")
+
+    url = (
+        f"{API_BASE_URL}/bot/incidencias/empleado/"
+        f"nombre/{nombre_codificado}/reasignadas"
+    )
+
+    headers = {
+        "X-SGIO-API-KEY": BOT_API_KEY
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+
+
+def obtener_mis_reasignadas(username_telegram):
+    from urllib.parse import quote
+
+    username = username_telegram.strip().lstrip("@")
+    username_codificado = quote(username, safe="")
+
+    url = (
+        f"{API_BASE_URL}/bot/incidencias/empleado/"
+        f"{username_codificado}/reasignadas"
+    )
+
+    headers = {
+        "X-SGIO-API-KEY": BOT_API_KEY
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+
+def obtener_reabiertas():
+    url = f"{API_BASE_URL}/bot/incidencias/reabiertas"
+
+    headers = {
+        "X-SGIO-API-KEY": BOT_API_KEY
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+
+def obtener_reabiertas_por_nombre(nombre_empleado):
+    from urllib.parse import quote
+
+    nombre_codificado = quote(
+        nombre_empleado.strip(),
+        safe=""
+    )
+
+    url = (
+        f"{API_BASE_URL}/bot/incidencias/empleado/"
+        f"nombre/{nombre_codificado}/reabiertas"
+    )
+
+    headers = {
+        "X-SGIO-API-KEY": BOT_API_KEY
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+
+
+def obtener_mis_reabiertas(username_telegram):
+    from urllib.parse import quote
+
+    username = username_telegram.strip().lstrip("@")
+    username_codificado = quote(username, safe="")
+
+    url = (
+        f"{API_BASE_URL}/bot/incidencias/empleado/"
+        f"{username_codificado}/reabiertas"
+    )
+
+    headers = {
+        "X-SGIO-API-KEY": BOT_API_KEY
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
+
+    if not response.ok:
+        manejar_error_response(response)
+
+    return response.json()
+

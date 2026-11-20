@@ -5,7 +5,8 @@ from telegram.ext import ContextTypes
 from api import (obtener_pendientes, obtener_incidencia, resolver_incidencia, tomar_incidencia,
                  obtener_pendientes_empleado, obtener_pendientes_por_empleado, obtener_resumen_empleados,
                  obtener_detalle_empleado, obtener_estadisticas, obtener_ranking, obtener_incidencias_atrasadas,
-                 cancelar_incidencia, reasignar_incidencia, cambiar_estado_empleado_admin)
+                 cancelar_incidencia, reasignar_incidencia, cambiar_estado_empleado_admin,obtener_reasignadas, obtener_reasignadas_por_nombre,
+                 obtener_mis_reasignadas,obtener_reabiertas,obtener_reabiertas_por_nombre,obtener_mis_reabiertas)
 import os
 from telegram.constants import ChatType
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -40,7 +41,16 @@ async def help_command(
         "/empleado usuarioTelegram - Muestra el detalle de un integrante.\n\n"
         "/estadisticas - Muestra el resumen general de SGIO.\n\n"
         "/ranking - Muestra el ranking operativo del equipo.\n\n"
-        "/atrasadas [dias] - Muestra incidencias abiertas con cierta antigüedad."
+        "/atrasadas [dias] - Muestra incidencias abiertas con cierta antigüedad.\n\n"
+        "📌 INCIDENCIAS REASIGNADAS\n\n"
+        "/reasignadas - Consulta todas las incidencias reasignadas.\n\n"
+        "/reasignadas nombre  - Consulta las reasignadas de un empleado.\n\n"
+        "/mis_reasignadas - Consulta mis incidencias reasignadas.\n\n"
+        "🔄 INCIDENCIAS REABIERTAS\n\n"
+        "/reabiertas - Consulta todas las incidencias reabiertas.\n\n"
+        "/reabiertas nombre -Consulta las reabiertas de un empleado.\n\n"
+        "/mis_reabiertas -Consulta mis incidencias reabiertas."
+
     )
 
     await update.message.reply_text(mensaje)
@@ -1006,4 +1016,274 @@ async def reasignar_command(
     except Exception as error:
         await update.effective_message.reply_text(
             f"❌ Error reasignando incidencia: {error}"
+        )
+
+
+async def reasignadas_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    try:
+        if context.args:
+            nombre_empleado = " ".join(context.args).strip()
+
+            incidencias = obtener_reasignadas_por_nombre(
+                nombre_empleado
+            )
+
+            encabezado = (
+                f"📋 Incidencias REASIGNADAS de "
+                f"{nombre_empleado}\n\n"
+            )
+        else:
+            incidencias = obtener_reasignadas()
+
+            encabezado = (
+                "📋 Todas las incidencias REASIGNADAS\n\n"
+            )
+
+        if not incidencias:
+            await update.effective_message.reply_text(
+                "✅ No se encontraron incidencias reasignadas."
+            )
+            return
+
+        bloques = []
+
+        for incidencia in incidencias:
+            empleado = incidencia.get("empleadoAsignado") or {}
+
+            bloques.append(
+                f"🚨 {incidencia.get('folio', 'Sin folio')}\n"
+                f"📌 Asunto: {incidencia.get('asunto') or 'Sin asunto'}\n"
+                f"⚠ Prioridad: {incidencia.get('prioridad') or 'Sin prioridad'}\n"
+                f"👤 Asignado: {empleado.get('nombre', 'Sin asignar')}\n"
+                f"📂 Carpeta: {incidencia.get('carpetaOrigen') or 'Sin carpeta'}\n"
+                f"📍 Estado: {incidencia.get('estado') or 'Sin estado'}"
+            )
+
+        limite = LIMITE_MENSAJE_TELEGRAM - 50
+        mensaje = encabezado
+
+        for bloque in bloques:
+            contenido = bloque + "\n\n"
+
+            if len(mensaje) + len(contenido) > limite:
+                await update.effective_message.reply_text(
+                    mensaje.rstrip()
+                )
+                mensaje = encabezado
+
+            mensaje += contenido
+
+        if mensaje.strip() != encabezado.strip():
+            await update.effective_message.reply_text(
+                mensaje.rstrip()
+            )
+
+    except Exception as error:
+        await update.effective_message.reply_text(
+            f"❌ Error consultando reasignadas: {error}"
+        )
+
+
+async def misreasignadas_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+
+    usuario = update.effective_user
+    username = usuario.username if usuario else None
+
+    if not username:
+        await update.effective_message.reply_text(
+            "❌ Necesitas configurar un nombre de usuario "
+            "en Telegram para consultar tus reasignadas."
+        )
+        return
+
+    try:
+        incidencias = obtener_mis_reasignadas(username)
+
+        if not incidencias:
+            await update.effective_message.reply_text(
+                "✅ No tienes incidencias reasignadas."
+            )
+            return
+
+        encabezado = (
+            f"📋 Incidencias REASIGNADAS de @{username}\n"
+            f"Total: {len(incidencias)}\n\n"
+        )
+
+        bloques = []
+
+        for incidencia in incidencias:
+            empleado = incidencia.get("empleadoAsignado") or {}
+
+            bloques.append(
+                f"🚨 {incidencia.get('folio', 'Sin folio')}\n"
+                f"📌 Asunto: {incidencia.get('asunto') or 'Sin asunto'}\n"
+                f"⚠ Prioridad: {incidencia.get('prioridad') or 'Sin prioridad'}\n"
+                f"👤 Asignado: {empleado.get('nombre', 'Sin asignar')}\n"
+                f"📍 Estado: {incidencia.get('estado') or 'Sin estado'}"
+            )
+
+        limite = LIMITE_MENSAJE_TELEGRAM - 50
+        mensaje = encabezado
+
+        for bloque in bloques:
+            contenido = bloque + "\n\n"
+
+            if len(mensaje) + len(contenido) > limite:
+                await update.effective_message.reply_text(
+                    mensaje.rstrip()
+                )
+                mensaje = encabezado
+
+            mensaje += contenido
+
+        if mensaje.strip() != encabezado.strip():
+            await update.effective_message.reply_text(
+                mensaje.rstrip()
+            )
+
+    except Exception as error:
+        await update.effective_message.reply_text(
+            f"❌ Error consultando mis reasignadas: {error}"
+        )
+
+
+async def reabiertas_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    try:
+        if context.args:
+            nombre_empleado = " ".join(context.args).strip()
+
+            incidencias = obtener_reabiertas_por_nombre(
+                nombre_empleado
+            )
+
+            encabezado = (
+                f"📋 Incidencias REABIERTAS de "
+                f"{nombre_empleado}\n\n"
+            )
+        else:
+            incidencias = obtener_reabiertas()
+
+            encabezado = (
+                "📋 Todas las incidencias REABIERTAS\n\n"
+            )
+
+        if not incidencias:
+            await update.effective_message.reply_text(
+                "✅ No se encontraron incidencias reabiertas."
+            )
+            return
+
+        bloques = []
+
+        for incidencia in incidencias:
+            empleado = incidencia.get("empleadoAsignado") or {}
+
+            bloques.append(
+                f"🚨 {incidencia.get('folio', 'Sin folio')}\n"
+                f"📌 Asunto: {incidencia.get('asunto') or 'Sin asunto'}\n"
+                f"⚠ Prioridad: {incidencia.get('prioridad') or 'Sin prioridad'}\n"
+                f"👤 Asignado: {empleado.get('nombre', 'Sin asignar')}\n"
+                f"📂 Carpeta: {incidencia.get('carpetaOrigen') or 'Sin carpeta'}\n"
+                f"📍 Estado: {incidencia.get('estado') or 'Sin estado'}"
+            )
+
+        limite = LIMITE_MENSAJE_TELEGRAM - 50
+        mensaje = encabezado
+
+        for bloque in bloques:
+            contenido = bloque + "\n\n"
+
+            if len(mensaje) + len(contenido) > limite:
+                await update.effective_message.reply_text(
+                    mensaje.rstrip()
+                )
+                mensaje = encabezado
+
+            mensaje += contenido
+
+        if mensaje.strip() != encabezado.strip():
+            await update.effective_message.reply_text(
+                mensaje.rstrip()
+            )
+
+    except Exception as error:
+        await update.effective_message.reply_text(
+            f"❌ Error consultando reabiertas: {error}"
+        )
+
+
+async def misreabiertas_command(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    try:
+        usuario = update.effective_user
+        username = usuario.username if usuario else None
+
+        if not username:
+            await update.effective_message.reply_text(
+                "❌ No tienes configurado un nombre de usuario "
+                "en Telegram. Configúralo para consultar "
+                "tus incidencias reabiertas."
+            )
+            return
+
+        incidencias = obtener_mis_reabiertas(username)
+
+        if not incidencias:
+            await update.effective_message.reply_text(
+                "✅ No tienes incidencias reabiertas asignadas."
+            )
+            return
+
+        encabezado = (
+            f"📋 Mis incidencias REABIERTAS (@{username})\n\n"
+        )
+
+        bloques = []
+
+        for incidencia in incidencias:
+            empleado = incidencia.get("empleadoAsignado") or {}
+
+            bloques.append(
+                f"🚨 {incidencia.get('folio') or 'Sin folio'}\n"
+                f"📌 Asunto: {incidencia.get('asunto') or 'Sin asunto'}\n"
+                f"⚠ Prioridad: {incidencia.get('prioridad') or 'Sin prioridad'}\n"
+                f"👤 Asignado: {empleado.get('nombre') or 'Sin asignar'}\n"
+                f"📂 Carpeta: {incidencia.get('carpetaOrigen') or 'Sin carpeta'}\n"
+                f"📍 Estado: {incidencia.get('estado') or 'Sin estado'}"
+            )
+
+        limite = LIMITE_MENSAJE_TELEGRAM - 50
+        mensaje = encabezado
+
+        for bloque in bloques:
+            contenido = bloque + "\n\n"
+
+            if len(mensaje) + len(contenido) > limite:
+                await update.effective_message.reply_text(
+                    mensaje.rstrip()
+                )
+                mensaje = encabezado
+
+            mensaje += contenido
+
+        if mensaje.strip() != encabezado.strip():
+            await update.effective_message.reply_text(
+                mensaje.rstrip()
+            )
+
+    except Exception as error:
+        await update.effective_message.reply_text(
+            f"❌ Error consultando mis reabiertas: {error}"
         )

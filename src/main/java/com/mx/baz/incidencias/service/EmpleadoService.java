@@ -24,6 +24,12 @@ import com.mx.baz.incidencias.dto.EmpleadoAusenciaRequest;
 import com.mx.baz.incidencias.entity.EmpleadoAusencia;
 import com.mx.baz.incidencias.repository.EmpleadoAusenciaRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import com.mx.baz.incidencias.dto.EmpleadoDiasMasivosRequest;
 
 
 @Service
@@ -92,6 +98,7 @@ public class EmpleadoService {
                             .usernameTelegram(empleado.getUsernameTelegram())
                             .email(empleado.getEmail())
                             .activo(empleado.getActivo())
+                            .diasLaborales(obtenerDiasLaborales(empleado))
                             .pendientes(pendientes)
                             .enProceso(enProceso)
                             .reabiertas(reabiertas)
@@ -658,4 +665,141 @@ public class EmpleadoService {
                 empleadoId
         );
     }
+    
+
+	@Transactional
+	public void actualizarDiasLaboralesMasivo(
+	        EmpleadoDiasMasivosRequest request) {
+	
+	    // 1. Validar solicitud
+	    if (request == null
+	            || request.getEmpleadoIds() == null
+	            || request.getEmpleadoIds().isEmpty()) {
+	
+	        throw new IllegalArgumentException(
+	                "Debes seleccionar al menos un empleado.");
+	    }
+	
+	    if (request.getDiasLaborales() == null
+	            || request.getDiasLaborales().isEmpty()
+	            || request.getDiasLaborales().contains(null)) {
+	
+	        throw new IllegalArgumentException(
+	                "Debes seleccionar al menos un día laboral válido.");
+	    }
+	
+	    String operacion = request.getOperacion();
+	
+	    if (!List.of("REEMPLAZAR", "AGREGAR", "QUITAR")
+	            .contains(operacion)) {
+	
+	        throw new IllegalArgumentException(
+	                "La operación indicada no es válida.");
+	    }
+	
+	    // Eliminar IDs duplicados y validar valores
+	    Set<Long> ids = new HashSet<>(request.getEmpleadoIds());
+	
+	    if (ids.contains(null)
+	            || ids.stream().anyMatch(id -> id <= 0)) {
+	
+	        throw new IllegalArgumentException(
+	                "La selección contiene IDs de empleados inválidos.");
+	    }
+	
+	    // 2. Consultar empleados
+	    List<Empleado> empleados =
+	            empleadoRepository.findAllById(ids);
+	
+	    if (empleados.size() != ids.size()) {
+	
+	        throw new IllegalArgumentException(
+	                "Uno o más empleados seleccionados no existen.");
+	    }
+	
+	    // 3. Preparar los cambios antes de modificar entidades
+	    Set<DayOfWeek> diasSolicitados =
+	            new HashSet<>(request.getDiasLaborales());
+	
+	    Map<Long, Set<DayOfWeek>> nuevosDias =
+	            new java.util.HashMap<>();
+	
+	    for (Empleado empleado : empleados) {
+	
+	        Set<DayOfWeek> diasActuales =
+	                empleado.getDiasLaborales()
+	                        .stream()
+	                        .map(EmpleadoDiaLaboral::getDiaSemana)
+	                        .collect(Collectors.toSet());
+	
+	        Set<DayOfWeek> resultado =
+	                new HashSet<>(diasActuales);
+	
+	        switch (operacion) {
+	
+	            case "REEMPLAZAR":
+	                resultado.clear();
+	                resultado.addAll(diasSolicitados);
+	                break;
+	
+	            case "AGREGAR":
+	                resultado.addAll(diasSolicitados);
+	                break;
+	
+	            case "QUITAR":
+	                resultado.removeAll(diasSolicitados);
+	                break;
+	
+	            default:
+	                throw new IllegalArgumentException(
+	                        "Operación no válida.");
+	        }
+	
+	        if (resultado.isEmpty()) {
+	
+	            throw new IllegalArgumentException(
+	                    "La operación dejaría sin días laborales "
+	                    + "al empleado: " + empleado.getNombre());
+	        }
+	
+	        nuevosDias.put(empleado.getId(), resultado);
+	    }
+	
+	    // 4. Aplicar los cambios
+	    for (Empleado empleado : empleados) {
+	
+	        Set<DayOfWeek> resultado =
+	                nuevosDias.get(empleado.getId());
+	
+	        // Eliminar únicamente días que ya no corresponden
+	        empleado.getDiasLaborales().removeIf(
+	                relacion -> !resultado.contains(
+	                        relacion.getDiaSemana()));
+	
+	        Set<DayOfWeek> existentes =
+	                empleado.getDiasLaborales()
+	                        .stream()
+	                        .map(EmpleadoDiaLaboral::getDiaSemana)
+	                        .collect(Collectors.toSet());
+	
+	        // Agregar únicamente los días faltantes
+	        for (DayOfWeek dia : resultado) {
+	
+	            if (!existentes.contains(dia)) {
+	
+	                EmpleadoDiaLaboral relacion =
+	                        EmpleadoDiaLaboral.builder()
+	                                .empleado(empleado)
+	                                .diaSemana(dia)
+	                                .build();
+	
+	                empleado.getDiasLaborales().add(relacion);
+	            }
+	        }
+	    }
+	
+	    // Los cambios se sincronizan mediante JPA
+	    // al finalizar la transacción.
+	}
+
 }

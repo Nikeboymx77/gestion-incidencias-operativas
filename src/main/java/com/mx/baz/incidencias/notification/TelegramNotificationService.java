@@ -18,9 +18,27 @@ public class TelegramNotificationService implements NotificationService {
     @Override
     public void notificarNuevaIncidencia(Incidencia incidencia) {
 
-        String empleado = incidencia.getEmpleadoAsignado() != null
-                ? incidencia.getEmpleadoAsignado().getNombre()
-                : "Sin asignar";
+
+		String empleado = "Sin asignar";
+		
+		if (incidencia.getEmpleadoAsignado() != null) {
+		
+		    String nombre = incidencia.getEmpleadoAsignado().getNombre();
+		
+		    String username = incidencia.getEmpleadoAsignado()
+		            .getUsernameTelegram();
+		
+		    empleado = valor(nombre);
+		
+		    if (username != null && !username.isBlank()) {
+		
+		        String usuarioNormalizado = username.trim()
+		                .replaceFirst("^@", "");
+		
+		        empleado += " (@" + usuarioNormalizado + ")";
+		    }
+		}
+
 
         String mensaje = """
                 🚨 <b>NUEVA INCIDENCIA</b>
@@ -43,7 +61,7 @@ public class TelegramNotificationService implements NotificationService {
                 html(valor(incidencia.getClienteUnico())),
                 html(valor(incidencia.getEquipo())),
                 html(resumen(valor(incidencia.getMotivo()), 500)),
-                html(valor(incidencia.getEmpleadoAsignado().getNombre())),
+                html(empleado),
                 html(valor(incidencia.getEstado()))
         );
 
@@ -226,6 +244,24 @@ public class TelegramNotificationService implements NotificationService {
             String usuario,
             String comentario
     ) {
+    	
+    	String nuevoResponsable = valor(empleadoNuevo);
+
+    	if (incidencia.getEmpleadoAsignado() != null) {
+
+    	    String username = incidencia.getEmpleadoAsignado()
+    	            .getUsernameTelegram();
+
+    	    if (username != null && !username.isBlank()) {
+
+    	        String usuarioNormalizado = username.trim()
+    	                .replaceFirst("^@", "");
+
+    	        if (!usuarioNormalizado.isBlank()) {
+    	            nuevoResponsable += " (@" + usuarioNormalizado + ")";
+    	        }
+    	    }
+    	}
 
         String mensaje = """
                 🔄 <b>INCIDENCIA REASIGNADA</b>
@@ -250,7 +286,7 @@ public class TelegramNotificationService implements NotificationService {
                 """.formatted(
                 html(valor(incidencia.getFolio())),
                 html(valor(empleadoAnterior)),
-                html(valor(empleadoNuevo)),
+                html(nuevoResponsable),
                 html(valor(usuario)),
                 html(valor(comentario)),
                 html(valor(incidencia.getEstado()))

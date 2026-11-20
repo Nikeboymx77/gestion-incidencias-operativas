@@ -13,6 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.mx.baz.incidencias.dto.EmpleadoDiasMasivosRequest;
+
+import java.util.Map;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/empleados")
@@ -125,4 +130,35 @@ public class EmpleadoController {
                 )
         );
     }
+
+	/* ==========================================
+	   SGIO-002 - ACTUALIZACIÓN MASIVA DE DÍAS
+	   ========================================== */
+	
+	@PatchMapping("/dias-laborales/masivo")
+	public ResponseEntity<?> actualizarDiasLaboralesMasivo(
+	        @RequestBody EmpleadoDiasMasivosRequest request) {
+	
+	    try {
+	
+	        empleadoService.actualizarDiasLaboralesMasivo(request);
+	
+	        return ResponseEntity.ok(
+	                Map.of(
+	                        "mensaje",
+	                        "Días laborales actualizados correctamente."
+	                )
+	        );
+	
+	    } catch (IllegalArgumentException e) {
+	
+	        return ResponseEntity.badRequest().body(
+	                Map.of(
+	                        "mensaje",
+	                        e.getMessage()
+	                )
+	        );
+	    }
+	}
+
 }

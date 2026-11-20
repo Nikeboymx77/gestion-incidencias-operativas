@@ -48,6 +48,42 @@ public class BotIncidenciaController {
                 .obtenerPendientes();
     }
     
+
+	@GetMapping("/reasignadas")
+	public ResponseEntity<List<IncidenciaResponse>>
+	        obtenerReasignadas() {
+	
+	    return ResponseEntity.ok(
+	            incidenciaService.obtenerReasignadas()
+	    );
+	}
+	
+
+	@GetMapping("/empleado/nombre/{nombre}/reasignadas")
+	public ResponseEntity<List<IncidenciaResponse>>
+	        obtenerReasignadasPorNombreEmpleado(
+	                @PathVariable String nombre) {
+	
+	    return ResponseEntity.ok(
+	            incidenciaService
+	                    .obtenerReasignadasPorNombreEmpleado(nombre)
+	    );
+	}
+	
+
+	@GetMapping("/empleado/{username}/reasignadas")
+	public ResponseEntity<List<IncidenciaResponse>>
+	        obtenerReasignadasPorEmpleado(
+	                @PathVariable String username) {
+	
+	    return ResponseEntity.ok(
+	            incidenciaService
+	                    .obtenerReasignadasPorEmpleado(username)
+	    );
+	}
+
+
+    
        
     @PutMapping("/{folio}/resolver")
     public IncidenciaResponse resolverIncidencia(
@@ -143,6 +179,41 @@ public class BotIncidenciaController {
 
         return ResponseEntity.ok(respuesta);
     }
+    
+
+	@GetMapping("/reabiertas")
+	public ResponseEntity<List<IncidenciaResponse>>
+	        obtenerReabiertas() {
+	
+	    return ResponseEntity.ok(
+	            incidenciaService.obtenerReabiertas()
+	    );
+	}
+	
+
+	@GetMapping("/empleado/nombre/{nombre}/reabiertas")
+	public ResponseEntity<List<IncidenciaResponse>>
+	        obtenerReabiertasPorNombreEmpleado(
+	                @PathVariable String nombre) {
+	
+	    return ResponseEntity.ok(
+	            incidenciaService
+	                    .obtenerReabiertasPorNombreEmpleado(nombre)
+	    );
+	}
+	
+
+	@GetMapping("/empleado/{username}/reabiertas")
+	public ResponseEntity<List<IncidenciaResponse>>
+	        obtenerReabiertasPorEmpleado(
+	                @PathVariable String username) {
+	
+	    return ResponseEntity.ok(
+	            incidenciaService
+	                    .obtenerReabiertasPorEmpleado(username)
+	    );
+	}
+
     
 }
 
